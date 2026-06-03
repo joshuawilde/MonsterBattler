@@ -1,0 +1,350 @@
+using System.Collections.Generic;
+using MonsterBattler.Sim.Data;
+using MonsterBattler.Sim.Effects;
+using MonsterBattler.Sim.Events;
+using MonsterBattler.Sim.Log;
+
+namespace MonsterBattler.Sim
+{
+    /// <summary>
+    /// The battle engine.
+    ///
+    /// Turn loop (gen9 singles):
+    ///   1. Both sides submit a <see cref="Choice"/> (move or switch).
+    ///   2. Switches resolve first (in side order — TODO: pursuit-style interactions).
+    ///   3. Moves resolve in priority / Speed order.
+    ///   4. Each move runs the event pipeline (TryHit → accuracy → DamageCalc → Hit/DamagingHit
+    ///      → move secondary → AfterMove).
+    ///   5. End-of-turn: residuals fire for every active mon.
+    ///   6. Auto-switch any fainted active slots from the bench.
+    ///   7. Win condition: all team mons fainted on one side.
+    /// </summary>
+    public sealed class Battle
+    {
+        public readonly Dex Dex;
+        public readonly Prng Prng;
+        public readonly BattleLog Log = new();
+        public readonly Field Field = new();
+        public readonly Side[] Sides = new Side[2];
+
+        public int TurnNumber;
+        public bool IsFinished;
+        public int? WinningSide;
+
+        public Battle(Dex dex, ulong seed)
+        {
+            Dex = dex;
+            Prng = new Prng(seed);
+        }
+
+        public void Setup(Side side0, Side side1)
+        {
+            Sides[0] = side0; side0.Index = 0;
+            Sides[1] = side1; side1.Index = 1;
+            foreach (var side in Sides)
+                foreach (var mon in side.Team)
+                    ResolveBaseEffects(mon);
+            foreach (var side in Sides)
+                if (side.ActiveSlots.Count > 0)
+                    RunSwitchIn(new SwitchInEvent { Battle = this, Pokemon = side.ActiveSlots[0] });
+        }
+
+        public void Step(Choice s0, Choice s1)
+        {
+            if (IsFinished) return;
+            TurnNumber++;
+            Log.Turn(TurnNumber);
+
+            // Phase 1: switches (both sides, side-0 first as a placeholder for richer ordering).
+            if (s0.Kind == ChoiceKind.Switch) Switch(Sides[0], s0.SwitchToIndex);
+            if (s1.Kind == ChoiceKind.Switch) Switch(Sides[1], s1.SwitchToIndex);
+
+            // Phase 2: moves in priority/Speed order.
+            var moveActions = new List<(Side attacker, Side defender, Choice c)>();
+            if (s0.Kind == ChoiceKind.Move) moveActions.Add((Sides[0], Sides[1], s0));
+            if (s1.Kind == ChoiceKind.Move) moveActions.Add((Sides[1], Sides[0], s1));
+            OrderMoves(moveActions);
+            foreach (var m in moveActions)
+            {
+                if (IsFinished) break;
+                ResolveAction(m.attacker, m.defender, m.c);
+            }
+            if (IsFinished) return;
+
+            // Phase 3: residuals (status DoTs, leftovers, weather damage…).
+            foreach (var side in Sides)
+                foreach (var mon in side.ActiveSlots)
+                    if (!mon.IsFainted)
+                        RunResidual(new ResidualEvent { Battle = this, Target = mon });
+
+            // Phase 4: faint logs + auto-switch from bench. TODO: surface a forced-switch
+            // decision to the player instead of auto-picking next alive.
+            foreach (var side in Sides)
+                foreach (var mon in side.ActiveSlots)
+                    if (mon.IsFainted) Log.Faint(mon);
+            AutoSwitchFainted();
+
+            CheckWinCondition();
+        }
+
+        void OrderMoves(List<(Side attacker, Side defender, Choice c)> moves)
+        {
+            if (moves.Count < 2) return;
+            var a = moves[0]; var b = moves[1];
+            var aMove = Dex.GetMove(a.c.MoveId);
+            var bMove = Dex.GetMove(b.c.MoveId);
+            int aPrio = aMove.Priority;
+            int bPrio = bMove.Priority;
+            if (aPrio != bPrio) { if (aPrio < bPrio) (moves[0], moves[1]) = (moves[1], moves[0]); return; }
+            int aSpe = a.attacker.ActiveSlots[0].MaxStats[(int)Stat.Spe];
+            int bSpe = b.attacker.ActiveSlots[0].MaxStats[(int)Stat.Spe];
+            if (aSpe == bSpe) { if (Prng.Chance(1, 2)) (moves[0], moves[1]) = (moves[1], moves[0]); return; }
+            if (aSpe < bSpe) (moves[0], moves[1]) = (moves[1], moves[0]);
+        }
+
+        void ResolveAction(Side attacker, Side defender, Choice choice)
+        {
+            if (choice.Kind != ChoiceKind.Move) return;
+            var user = attacker.ActiveSlots[0];
+            if (user.IsFainted) return;
+            var moveData = Dex.GetMove(choice.MoveId);
+            // Self-targeting moves (Swords Dance, Roost, etc.) route back to the user.
+            // Other targeting modes (spread, ally, field) collapse to "the opposing slot"
+            // until the rest of the targeting system lands.
+            var target = moveData.Target == MoveTarget.Self ? user : defender.ActiveSlots[0];
+            if (target.IsFainted) return;
+            UseMove(user, target, choice.MoveId);
+        }
+
+        /// <summary>
+        /// Swap the side's active slot with a bench mon. Fires OnSwitchOut/OnSwitchIn.
+        /// </summary>
+        public void Switch(Side side, int newIndex)
+        {
+            if (newIndex < 0 || newIndex >= side.Team.Count) return;
+            var incoming = side.Team[newIndex];
+            if (incoming.IsFainted) return;
+            var outgoing = side.ActiveSlots.Count > 0 ? side.ActiveSlots[0] : null;
+            if (outgoing == incoming) return;
+
+            if (outgoing != null)
+            {
+                RunSwitchOut(new SwitchOutEvent { Battle = this, Pokemon = outgoing });
+                outgoing.IsActive = false;
+                outgoing.Volatiles.Clear();
+                outgoing.Tags.Clear();
+                for (int i = 0; i < outgoing.StatStages.Length; i++) outgoing.StatStages[i] = 0;
+            }
+
+            if (side.ActiveSlots.Count > 0) side.ActiveSlots[0] = incoming;
+            else side.ActiveSlots.Add(incoming);
+            incoming.IsActive = true;
+            Log.Raw($"|switch|{Ident(incoming)}|{incoming.Species?.Name}|{incoming.CurrentHp}/{incoming.MaxStats[(int)Stat.HP]}");
+            RunSwitchIn(new SwitchInEvent { Battle = this, Pokemon = incoming });
+        }
+
+        void AutoSwitchFainted()
+        {
+            foreach (var side in Sides)
+            {
+                if (side.ActiveSlots.Count == 0) continue;
+                var active = side.ActiveSlots[0];
+                if (!active.IsFainted) continue;
+                for (int i = 0; i < side.Team.Count; i++)
+                {
+                    var candidate = side.Team[i];
+                    if (candidate == active || candidate.IsFainted) continue;
+                    Switch(side, i);
+                    break;
+                }
+            }
+        }
+
+        void UseMove(Pokemon user, Pokemon target, string moveId)
+        {
+            var move = Dex.GetMove(moveId);
+
+            // PP gate. Real PS substitutes Struggle when every slot is at 0; that escape hatch
+            // comes later — for now an empty slot just fails the action.
+            MoveSlot slot = null;
+            for (int i = 0; i < user.Moves.Count; i++)
+                if (user.Moves[i].Move.Id == moveId) { slot = user.Moves[i]; break; }
+            if (slot != null && slot.Pp <= 0)
+            {
+                Log.Raw($"|cant|{Ident(user)}|nopp|{move.Name}");
+                return;
+            }
+            if (slot != null) slot.Pp--;
+
+            Log.Move(user, move, target);
+
+            var tryHit = new TryHitEvent { Battle = this, User = user, Target = target, Move = move };
+            RunTryHit(tryHit);
+            if (tryHit.Blocked)
+            {
+                Log.Raw($"|-immune|{Ident(target)}|[from] ability: {tryHit.BlockReason}");
+                return;
+            }
+
+            // Accuracy check with accuracy/evasion stages folded in.
+            if (move.Accuracy > 0)
+            {
+                int accDiff = user.StatStages[(int)Stat.Acc] - target.StatStages[(int)Stat.Eva];
+                int threshold = (int)(move.Accuracy * Stats.AccuracyStageMult(accDiff));
+                if (!Prng.Chance(threshold, 100))
+                {
+                    Log.Raw($"|-miss|{Ident(user)}|{Ident(target)}");
+                    return;
+                }
+            }
+
+            int damage = 0;
+            bool isCrit = false;
+            if (move.Category != MoveCategory.Status && move.BasePower > 0)
+            {
+                isCrit = RollCrit(move.CritRatio);
+                damage = DamageCalc.Compute(this, user, target, move, isCrit);
+                ApplyDamage(target, damage);
+                if (isCrit) Log.Raw($"|-crit|{Ident(target)}");
+                Log.Damage(target, damage);
+            }
+
+            var hit = new HitEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = damage };
+            RunHit(hit);
+            if (damage > 0) RunDamagingHit(hit);
+
+            var moveEffect = EffectRegistry.Get(move.EffectId);
+            if (moveEffect != null && damage > 0) moveEffect.OnDamagingHit(hit, null);
+            if (moveEffect != null) moveEffect.OnHit(hit, null);
+
+            RunAfterMove(new AfterMoveEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = damage });
+        }
+
+        /// <summary>Returns the side that owns <paramref name="mon"/>, or null if not on either team.</summary>
+        public Side SideOf(Pokemon mon)
+        {
+            if (mon == null) return null;
+            foreach (var s in Sides) if (s != null && s.Team.Contains(mon)) return s;
+            return null;
+        }
+
+        /// <summary>Returns the side opposite to <paramref name="mon"/>'s side.</summary>
+        public Side OpposingSideOf(Pokemon mon)
+        {
+            var s = SideOf(mon);
+            if (s == null) return null;
+            return Sides[1 - s.Index];
+        }
+
+        /// <summary>Gen 6+ crit ratio table. Stage 3+ is guaranteed crit.</summary>
+        public bool RollCrit(int critRatio)
+        {
+            if (critRatio >= 3) return true;
+            return critRatio switch
+            {
+                1 => Prng.Chance(1, 8),
+                2 => Prng.Chance(1, 2),
+                _ => Prng.Chance(1, 24),
+            };
+        }
+
+        /// <summary>
+        /// Change a stat stage by <paramref name="delta"/> (clamped to ±6). Returns true on
+        /// a meaningful change; emits a |-boost|/|-unboost|/|-fail| log line.
+        /// </summary>
+        public bool BoostStat(Pokemon mon, Stat stat, int delta)
+        {
+            if (mon == null || mon.IsFainted || delta == 0) return false;
+            int idx = (int)stat;
+            int before = mon.StatStages[idx];
+            int after = System.Math.Clamp(before + delta, -6, 6);
+            if (before == after)
+            {
+                Log.Raw($"|-fail|{Ident(mon)}|stat: {stat}");
+                return false;
+            }
+            mon.StatStages[idx] = after;
+            int magnitude = System.Math.Abs(after - before);
+            string verb = delta > 0 ? "boost" : "unboost";
+            Log.Raw($"|-{verb}|{Ident(mon)}|{stat.ToString().ToLower()}|{magnitude}");
+            return true;
+        }
+
+        public void ApplyDamage(Pokemon mon, int amount)
+        {
+            mon.CurrentHp = System.Math.Max(0, mon.CurrentHp - amount);
+        }
+
+        public void ApplyStatus(Pokemon target, StatusCondition status)
+        {
+            if (target.IsFainted || target.Status != StatusCondition.None) return;
+            target.Status = status;
+            target.StatusEffect = EffectRegistry.Get(StatusEffectId(status));
+            Log.Raw($"|-status|{Ident(target)}|{StatusEffectId(status)}");
+        }
+
+        static string StatusEffectId(StatusCondition s) => s switch
+        {
+            StatusCondition.Burn => "brn",
+            StatusCondition.Paralysis => "par",
+            StatusCondition.Poison => "psn",
+            StatusCondition.BadlyPoisoned => "tox",
+            StatusCondition.Sleep => "slp",
+            StatusCondition.Freeze => "frz",
+            StatusCondition.Frostbite => "frb",
+            _ => null,
+        };
+
+        void ResolveBaseEffects(Pokemon mon)
+        {
+            mon.AbilityEffect = mon.Ability != null ? EffectRegistry.Get(mon.Ability.EffectId ?? mon.Ability.Id) : null;
+            mon.ItemEffect = mon.Item != null ? EffectRegistry.Get(mon.Item.EffectId ?? mon.Item.Id) : null;
+            mon.StatusEffect = mon.Status != StatusCondition.None ? EffectRegistry.Get(StatusEffectId(mon.Status)) : null;
+        }
+
+        void CheckWinCondition()
+        {
+            bool s0Out = Sides[0].Team.TrueForAll(p => p.IsFainted);
+            bool s1Out = Sides[1].Team.TrueForAll(p => p.IsFainted);
+            if (s0Out && s1Out) { IsFinished = true; WinningSide = null; }
+            else if (s1Out) { IsFinished = true; WinningSide = 0; }
+            else if (s0Out) { IsFinished = true; WinningSide = 1; }
+        }
+
+        public void RunTryHit(TryHitEvent ev)        { Dispatch(ev.Target, (e, o) => e.OnTryHit(ev, o)); }
+        public void RunHit(HitEvent ev)              { Dispatch(ev.User, (e, o) => e.OnHit(ev, o)); Dispatch(ev.Target, (e, o) => e.OnHit(ev, o)); }
+        public void RunDamagingHit(HitEvent ev)      { Dispatch(ev.Target, (e, o) => e.OnDamagingHit(ev, o)); }
+        public void RunAfterMove(AfterMoveEvent ev)  { Dispatch(ev.User, (e, o) => e.OnAfterMove(ev, o)); }
+
+        public void RunBasePower(BasePowerEvent ev)  { Dispatch(ev.User, (e, o) => e.OnBasePower(ev, o)); Dispatch(ev.Target, (e, o) => e.OnBasePower(ev, o)); }
+        public void RunModifyAtk(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifyAtk(ev, o)); }
+        public void RunModifyDef(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifyDef(ev, o)); }
+        public void RunModifySpA(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpA(ev, o)); }
+        public void RunModifySpD(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpD(ev, o)); }
+        public void RunModifyDamage(ModifyDamageEvent ev) { Dispatch(ev.User, (e, o) => e.OnModifyDamage(ev, o)); Dispatch(ev.Target, (e, o) => e.OnModifyDamage(ev, o)); }
+
+        public void RunSwitchIn(SwitchInEvent ev)    { Dispatch(ev.Pokemon, (e, o) => e.OnSwitchIn(ev, o)); }
+        public void RunSwitchOut(SwitchOutEvent ev)  { Dispatch(ev.Pokemon, (e, o) => e.OnSwitchOut(ev, o)); }
+        public void RunResidual(ResidualEvent ev)    { Dispatch(ev.Target, (e, o) => e.OnResidual(ev, o)); }
+
+        static void Dispatch(Pokemon scope, System.Action<Effect, Pokemon> visit)
+        {
+            if (scope == null) return;
+            foreach (var e in scope.ActiveEffects()) visit(e, scope);
+        }
+
+        static string Ident(Pokemon mon) => mon?.Nickname ?? mon?.Species?.Name ?? "?";
+    }
+
+    public enum ChoiceKind { Move, Switch }
+
+    public struct Choice
+    {
+        public ChoiceKind Kind;
+        public string MoveId;
+        public int SwitchToIndex;
+        public bool Terastallize;
+        public static Choice UseMove(string id, bool tera = false) => new Choice { Kind = ChoiceKind.Move, MoveId = id, Terastallize = tera };
+        public static Choice SwitchTo(int idx) => new Choice { Kind = ChoiceKind.Switch, SwitchToIndex = idx };
+    }
+}

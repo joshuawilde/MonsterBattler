@@ -1,0 +1,75 @@
+using System;
+using MonsterBattler.Sim.Data;
+using MonsterBattler.Sim.Events;
+
+namespace MonsterBattler.Sim
+{
+    /// <summary>
+    /// Mainline gen9 damage formula with event hooks woven in. Order of operations:
+    ///   1. BasePower starts at MoveData.BasePower; RunBasePower lets abilities/items scale it.
+    ///   2. Atk and Def use the user/target's MaxStats × stat-stage multiplier. On a crit the
+    ///      attacker ignores its own negative Atk stages and the target ignores its positive
+    ///      Def stages (PS's "ignore stages that hurt the attacker").
+    ///   3. Stat-modifier events (RunModifyAtk/Def/SpA/SpD) run on the stage-adjusted value.
+    ///   4. damage = floor(floor((2*L/5 + 2) * BP * A/D) / 50) + 2
+    ///   5. Random roll (85..100 / 100).
+    ///   6. STAB (× 1.5).
+    ///   7. Type effectiveness.
+    ///   8. Crit (× 1.5 in gen 6+).
+    ///   9. RunModifyDamage — Life Orb, screens, multiscale, etc.
+    /// </summary>
+    public static class DamageCalc
+    {
+        public static int Compute(Battle battle, Pokemon user, Pokemon target, MoveData move, bool isCrit = false)
+        {
+            if (move.Category == MoveCategory.Status || move.BasePower <= 0) return 0;
+
+            var bpEv = new BasePowerEvent { Battle = battle, User = user, Target = target, Move = move, BasePower = move.BasePower };
+            battle.RunBasePower(bpEv);
+            int basePower = Math.Max(1, bpEv.BasePower);
+
+            var atkStatKind = move.Category == MoveCategory.Physical ? Stat.Atk : Stat.SpA;
+            var defStatKind = move.Category == MoveCategory.Physical ? Stat.Def : Stat.SpD;
+
+            // Stat stages — crit ignores stages that hurt the attacker.
+            int atkStage = user.StatStages[(int)atkStatKind];
+            int defStage = target.StatStages[(int)defStatKind];
+            if (isCrit)
+            {
+                if (atkStage < 0) atkStage = 0;
+                if (defStage > 0) defStage = 0;
+            }
+            int atkStat = Math.Max(1, (int)(user.MaxStats[(int)atkStatKind] * Stats.StageMult(atkStage)));
+            int defStat = Math.Max(1, (int)(target.MaxStats[(int)defStatKind] * Stats.StageMult(defStage)));
+
+            var atkEv = new StatModifyEvent { Battle = battle, Owner = user, Stat = atkStatKind, Value = atkStat, ContextMove = move };
+            if (atkStatKind == Stat.Atk) battle.RunModifyAtk(atkEv); else battle.RunModifySpA(atkEv);
+            atkStat = Math.Max(1, atkEv.Value);
+
+            var defEv = new StatModifyEvent { Battle = battle, Owner = target, Stat = defStatKind, Value = defStat, ContextMove = move };
+            if (defStatKind == Stat.Def) battle.RunModifyDef(defEv); else battle.RunModifySpD(defEv);
+            defStat = Math.Max(1, defEv.Value);
+
+            int level = user.Level;
+            int dmg = (int)Math.Floor((2.0 * level / 5.0 + 2.0) * basePower * atkStat / defStat);
+            dmg = (int)Math.Floor(dmg / 50.0) + 2;
+
+            int roll = battle.Prng.Range(85, 101);
+            dmg = dmg * roll / 100;
+
+            bool stab = user.Species != null && (move.Type == user.Species.Type1 || move.Type == user.Species.Type2);
+            if (stab) dmg = dmg * 3 / 2;
+
+            var eff = target.Species != null
+                ? TypeChart.Effectiveness(move.Type, target.Species.Type1, target.Species.Type2)
+                : 1f;
+            dmg = (int)(dmg * eff);
+
+            if (isCrit) dmg = dmg * 3 / 2;
+
+            var modEv = new ModifyDamageEvent { Battle = battle, User = user, Target = target, Move = move, Damage = dmg };
+            battle.RunModifyDamage(modEv);
+            return Math.Max(1, modEv.Damage);
+        }
+    }
+}

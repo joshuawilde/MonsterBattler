@@ -1,0 +1,20 @@
+{
+    "name": "MonsterBattler.Editor.MCP",
+    "rootNamespace": "MonsterBattler.Editor.MCP",
+    "references": [
+        "MonsterBattler.Sim",
+        "MonsterBattler.Game",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

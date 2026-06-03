@@ -1,0 +1,76 @@
+# --- Unity ---
+# Generated, machine-specific, or rebuildable artifacts.
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emory[Cc]aptures/
+[Rr]ecordings/
+
+# Asset meta cache and asset import progress
+**/Assets/AssetStoreTools*
+**/Assets/Plugins/Editor/JetBrains*
+.consulo/
+ExportedObj/
+
+# IDE / generated solution files (Unity regenerates these)
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity build outputs
+*.apk
+*.aab
+*.unitypackage
+*.app
+sysinfo.txt
+
+# Crashlytics / Unity Cloud
+crashlytics-build.properties
+Assets/Plugins/Editor/JetBrains*
+
+# --- Node / TypeScript (mcp-server) ---
+node_modules/
+dist/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# --- Editor / IDE ---
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Secrets / local-only ---
+.env
+.env.local
+*.pem
+*.key

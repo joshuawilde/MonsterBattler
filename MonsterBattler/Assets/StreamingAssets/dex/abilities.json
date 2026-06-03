@@ -1,0 +1,17 @@
+{
+  "blaze": {"name": "Blaze"},
+  "overgrow": {"name": "Overgrow"},
+  "torrent": {"name": "Torrent"},
+  "static": {"name": "Static"},
+  "levitate": {"name": "Levitate"},
+  "chlorophyll": {"name": "Chlorophyll"},
+  "solarpower": {"name": "Solar Power"},
+  "raindish": {"name": "Rain Dish"},
+  "lightningrod": {"name": "Lightning Rod"},
+  "immunity": {"name": "Immunity"},
+  "thickfat": {"name": "Thick Fat"},
+  "intimidate": {"name": "Intimidate"},
+  "speedboost": {"name": "Speed Boost"},
+  "flashfire": {"name": "Flash Fire"},
+  "sturdy": {"name": "Sturdy"}
+}

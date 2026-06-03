@@ -1,0 +1,49 @@
+namespace MonsterBattler.Sim.Data
+{
+    /// <summary>
+    /// Immutable move definition. The pure-data fields cover ~60% of gen9 moves verbatim;
+    /// the remaining ~40% additionally attach an Effect class (see Effects/) that hooks into
+    /// the battle event system.
+    /// </summary>
+    public sealed class MoveData
+    {
+        public string Id;             // e.g. "tackle"
+        public string Name;
+        public MonType Type;
+        public MoveCategory Category;
+        public int BasePower;         // 0 for status moves
+        public int Accuracy;          // 0..100, or 0 meaning "never miss"
+        public int Pp;                // base PP, before PP Ups
+        public int Priority;          // -7..+5
+        public int CritRatio;         // 0 = base 1/24, 1 = 1/8, 2 = 1/2, 3+ = guaranteed
+        public MoveTarget Target = MoveTarget.Normal;
+
+        // Bitfield-ish flags. TODO: replace with a [Flags] enum once we know the full set.
+        public bool Contact;
+        public bool Protect;          // blocked by Protect/Detect
+        public bool Sound;
+        public bool Punch;
+        public bool Bite;
+        public bool Slicing;
+        public bool Wind;
+        public bool Bullet;
+
+        /// <summary>Optional name of an effect class that supplies callback overrides (see Effects/).</summary>
+        public string EffectId;
+    }
+
+    public enum MoveTarget
+    {
+        Normal,             // single adjacent foe
+        Self,
+        AllyOrSelf,
+        AdjacentAlly,
+        AllAdjacentFoes,
+        AllAdjacent,
+        All,
+        AllySide,
+        FoeSide,
+        Field,
+        RandomNormal,
+    }
+}
