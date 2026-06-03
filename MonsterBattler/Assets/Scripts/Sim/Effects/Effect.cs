@@ -17,6 +17,7 @@ namespace MonsterBattler.Sim.Effects
         public virtual string DisplayName => EffectId;
 
         // -------- Move pipeline --------
+        public virtual void OnBeforeMove(BeforeMoveEvent ev, Pokemon owner) { }
         public virtual void OnTryHit(TryHitEvent ev, Pokemon owner) { }
         public virtual void OnHit(HitEvent ev, Pokemon owner) { }
         public virtual void OnDamagingHit(HitEvent ev, Pokemon owner) { }

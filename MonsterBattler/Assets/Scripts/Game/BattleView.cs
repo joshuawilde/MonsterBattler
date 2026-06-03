@@ -161,12 +161,15 @@ namespace MonsterBattler.Game
         void SetInputEnabled(bool on)
         {
             var player = _battle.Sides[0].ActiveSlots[0];
+            // Choice items lock the player into one move. Disable everything else when locked.
+            bool isLocked = !string.IsNullOrEmpty(player.LockedMoveId);
             for (int i = 0; i < _moves.Length; i++)
             {
                 if (_moves[i] == null) continue;
                 bool active = i < player.Moves.Count;
                 _moves[i].gameObject.SetActive(active);
-                _moves[i].SetInteractable(on && active);
+                bool isLockedMove = isLocked && active && player.Moves[i].Move.Id == player.LockedMoveId;
+                _moves[i].SetInteractable(on && active && (!isLocked || isLockedMove));
             }
             // Switch buttons keep their own interactable state per Show(), but a global
             // disable while a turn is animating is also useful.

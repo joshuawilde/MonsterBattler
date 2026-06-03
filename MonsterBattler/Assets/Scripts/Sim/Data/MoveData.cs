@@ -16,6 +16,16 @@ namespace MonsterBattler.Sim.Data
         public int Pp;                // base PP, before PP Ups
         public int Priority;          // -7..+5
         public int CritRatio;         // 0 = base 1/24, 1 = 1/8, 2 = 1/2, 3+ = guaranteed
+
+        // Recoil: user takes Damage * num / den. Default (0/0) = no recoil.
+        public int RecoilNum;
+        public int RecoilDen;
+        // Drain: user heals Damage * num / den.
+        public int DrainNum;
+        public int DrainDen;
+        // Self-KO moves (Explosion, Self-Destruct, Final Gambit, Memento).
+        public bool SelfKO;
+
         public MoveTarget Target = MoveTarget.Normal;
 
         // Bitfield-ish flags. TODO: replace with a [Flags] enum once we know the full set.

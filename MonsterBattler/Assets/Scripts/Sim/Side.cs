@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MonsterBattler.Sim.Effects;
 
 namespace MonsterBattler.Sim
 {
@@ -13,15 +14,20 @@ namespace MonsterBattler.Sim
         public List<Pokemon> Team = new();
         public List<Pokemon> ActiveSlots = new();
 
-        // Side conditions: Reflect, Light Screen, Spikes, etc. — TODO when wiring conditions.
+        /// <summary>Persistent side conditions (hazards, screens, Tailwind, Mist, Wish).</summary>
         public Dictionary<string, SideCondition> Conditions = new();
     }
 
+    /// <summary>
+    /// One side condition slot. Effect carries the callback logic; the slot carries the
+    /// per-instance state (turns remaining, layer count, payload).
+    /// </summary>
     public sealed class SideCondition
     {
         public string Id;
+        public Effect Effect;
         public int TurnsLeft;
-        public int Layers;          // for Spikes/Toxic Spikes
-        public object Data;         // condition-specific payload
+        public int Layers;
+        public object Data;
     }
 }

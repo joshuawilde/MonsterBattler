@@ -16,6 +16,19 @@ namespace MonsterBattler.Sim.Events
     /* Move pipeline                                                       */
     /* ------------------------------------------------------------------ */
 
+    /// <summary>
+    /// Fires after PP gate, before targeting / accuracy / damage. Listeners (Sleep, Confusion,
+    /// Paralysis full-para roll, Truant, Recharge, etc.) can <see cref="Cancelled"/> = true to
+    /// abort the move attempt entirely.
+    /// </summary>
+    public sealed class BeforeMoveEvent : BattleEvent
+    {
+        public Pokemon User;
+        public MoveData Move;
+        public bool Cancelled;
+        public string CancelReason;
+    }
+
     public sealed class TryHitEvent : BattleEvent
     {
         public Pokemon User;

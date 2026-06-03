@@ -1,5 +1,7 @@
 {
-  "leftovers": {"name": "Leftovers"},
-  "lifeorb": {"name": "Life Orb"},
+  "leftovers":   {"name": "Leftovers"},
+  "lifeorb":     {"name": "Life Orb"},
+  "choiceband":  {"name": "Choice Band"},
+  "choicespecs": {"name": "Choice Specs"},
   "choicescarf": {"name": "Choice Scarf"}
 }

@@ -125,5 +125,81 @@
     "name": "Thunder Wave", "type": "Electric", "category": "Status",
     "basePower": 0, "accuracy": 90, "pp": 20, "priority": 0,
     "effectId": "thunderwavemove"
+  },
+  "stealthrock": {
+    "name": "Stealth Rock", "type": "Rock", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": 0,
+    "target": "foeSide", "effectId": "stealthrockmove"
+  },
+  "spikes": {
+    "name": "Spikes", "type": "Ground", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": 0,
+    "target": "foeSide", "effectId": "spikesmove"
+  },
+  "toxicspikes": {
+    "name": "Toxic Spikes", "type": "Poison", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": 0,
+    "target": "foeSide", "effectId": "toxicspikesmove"
+  },
+  "stickyweb": {
+    "name": "Sticky Web", "type": "Bug", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": 0,
+    "target": "foeSide", "effectId": "stickywebmove"
+  },
+  "confuseray": {
+    "name": "Confuse Ray", "type": "Ghost", "category": "Status",
+    "basePower": 0, "accuracy": 100, "pp": 10, "priority": 0,
+    "effectId": "confuseraymove"
+  },
+  "sleeppowder": {
+    "name": "Sleep Powder", "type": "Grass", "category": "Status",
+    "basePower": 0, "accuracy": 75, "pp": 15, "priority": 0,
+    "effectId": "sleeppowdermove"
+  },
+  "spore": {
+    "name": "Spore", "type": "Grass", "category": "Status",
+    "basePower": 0, "accuracy": 100, "pp": 15, "priority": 0,
+    "effectId": "sleeppowdermove"
+  },
+  "bravebird": {
+    "name": "Brave Bird", "type": "Flying", "category": "Physical",
+    "basePower": 120, "accuracy": 100, "pp": 15, "priority": 0,
+    "recoilNum": 1, "recoilDen": 3,
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "flareblitz": {
+    "name": "Flare Blitz", "type": "Fire", "category": "Physical",
+    "basePower": 120, "accuracy": 100, "pp": 15, "priority": 0,
+    "recoilNum": 1, "recoilDen": 3,
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "wildcharge": {
+    "name": "Wild Charge", "type": "Electric", "category": "Physical",
+    "basePower": 90, "accuracy": 100, "pp": 15, "priority": 0,
+    "recoilNum": 1, "recoilDen": 4,
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "doubleedge": {
+    "name": "Double-Edge", "type": "Normal", "category": "Physical",
+    "basePower": 120, "accuracy": 100, "pp": 15, "priority": 0,
+    "recoilNum": 1, "recoilDen": 3,
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "explosion": {
+    "name": "Explosion", "type": "Normal", "category": "Physical",
+    "basePower": 250, "accuracy": 100, "pp": 5, "priority": 0,
+    "selfKO": true, "flags": {"protect": 1}
+  },
+  "gigadrain": {
+    "name": "Giga Drain", "type": "Grass", "category": "Special",
+    "basePower": 75, "accuracy": 100, "pp": 10, "priority": 0,
+    "drainNum": 1, "drainDen": 2,
+    "flags": {"protect": 1}
+  },
+  "drainpunch": {
+    "name": "Drain Punch", "type": "Fighting", "category": "Physical",
+    "basePower": 75, "accuracy": 100, "pp": 10, "priority": 0,
+    "drainNum": 1, "drainDen": 2,
+    "flags": {"contact": 1, "punch": 1, "protect": 1}
   }
 }

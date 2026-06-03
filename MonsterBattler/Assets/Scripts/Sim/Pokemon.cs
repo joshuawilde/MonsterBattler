@@ -39,6 +39,11 @@ namespace MonsterBattler.Sim
         public int SleepTurnsLeft;
         public int ToxicCounter;
 
+        /// <summary>Last move successfully used. Cleared on switch out. Used by Encore/Disable/Choice items.</summary>
+        public Data.MoveData LastMoveUsed;
+        /// <summary>If non-null, the Pokemon is locked into using this move (Choice items, Outrage, etc.).</summary>
+        public string LockedMoveId;
+
         public MonType TeraType;
         public bool IsTerastallized;
 

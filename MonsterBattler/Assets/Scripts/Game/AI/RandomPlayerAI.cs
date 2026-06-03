@@ -44,6 +44,10 @@ namespace MonsterBattler.Game.AI
                 return Choice.UseMove(FirstUsableMoveId(active) ?? "tackle");
             }
 
+            // Choice-item lock — only the locked move is legal until we switch.
+            if (!string.IsNullOrEmpty(active.LockedMoveId))
+                return Choice.UseMove(active.LockedMoveId);
+
             // Usable moves (PS doesn't filter on PP > 0; some moves are needed at 0 PP via
             // edge cases. Mirror that here — non-disabled is the only check.)
             var canMove = new List<int>();

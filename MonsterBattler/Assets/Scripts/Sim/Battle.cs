@@ -140,6 +140,8 @@ namespace MonsterBattler.Sim
                 outgoing.Volatiles.Clear();
                 outgoing.Tags.Clear();
                 outgoing.ToxicCounter = 0;
+                outgoing.LastMoveUsed = null;
+                outgoing.LockedMoveId = null;
                 for (int i = 0; i < outgoing.StatStages.Length; i++) outgoing.StatStages[i] = 0;
             }
 
@@ -183,6 +185,11 @@ namespace MonsterBattler.Sim
             }
             if (slot != null) slot.Pp--;
 
+            // BeforeMove gate: Sleep, Confusion, full-paralyze, Truant, Recharge, etc.
+            var before = new BeforeMoveEvent { Battle = this, User = user, Move = move };
+            RunBeforeMove(before);
+            if (before.Cancelled) return;
+
             Log.Move(user, move, target);
 
             var tryHit = new TryHitEvent { Battle = this, User = user, Target = target, Move = move };
@@ -224,6 +231,37 @@ namespace MonsterBattler.Sim
             if (moveEffect != null && damage > 0) moveEffect.OnDamagingHit(hit, null);
             if (moveEffect != null) moveEffect.OnHit(hit, null);
 
+            // Drain: heal user for a fraction of damage dealt.
+            if (move.DrainDen > 0 && damage > 0 && !user.IsFainted)
+            {
+                int max = user.MaxStats[(int)Stat.HP];
+                int heal = System.Math.Max(1, damage * move.DrainNum / move.DrainDen);
+                int actual = System.Math.Min(heal, max - user.CurrentHp);
+                if (actual > 0)
+                {
+                    user.CurrentHp += actual;
+                    Log.Raw($"|-heal|{Ident(user)}|{user.CurrentHp}/{max}|[from] drain|[of] {Ident(target)}");
+                }
+            }
+
+            // Recoil: user takes a fraction of damage dealt.
+            if (move.RecoilDen > 0 && damage > 0 && !user.IsFainted)
+            {
+                int recoil = System.Math.Max(1, damage * move.RecoilNum / move.RecoilDen);
+                ApplyDamage(user, recoil);
+                Log.Raw($"|-damage|{Ident(user)}|{user.CurrentHp}/{user.MaxStats[(int)Stat.HP]}|[from] Recoil");
+            }
+
+            // Self-KO moves (Explosion, Self-Destruct, Memento).
+            if (move.SelfKO && !user.IsFainted)
+            {
+                ApplyDamage(user, user.CurrentHp);
+                Log.Faint(user);
+            }
+
+            // Last move tracking — only on successful moves (we got past PP and BeforeMove gates).
+            user.LastMoveUsed = move;
+
             RunAfterMove(new AfterMoveEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = damage });
         }
 
@@ -248,6 +286,36 @@ namespace MonsterBattler.Sim
             if (target == null) return false;
             if (!target.Volatiles.Remove(id)) return false;
             Log.Raw($"|-end|{Ident(target)}|{id}");
+            return true;
+        }
+
+        /// <summary>
+        /// Add or stack a side condition (hazards, screens, Tailwind). Stacking layers up to
+        /// <paramref name="maxLayers"/>; returns the resulting <see cref="SideCondition"/> or null
+        /// if no further stacking was possible.
+        /// </summary>
+        public SideCondition AddSideCondition(Side side, string id, int maxLayers = 1, int turns = -1)
+        {
+            if (side == null) return null;
+            if (side.Conditions.TryGetValue(id, out var existing))
+            {
+                if (existing.Layers >= maxLayers) return null;
+                existing.Layers++;
+                Log.Raw($"|-sidestart|p{side.Index + 1}|{id}");
+                return existing;
+            }
+            var effect = EffectRegistry.Get(id);
+            if (effect == null) return null;
+            var c = new SideCondition { Id = id, Effect = effect, Layers = 1, TurnsLeft = turns };
+            side.Conditions[id] = c;
+            Log.Raw($"|-sidestart|p{side.Index + 1}|{id}");
+            return c;
+        }
+
+        public bool RemoveSideCondition(Side side, string id)
+        {
+            if (side == null || !side.Conditions.Remove(id)) return false;
+            Log.Raw($"|-sideend|p{side.Index + 1}|{id}");
             return true;
         }
 
@@ -386,6 +454,8 @@ namespace MonsterBattler.Sim
             if (target.IsFainted || target.Status != StatusCondition.None) return;
             target.Status = status;
             target.StatusEffect = EffectRegistry.Get(StatusEffectId(status));
+            if (status == StatusCondition.Sleep) target.SleepTurnsLeft = Prng.Range(1, 4); // gen 5+: 1..3 turns
+            if (status == StatusCondition.BadlyPoisoned) target.ToxicCounter = 0;
             Log.Raw($"|-status|{Ident(target)}|{StatusEffectId(status)}");
         }
 
@@ -417,6 +487,7 @@ namespace MonsterBattler.Sim
             else if (s0Out) { IsFinished = true; WinningSide = 1; }
         }
 
+        public void RunBeforeMove(BeforeMoveEvent ev) { Dispatch(ev.User, (e, o) => e.OnBeforeMove(ev, o)); }
         public void RunTryHit(TryHitEvent ev)        { Dispatch(ev.Target, (e, o) => e.OnTryHit(ev, o)); }
         public void RunHit(HitEvent ev)              { Dispatch(ev.User, (e, o) => e.OnHit(ev, o)); Dispatch(ev.Target, (e, o) => e.OnHit(ev, o)); }
         public void RunDamagingHit(HitEvent ev)
@@ -435,7 +506,15 @@ namespace MonsterBattler.Sim
         public void RunModifySpe(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpe(ev, o)); }
         public void RunModifyDamage(ModifyDamageEvent ev) { Dispatch(ev.User, (e, o) => e.OnModifyDamage(ev, o)); Dispatch(ev.Target, (e, o) => e.OnModifyDamage(ev, o)); }
 
-        public void RunSwitchIn(SwitchInEvent ev)    { Dispatch(ev.Pokemon, (e, o) => e.OnSwitchIn(ev, o)); }
+        public void RunSwitchIn(SwitchInEvent ev)
+        {
+            Dispatch(ev.Pokemon, (e, o) => e.OnSwitchIn(ev, o));
+            // Hazards live on the side the incoming Pokemon belongs to.
+            var side = SideOf(ev.Pokemon);
+            if (side != null)
+                foreach (var cond in side.Conditions.Values)
+                    cond.Effect?.OnSwitchIn(ev, ev.Pokemon);
+        }
         public void RunSwitchOut(SwitchOutEvent ev)  { Dispatch(ev.Pokemon, (e, o) => e.OnSwitchOut(ev, o)); }
         public void RunResidual(ResidualEvent ev)    { Dispatch(ev.Target, (e, o) => e.OnResidual(ev, o)); }
 
