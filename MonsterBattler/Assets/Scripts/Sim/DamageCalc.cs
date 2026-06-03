@@ -53,10 +53,11 @@ namespace MonsterBattler.Sim
             if (defStatKind == Stat.Def) battle.RunModifyDef(defEv); else battle.RunModifySpD(defEv);
             defStat = Math.Max(1, defEv.Value);
 
-            // Passive weather-based defensive boosts (gen 4+ Sand SpD for Rock, gen 9 Snow Def for Ice).
-            if (battle.Field.Weather == Weather.Sandstorm && defStatKind == Stat.SpD && IsType(target, MonType.Rock))
+            // Weather-based defensive boosts (Cloud Nine / Air Lock suppresses).
+            var weather = battle.ActiveWeather();
+            if (weather == Weather.Sandstorm && defStatKind == Stat.SpD && IsType(target, MonType.Rock))
                 defStat = defStat * 3 / 2;
-            if (battle.Field.Weather == Weather.Snow && defStatKind == Stat.Def && IsType(target, MonType.Ice))
+            if (weather == Weather.Snow && defStatKind == Stat.Def && IsType(target, MonType.Ice))
                 defStat = defStat * 3 / 2;
 
             int level = user.Level;
@@ -82,8 +83,9 @@ namespace MonsterBattler.Sim
             float eff = TypeChart.Effectiveness(move.Type, defType1, defType2);
             dmg = (int)(dmg * eff);
 
-            // Weather damage multipliers (after STAB/type, before crit).
-            switch (battle.Field.Weather)
+            // Weather damage multipliers (after STAB/type, before crit). Cloud Nine / Air Lock
+            // suppresses weather effects globally via ActiveWeather().
+            switch (battle.ActiveWeather())
             {
                 case Weather.Sun:
                     if (move.Type == MonType.Fire) dmg = dmg * 3 / 2;

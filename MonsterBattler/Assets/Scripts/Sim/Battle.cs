@@ -587,9 +587,24 @@ namespace MonsterBattler.Sim
         /// Change a stat stage by <paramref name="delta"/> (clamped to ±6). Returns true on
         /// a meaningful change; emits a |-boost|/|-unboost|/|-fail| log line.
         /// </summary>
-        public bool BoostStat(Pokemon mon, Stat stat, int delta)
+        public bool BoostStat(Pokemon mon, Stat stat, int delta, Pokemon source = null)
         {
             if (mon == null || mon.IsFainted || delta == 0) return false;
+            // Opponent-induced stat drops can be refused by ability.
+            if (delta < 0 && source != null && source != mon && mon.AbilityEffect != null)
+            {
+                bool block = false;
+                if (mon.AbilityEffect is Effects.Abilities.ClearBodyEffect ||
+                    mon.AbilityEffect is Effects.Abilities.WhiteSmokeEffect ||
+                    mon.AbilityEffect is Effects.Abilities.FullMetalBodyEffect) block = true;
+                if (stat == Stat.Atk && mon.AbilityEffect is Effects.Abilities.HyperCutterEffect) block = true;
+                if (stat == Stat.Def && mon.AbilityEffect is Effects.Abilities.BigPecksEffect) block = true;
+                if (block)
+                {
+                    Log.Raw($"|-immune|{Ident(mon)}|[from] ability: {mon.AbilityEffect.DisplayName}");
+                    return false;
+                }
+            }
             int idx = (int)stat;
             int before = mon.StatStages[idx];
             int after = System.Math.Clamp(before + delta, -6, 6);
@@ -603,6 +618,23 @@ namespace MonsterBattler.Sim
             string verb = delta > 0 ? "boost" : "unboost";
             Log.Raw($"|-{verb}|{Ident(mon)}|{stat.ToString().ToLower()}|{magnitude}");
             return true;
+        }
+
+        /// <summary>
+        /// Returns the effective weather: <see cref="Field"/> weather unless one of the active
+        /// Pokemon has Cloud Nine / Air Lock, which negate weather effects globally.
+        /// </summary>
+        public Weather ActiveWeather()
+        {
+            foreach (var side in Sides)
+                foreach (var mon in side.ActiveSlots)
+                {
+                    if (mon == null || mon.IsFainted) continue;
+                    if (mon.AbilityEffect is Effects.Abilities.CloudNineEffect ||
+                        mon.AbilityEffect is Effects.Abilities.AirLockEffect)
+                        return Weather.None;
+                }
+            return Field.Weather;
         }
 
         public void ApplyDamage(Pokemon mon, int amount, DamageSource source = DamageSource.Move)

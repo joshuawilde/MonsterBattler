@@ -52,5 +52,12 @@
   "tintedlens":   {"name": "Tinted Lens"},
   "stancechange": {"name": "Stance Change"},
   "schooling":    {"name": "Schooling"},
-  "zerotohero":   {"name": "Zero to Hero"}
+  "zerotohero":   {"name": "Zero to Hero"},
+  "clearbody":    {"name": "Clear Body"},
+  "whitesmoke":   {"name": "White Smoke"},
+  "fullmetalbody":{"name": "Full Metal Body"},
+  "hypercutter":  {"name": "Hyper Cutter"},
+  "bigpecks":     {"name": "Big Pecks"},
+  "cloudnine":    {"name": "Cloud Nine"},
+  "airlock":      {"name": "Air Lock"}
 }

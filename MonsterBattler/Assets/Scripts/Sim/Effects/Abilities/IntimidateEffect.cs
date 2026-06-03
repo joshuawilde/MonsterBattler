@@ -18,7 +18,7 @@ namespace MonsterBattler.Sim.Effects.Abilities
             foreach (var foe in opp.ActiveSlots)
             {
                 if (foe == null || foe.IsFainted) continue;
-                ev.Battle.BoostStat(foe, Stat.Atk, -1);
+                ev.Battle.BoostStat(foe, Stat.Atk, -1, source: owner);
             }
         }
     }

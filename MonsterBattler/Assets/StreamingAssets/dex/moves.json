@@ -435,5 +435,20 @@
     "name": "Shadow Sneak", "type": "Ghost", "category": "Physical",
     "basePower": 40, "accuracy": 100, "pp": 30, "priority": 1,
     "flags": {"contact": 1, "protect": 1}
+  },
+  "bellydrum": {
+    "name": "Belly Drum", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 10, "priority": 0,
+    "target": "self", "effectId": "bellydrummove"
+  },
+  "trick": {
+    "name": "Trick", "type": "Psychic", "category": "Status",
+    "basePower": 0, "accuracy": 100, "pp": 10, "priority": 0,
+    "effectId": "trickmove", "flags": {"protect": 1}
+  },
+  "switcheroo": {
+    "name": "Switcheroo", "type": "Dark", "category": "Status",
+    "basePower": 0, "accuracy": 100, "pp": 10, "priority": 0,
+    "effectId": "trickmove", "flags": {"protect": 1}
   }
 }
