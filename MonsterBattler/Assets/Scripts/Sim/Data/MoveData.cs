@@ -25,6 +25,13 @@ namespace MonsterBattler.Sim.Data
         public int DrainDen;
         // Self-KO moves (Explosion, Self-Destruct, Final Gambit, Memento).
         public bool SelfKO;
+        // Pivot moves — user switches out after the move connects if they have an available bench.
+        public bool PivotsOut;
+        // Multi-hit: rolls 2–5 hits when MultihitMax > 0 (or fixed = MultihitMin when min == max).
+        public int MultihitMin;
+        public int MultihitMax;
+        // 0..100 probability of flinching the target after a damaging hit.
+        public int FlinchChance;
 
         public MoveTarget Target = MoveTarget.Normal;
 

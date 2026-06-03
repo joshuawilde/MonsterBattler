@@ -60,6 +60,7 @@
   "ironhead": {
     "name": "Iron Head", "type": "Steel", "category": "Physical",
     "basePower": 80, "accuracy": 100, "pp": 15, "priority": 0,
+    "flinchChance": 30,
     "flags": {"contact": 1, "protect": 1}
   },
   "icebeam": {
@@ -237,5 +238,77 @@
     "name": "Defog", "type": "Flying", "category": "Status",
     "basePower": 0, "accuracy": 0, "pp": 15, "priority": 0,
     "effectId": "defogmove"
+  },
+  "uturn": {
+    "name": "U-turn", "type": "Bug", "category": "Physical",
+    "basePower": 70, "accuracy": 100, "pp": 20, "priority": 0,
+    "pivotsOut": true, "flags": {"contact": 1, "protect": 1}
+  },
+  "voltswitch": {
+    "name": "Volt Switch", "type": "Electric", "category": "Special",
+    "basePower": 70, "accuracy": 100, "pp": 20, "priority": 0,
+    "pivotsOut": true, "flags": {"protect": 1}
+  },
+  "flipturn": {
+    "name": "Flip Turn", "type": "Water", "category": "Physical",
+    "basePower": 60, "accuracy": 100, "pp": 20, "priority": 0,
+    "pivotsOut": true, "flags": {"contact": 1, "protect": 1}
+  },
+  "knockoff": {
+    "name": "Knock Off", "type": "Dark", "category": "Physical",
+    "basePower": 65, "accuracy": 100, "pp": 20, "priority": 0,
+    "effectId": "knockoffmove",
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "recover": {
+    "name": "Recover", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 5, "priority": 0,
+    "target": "self", "effectId": "recovermove"
+  },
+  "synthesis": {
+    "name": "Synthesis", "type": "Grass", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 5, "priority": 0,
+    "target": "self", "effectId": "synthesismove"
+  },
+  "bulletseed": {
+    "name": "Bullet Seed", "type": "Grass", "category": "Physical",
+    "basePower": 25, "accuracy": 100, "pp": 30, "priority": 0,
+    "multihitMin": 2, "multihitMax": 5,
+    "flags": {"bullet": 1, "protect": 1}
+  },
+  "rockblast": {
+    "name": "Rock Blast", "type": "Rock", "category": "Physical",
+    "basePower": 25, "accuracy": 90, "pp": 10, "priority": 0,
+    "multihitMin": 2, "multihitMax": 5,
+    "flags": {"bullet": 1, "protect": 1}
+  },
+  "iciclespear": {
+    "name": "Icicle Spear", "type": "Ice", "category": "Physical",
+    "basePower": 25, "accuracy": 100, "pp": 30, "priority": 0,
+    "multihitMin": 2, "multihitMax": 5,
+    "flags": {"protect": 1}
+  },
+  "tailslap": {
+    "name": "Tail Slap", "type": "Normal", "category": "Physical",
+    "basePower": 25, "accuracy": 85, "pp": 10, "priority": 0,
+    "multihitMin": 2, "multihitMax": 5,
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "bite": {
+    "name": "Bite", "type": "Dark", "category": "Physical",
+    "basePower": 60, "accuracy": 100, "pp": 25, "priority": 0,
+    "flinchChance": 30,
+    "flags": {"contact": 1, "bite": 1, "protect": 1}
+  },
+  "airslash": {
+    "name": "Air Slash", "type": "Flying", "category": "Special",
+    "basePower": 75, "accuracy": 95, "pp": 15, "priority": 0,
+    "flinchChance": 30,
+    "flags": {"slicing": 1, "protect": 1}
+  },
+  "trickroom": {
+    "name": "Trick Room", "type": "Psychic", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 5, "priority": -7,
+    "target": "field", "effectId": "trickroommove"
   }
 }

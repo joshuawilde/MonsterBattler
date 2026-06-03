@@ -80,8 +80,9 @@ namespace MonsterBattler.Sim
             // Phase 3b: weather chip damage + duration tick.
             TickWeather();
 
-            // Phase 3c: side condition duration tick (screens, Tailwind, etc.).
+            // Phase 3c: side + field condition duration ticks (screens, Tailwind, Trick Room).
             TickSideConditions();
+            TickFieldConditions();
 
             // Phase 3d: clean up single-turn volatiles (Protect / Detect / etc.).
             ClearSingleTurnVolatiles();
@@ -108,7 +109,10 @@ namespace MonsterBattler.Sim
             int aSpe = GetEffectiveSpeed(a.attacker.ActiveSlots[0]);
             int bSpe = GetEffectiveSpeed(b.attacker.ActiveSlots[0]);
             if (aSpe == bSpe) { if (Prng.Chance(1, 2)) (moves[0], moves[1]) = (moves[1], moves[0]); return; }
-            if (aSpe < bSpe) (moves[0], moves[1]) = (moves[1], moves[0]);
+            bool trickRoom = Field.Conditions.ContainsKey("trickroom");
+            // Trick Room flips the comparison: slower goes first.
+            bool aGoesFirst = trickRoom ? aSpe < bSpe : aSpe > bSpe;
+            if (!aGoesFirst) (moves[0], moves[1]) = (moves[1], moves[0]);
         }
 
         void ResolveAction(Side attacker, Side defender, Choice choice)
@@ -226,47 +230,67 @@ namespace MonsterBattler.Sim
                 }
             }
 
-            int damage = 0;
+            int totalDamage = 0;
             bool isCrit = false;
+            int hitsConnected = 0;
+            var moveEffect = EffectRegistry.Get(move.EffectId);
+
             if (move.Category != MoveCategory.Status && move.BasePower > 0)
             {
-                isCrit = RollCrit(move.CritRatio);
-                damage = DamageCalc.Compute(this, user, target, move, isCrit);
-
-                // Substitute absorbs the hit (gen 5+: no bleed-through).
-                var sub = target.GetVolatile("substitute");
-                bool absorbed = sub != null && damage > 0 && !move.Sound && user != target;
-                if (absorbed)
+                int targetHits = RollMultihitCount(move);
+                for (int h = 0; h < targetHits; h++)
                 {
-                    if (damage >= sub.Counter) RemoveVolatile(target, "substitute");
+                    if (target.IsFainted) break;
+                    isCrit = RollCrit(move.CritRatio);
+                    int hitDamage = DamageCalc.Compute(this, user, target, move, isCrit);
+
+                    var sub = target.GetVolatile("substitute");
+                    bool absorbed = sub != null && hitDamage > 0 && !move.Sound && user != target;
+                    if (absorbed)
+                    {
+                        if (hitDamage >= sub.Counter) RemoveVolatile(target, "substitute");
+                        else
+                        {
+                            sub.Counter -= hitDamage;
+                            Log.Raw($"|-activate|{Ident(target)}|move: Substitute|[damage]");
+                        }
+                        hitDamage = 0;
+                    }
                     else
                     {
-                        sub.Counter -= damage;
-                        Log.Raw($"|-activate|{Ident(target)}|move: Substitute|[damage]");
+                        ApplyDamage(target, hitDamage);
+                        if (isCrit) Log.Raw($"|-crit|{Ident(target)}");
+                        Log.Damage(target, hitDamage);
                     }
-                    damage = 0;
+
+                    var hit = new HitEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = hitDamage };
+                    RunHit(hit);
+                    if (hitDamage > 0) RunDamagingHit(hit);
+                    if (moveEffect != null && hitDamage > 0) moveEffect.OnDamagingHit(hit, null);
+                    if (moveEffect != null) moveEffect.OnHit(hit, null);
+
+                    totalDamage += hitDamage;
+                    hitsConnected++;
                 }
-                else
-                {
-                    ApplyDamage(target, damage);
-                    if (isCrit) Log.Raw($"|-crit|{Ident(target)}");
-                    Log.Damage(target, damage);
-                }
+                if (targetHits > 1) Log.Raw($"|-hitcount|{Ident(target)}|{hitsConnected}");
+            }
+            else
+            {
+                // Status / zero-BP moves still need OnHit dispatch for the effect.
+                var hit = new HitEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = 0 };
+                RunHit(hit);
+                if (moveEffect != null) moveEffect.OnHit(hit, null);
             }
 
-            var hit = new HitEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = damage };
-            RunHit(hit);
-            if (damage > 0) RunDamagingHit(hit);
+            // Flinch chance — applied to the target post-hit. Only meaningful if attacker outsped.
+            if (move.FlinchChance > 0 && totalDamage > 0 && !target.IsFainted && Prng.Chance(move.FlinchChance, 100))
+                AddVolatile(target, "flinch", singleTurn: true);
 
-            var moveEffect = EffectRegistry.Get(move.EffectId);
-            if (moveEffect != null && damage > 0) moveEffect.OnDamagingHit(hit, null);
-            if (moveEffect != null) moveEffect.OnHit(hit, null);
-
-            // Drain: heal user for a fraction of damage dealt.
-            if (move.DrainDen > 0 && damage > 0 && !user.IsFainted)
+            // Drain: heal user for a fraction of total damage dealt.
+            if (move.DrainDen > 0 && totalDamage > 0 && !user.IsFainted)
             {
                 int max = user.MaxStats[(int)Stat.HP];
-                int heal = System.Math.Max(1, damage * move.DrainNum / move.DrainDen);
+                int heal = System.Math.Max(1, totalDamage * move.DrainNum / move.DrainDen);
                 int actual = System.Math.Min(heal, max - user.CurrentHp);
                 if (actual > 0)
                 {
@@ -275,10 +299,10 @@ namespace MonsterBattler.Sim
                 }
             }
 
-            // Recoil: user takes a fraction of damage dealt.
-            if (move.RecoilDen > 0 && damage > 0 && !user.IsFainted)
+            // Recoil: user takes a fraction of total damage dealt.
+            if (move.RecoilDen > 0 && totalDamage > 0 && !user.IsFainted)
             {
-                int recoil = System.Math.Max(1, damage * move.RecoilNum / move.RecoilDen);
+                int recoil = System.Math.Max(1, totalDamage * move.RecoilNum / move.RecoilDen);
                 ApplyDamage(user, recoil);
                 Log.Raw($"|-damage|{Ident(user)}|{user.CurrentHp}/{user.MaxStats[(int)Stat.HP]}|[from] Recoil");
             }
@@ -293,7 +317,26 @@ namespace MonsterBattler.Sim
             // Last move tracking — only on successful moves (we got past PP and BeforeMove gates).
             user.LastMoveUsed = move;
 
-            RunAfterMove(new AfterMoveEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = damage });
+            RunAfterMove(new AfterMoveEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = totalDamage });
+
+            // Pivot moves (U-turn, Volt Switch, Flip Turn): the user switches out after the
+            // move connects, provided they're still standing and have a non-fainted bench mon.
+            // TODO: surface the choice of which bench mon to the player; for now auto-pick the
+            // first alive slot.
+            if (move.PivotsOut && !user.IsFainted)
+            {
+                var side = SideOf(user);
+                if (side != null)
+                {
+                    for (int i = 0; i < side.Team.Count; i++)
+                    {
+                        var candidate = side.Team[i];
+                        if (candidate == user || candidate.IsFainted) continue;
+                        Switch(side, i);
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -441,6 +484,25 @@ namespace MonsterBattler.Sim
             return System.Math.Max(1, ev.Value);
         }
 
+        /// <summary>
+        /// Rolls hit count for a multi-hit move. Fixed if min==max; otherwise gen 5+ distribution
+        /// for the canonical 2-5 spread: 2 (35%), 3 (35%), 4 (15%), 5 (15%).
+        /// </summary>
+        public int RollMultihitCount(Data.MoveData move)
+        {
+            if (move.MultihitMax <= 0) return 1;
+            if (move.MultihitMin == move.MultihitMax) return move.MultihitMin;
+            if (move.MultihitMin == 2 && move.MultihitMax == 5)
+            {
+                int r = Prng.Range(0, 100);
+                if (r < 35) return 2;
+                if (r < 70) return 3;
+                if (r < 85) return 4;
+                return 5;
+            }
+            return Prng.Range(move.MultihitMin, move.MultihitMax + 1);
+        }
+
         /// <summary>Gen 6+ crit ratio table. Stage 3+ is guaranteed crit.</summary>
         public bool RollCrit(int critRatio)
         {
@@ -560,6 +622,24 @@ namespace MonsterBattler.Sim
             if (side == null) return;
             foreach (var cond in side.Conditions.Values)
                 if (cond.Effect != null) visit(cond.Effect, scope);
+        }
+
+        void TickFieldConditions()
+        {
+            if (Field.Conditions.Count == 0) return;
+            var toRemove = new System.Collections.Generic.List<string>();
+            foreach (var kv in Field.Conditions)
+            {
+                var c = kv.Value;
+                if (c.TurnsLeft <= 0) continue;
+                c.TurnsLeft--;
+                if (c.TurnsLeft <= 0) toRemove.Add(kv.Key);
+            }
+            foreach (var id in toRemove)
+            {
+                Field.Conditions.Remove(id);
+                Log.Raw($"|-fieldend|{id}");
+            }
         }
 
         void TickSideConditions()

@@ -39,5 +39,8 @@
   "swiftswim":    {"name": "Swift Swim"},
   "chlorophyll":  {"name": "Chlorophyll"},
   "sandrush":     {"name": "Sand Rush"},
-  "slushrush":    {"name": "Slush Rush"}
+  "slushrush":    {"name": "Slush Rush"},
+  "solarpower":   {"name": "Solar Power"},
+  "raindish":     {"name": "Rain Dish"},
+  "icebody":      {"name": "Ice Body"}
 }

@@ -26,6 +26,9 @@ namespace MonsterBattler.Sim
 
             var bpEv = new BasePowerEvent { Battle = battle, User = user, Target = target, Move = move, BasePower = move.BasePower };
             battle.RunBasePower(bpEv);
+            // The move's own effect also gets to tweak base power (Knock Off ×1.5 on item, etc.).
+            var moveEffect = Effects.EffectRegistry.Get(move.EffectId);
+            if (moveEffect != null) moveEffect.OnBasePower(bpEv, null);
             int basePower = Math.Max(1, bpEv.BasePower);
 
             var atkStatKind = move.Category == MoveCategory.Physical ? Stat.Atk : Stat.SpA;
