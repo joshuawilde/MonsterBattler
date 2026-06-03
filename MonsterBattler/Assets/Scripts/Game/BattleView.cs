@@ -66,23 +66,23 @@ namespace MonsterBattler.Game
             var dex = DexLoader.LoadFromStreamingAssets();
             _battle = new Battle(dex, _seed);
 
-            var playerTeam = BuildTeam(dex, new (string species, string ability, string[] moves)[]
+            var playerTeam = BuildTeam(dex, new (string species, string ability, string[] moves, string item)[]
             {
-                ("bulbasaur",  "overgrow", new[] { "swordsdance", "razorleaf", "vinewhip", "quickattack" }),
-                ("charmander", "blaze",    new[] { "dragondance", "flamethrower", "slash", "quickattack" }),
-                ("squirtle",   "torrent",  new[] { "calmmind", "hydropump", "icebeam", "watergun" }),
-                ("pikachu",    "static",   new[] { "nastyplot", "thunderbolt", "thundershock", "quickattack" }),
-                ("gengar",     "levitate", new[] { "nastyplot", "shadowball", "thunderbolt", "icebeam" }),
-                ("snorlax",    "thickfat", new[] { "bulkup", "earthquake", "hypervoice", "icebeam" }),
+                ("bulbasaur",  "overgrow", new[] { "leechseed", "razorleaf", "vinewhip", "swordsdance" },     null),
+                ("charmander", "blaze",    new[] { "flamethrower", "slash", "dragondance", "quickattack" },   "lifeorb"),
+                ("squirtle",   "torrent",  new[] { "protect", "hydropump", "icebeam", "calmmind" },           null),
+                ("pikachu",    "static",   new[] { "thunderwave", "thunderbolt", "nastyplot", "quickattack" },null),
+                ("gengar",     "levitate", new[] { "willowisp", "shadowball", "thunderbolt", "nastyplot" },   null),
+                ("snorlax",    "thickfat", new[] { "bulkup", "earthquake", "hypervoice", "icebeam" },         "leftovers"),
             });
-            var opponentTeam = BuildTeam(dex, new (string species, string ability, string[] moves)[]
+            var opponentTeam = BuildTeam(dex, new (string species, string ability, string[] moves, string item)[]
             {
-                ("gengar",     "levitate", new[] { "shadowball", "hypervoice", "thunderbolt", "icebeam" }),
-                ("snorlax",    "thickfat", new[] { "stoneedge", "earthquake", "hypervoice", "icebeam" }),
-                ("charmander", "blaze",    new[] { "flamethrower", "slash", "ember", "quickattack" }),
-                ("squirtle",   "torrent",  new[] { "hydropump", "watergun", "icebeam", "tackle" }),
-                ("pikachu",    "static",   new[] { "thunderbolt", "thundershock", "quickattack", "ironhead" }),
-                ("bulbasaur",  "overgrow", new[] { "razorleaf", "vinewhip", "tackle", "quickattack" }),
+                ("gengar",     "levitate", new[] { "shadowball", "hypervoice", "thunderbolt", "icebeam" },    null),
+                ("snorlax",    "thickfat", new[] { "stoneedge", "earthquake", "hypervoice", "icebeam" },      "leftovers"),
+                ("charmander", "blaze",    new[] { "flamethrower", "slash", "ember", "quickattack" },         "lifeorb"),
+                ("squirtle",   "torrent",  new[] { "hydropump", "watergun", "icebeam", "tackle" },            null),
+                ("pikachu",    "static",   new[] { "thunderwave", "thunderbolt", "quickattack", "ironhead" }, null),
+                ("bulbasaur",  "overgrow", new[] { "leechseed", "razorleaf", "vinewhip", "tackle" },          null),
             });
 
             var side0 = new Side { Name = "Player" };
@@ -113,11 +113,11 @@ namespace MonsterBattler.Game
             StartCoroutine(BattleLoop());
         }
 
-        List<Pokemon> BuildTeam(Dex dex, (string species, string ability, string[] moves)[] entries)
+        List<Pokemon> BuildTeam(Dex dex, (string species, string ability, string[] moves, string item)[] entries)
         {
             var team = new List<Pokemon>();
-            foreach (var (species, ability, moves) in entries)
-                team.Add(DemoDex.MakeBattler(dex, species, species, ability, moves));
+            foreach (var (species, ability, moves, item) in entries)
+                team.Add(DemoDex.MakeBattler(dex, species, species, ability, moves, item));
             return team;
         }
 

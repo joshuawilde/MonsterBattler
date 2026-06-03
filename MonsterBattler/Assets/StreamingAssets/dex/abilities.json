@@ -13,5 +13,9 @@
   "intimidate": {"name": "Intimidate"},
   "speedboost": {"name": "Speed Boost"},
   "flashfire": {"name": "Flash Fire"},
-  "sturdy": {"name": "Sturdy"}
+  "sturdy": {"name": "Sturdy"},
+  "drought": {"name": "Drought"},
+  "drizzle": {"name": "Drizzle"},
+  "sandstream": {"name": "Sand Stream"},
+  "snowwarning": {"name": "Snow Warning"}
 }

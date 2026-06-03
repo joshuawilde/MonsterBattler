@@ -50,6 +50,12 @@ namespace MonsterBattler.Sim
             if (defStatKind == Stat.Def) battle.RunModifyDef(defEv); else battle.RunModifySpD(defEv);
             defStat = Math.Max(1, defEv.Value);
 
+            // Passive weather-based defensive boosts (gen 4+ Sand SpD for Rock, gen 9 Snow Def for Ice).
+            if (battle.Field.Weather == Weather.Sandstorm && defStatKind == Stat.SpD && IsType(target, MonType.Rock))
+                defStat = defStat * 3 / 2;
+            if (battle.Field.Weather == Weather.Snow && defStatKind == Stat.Def && IsType(target, MonType.Ice))
+                defStat = defStat * 3 / 2;
+
             int level = user.Level;
             int dmg = (int)Math.Floor((2.0 * level / 5.0 + 2.0) * basePower * atkStat / defStat);
             dmg = (int)Math.Floor(dmg / 50.0) + 2;
@@ -65,11 +71,38 @@ namespace MonsterBattler.Sim
                 : 1f;
             dmg = (int)(dmg * eff);
 
+            // Weather damage multipliers (after STAB/type, before crit).
+            switch (battle.Field.Weather)
+            {
+                case Weather.Sun:
+                    if (move.Type == MonType.Fire) dmg = dmg * 3 / 2;
+                    else if (move.Type == MonType.Water) dmg = dmg / 2;
+                    break;
+                case Weather.Rain:
+                    if (move.Type == MonType.Water) dmg = dmg * 3 / 2;
+                    else if (move.Type == MonType.Fire) dmg = dmg / 2;
+                    break;
+                case Weather.HarshSun:
+                    if (move.Type == MonType.Water) return 0; // Water moves fail in extremely harsh sunlight.
+                    if (move.Type == MonType.Fire) dmg = dmg * 3 / 2;
+                    break;
+                case Weather.HeavyRain:
+                    if (move.Type == MonType.Fire) return 0;
+                    if (move.Type == MonType.Water) dmg = dmg * 3 / 2;
+                    break;
+            }
+
             if (isCrit) dmg = dmg * 3 / 2;
 
             var modEv = new ModifyDamageEvent { Battle = battle, User = user, Target = target, Move = move, Damage = dmg };
             battle.RunModifyDamage(modEv);
             return Math.Max(1, modEv.Damage);
+        }
+
+        static bool IsType(Pokemon mon, MonType t)
+        {
+            if (mon?.Species == null) return false;
+            return mon.Species.Type1 == t || mon.Species.Type2 == t;
         }
     }
 }

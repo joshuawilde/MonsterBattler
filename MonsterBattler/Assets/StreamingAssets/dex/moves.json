@@ -100,5 +100,30 @@
     "name": "Stone Edge", "type": "Rock", "category": "Physical",
     "basePower": 100, "accuracy": 80, "pp": 5, "priority": 0,
     "critRatio": 1, "flags": {"protect": 1}
+  },
+  "leechseed": {
+    "name": "Leech Seed", "type": "Grass", "category": "Status",
+    "basePower": 0, "accuracy": 90, "pp": 10, "priority": 0,
+    "effectId": "leechseedmove"
+  },
+  "protect": {
+    "name": "Protect", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 10, "priority": 4,
+    "target": "self", "effectId": "protectmove"
+  },
+  "toxic": {
+    "name": "Toxic", "type": "Poison", "category": "Status",
+    "basePower": 0, "accuracy": 90, "pp": 10, "priority": 0,
+    "effectId": "toxicmove"
+  },
+  "willowisp": {
+    "name": "Will-O-Wisp", "type": "Fire", "category": "Status",
+    "basePower": 0, "accuracy": 85, "pp": 15, "priority": 0,
+    "effectId": "willowispmove"
+  },
+  "thunderwave": {
+    "name": "Thunder Wave", "type": "Electric", "category": "Status",
+    "basePower": 0, "accuracy": 90, "pp": 20, "priority": 0,
+    "effectId": "thunderwavemove"
   }
 }

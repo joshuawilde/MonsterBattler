@@ -28,6 +28,7 @@ namespace MonsterBattler.Sim.Effects
         public virtual void OnModifyDef(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnModifySpA(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnModifySpD(StatModifyEvent ev, Pokemon owner) { }
+        public virtual void OnModifySpe(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnModifyDamage(ModifyDamageEvent ev, Pokemon owner) { }
 
         // -------- Lifecycle --------

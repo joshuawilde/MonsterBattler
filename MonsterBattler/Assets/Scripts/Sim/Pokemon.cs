@@ -24,7 +24,7 @@ namespace MonsterBattler.Sim
         public Effect AbilityEffect;
         public Effect ItemEffect;
         public Effect StatusEffect;
-        public readonly Dictionary<string, Effect> Volatiles = new();
+        public readonly Dictionary<string, VolatileSlot> Volatiles = new();
         /// <summary>Lightweight string tags for ability/effect flags (e.g. "flashfire"). Cleared on switch out.</summary>
         public readonly HashSet<string> Tags = new();
 
@@ -55,8 +55,11 @@ namespace MonsterBattler.Sim
             if (AbilityEffect != null) yield return AbilityEffect;
             if (ItemEffect != null) yield return ItemEffect;
             if (StatusEffect != null) yield return StatusEffect;
-            foreach (var v in Volatiles.Values) yield return v;
+            foreach (var v in Volatiles.Values) if (v.Effect != null) yield return v.Effect;
         }
+
+        public VolatileSlot GetVolatile(string id) =>
+            Volatiles.TryGetValue(id, out var slot) ? slot : null;
 
         public override string ToString() => $"{Nickname ?? Species?.Name} ({CurrentHp}/{MaxStats[(int)Stat.HP]})";
     }

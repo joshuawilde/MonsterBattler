@@ -54,11 +54,12 @@ namespace MonsterBattler.Game
         }
 
         public static Pokemon MakeBattler(Dex dex, string speciesId, string nickname,
-                                          string abilityId = null, string[] moveIds = null)
+                                          string abilityId = null, string[] moveIds = null, string itemId = null)
         {
             var sp = dex.Get(speciesId);
             var mon = new Pokemon { Species = sp, Nickname = nickname, Level = 50 };
             if (!string.IsNullOrEmpty(abilityId)) mon.Ability = dex.GetAbility(abilityId);
+            if (!string.IsNullOrEmpty(itemId)) mon.Item = dex.GetItem(itemId);
 
             for (int i = 0; i < 6; i++) mon.IVs[i] = 31;
             mon.MaxStats[(int)Stat.HP]  = CalcHp(sp.BaseStats.HP, mon.Level);

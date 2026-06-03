@@ -71,11 +71,17 @@ namespace MonsterBattler.Sim
             }
             if (IsFinished) return;
 
-            // Phase 3: residuals (status DoTs, leftovers, weather damage…).
+            // Phase 3a: per-mon residuals (status DoTs, leftovers, ability residuals…).
             foreach (var side in Sides)
                 foreach (var mon in side.ActiveSlots)
                     if (!mon.IsFainted)
                         RunResidual(new ResidualEvent { Battle = this, Target = mon });
+
+            // Phase 3b: weather chip damage + duration tick.
+            TickWeather();
+
+            // Phase 3c: clean up single-turn volatiles (Protect / Detect / etc.).
+            ClearSingleTurnVolatiles();
 
             // Phase 4: faint logs + auto-switch from bench. TODO: surface a forced-switch
             // decision to the player instead of auto-picking next alive.
@@ -96,8 +102,8 @@ namespace MonsterBattler.Sim
             int aPrio = aMove.Priority;
             int bPrio = bMove.Priority;
             if (aPrio != bPrio) { if (aPrio < bPrio) (moves[0], moves[1]) = (moves[1], moves[0]); return; }
-            int aSpe = a.attacker.ActiveSlots[0].MaxStats[(int)Stat.Spe];
-            int bSpe = b.attacker.ActiveSlots[0].MaxStats[(int)Stat.Spe];
+            int aSpe = GetEffectiveSpeed(a.attacker.ActiveSlots[0]);
+            int bSpe = GetEffectiveSpeed(b.attacker.ActiveSlots[0]);
             if (aSpe == bSpe) { if (Prng.Chance(1, 2)) (moves[0], moves[1]) = (moves[1], moves[0]); return; }
             if (aSpe < bSpe) (moves[0], moves[1]) = (moves[1], moves[0]);
         }
@@ -133,6 +139,7 @@ namespace MonsterBattler.Sim
                 outgoing.IsActive = false;
                 outgoing.Volatiles.Clear();
                 outgoing.Tags.Clear();
+                outgoing.ToxicCounter = 0;
                 for (int i = 0; i < outgoing.StatStages.Length; i++) outgoing.StatStages[i] = 0;
             }
 
@@ -220,6 +227,92 @@ namespace MonsterBattler.Sim
             RunAfterMove(new AfterMoveEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = damage });
         }
 
+        /// <summary>
+        /// Attach a volatile effect (Leech Seed, Protect, Confusion, etc.) to the target.
+        /// No-op if the target already has a volatile with this id, or the EffectId is unknown.
+        /// </summary>
+        public VolatileSlot AddVolatile(Pokemon target, string id, Pokemon source = null, int turns = -1, bool singleTurn = false)
+        {
+            if (target == null || target.IsFainted) return null;
+            if (target.Volatiles.ContainsKey(id)) return null;
+            var effect = EffectRegistry.Get(id);
+            if (effect == null) return null;
+            var slot = new VolatileSlot { Effect = effect, Source = source, Turns = turns, SingleTurn = singleTurn };
+            target.Volatiles[id] = slot;
+            Log.Raw($"|-start|{Ident(target)}|{id}");
+            return slot;
+        }
+
+        public bool RemoveVolatile(Pokemon target, string id)
+        {
+            if (target == null) return false;
+            if (!target.Volatiles.Remove(id)) return false;
+            Log.Raw($"|-end|{Ident(target)}|{id}");
+            return true;
+        }
+
+        void ClearSingleTurnVolatiles()
+        {
+            foreach (var side in Sides)
+            {
+                if (side == null) continue;
+                foreach (var mon in side.ActiveSlots)
+                {
+                    if (mon == null) continue;
+                    var keys = new System.Collections.Generic.List<string>();
+                    foreach (var kv in mon.Volatiles) if (kv.Value.SingleTurn) keys.Add(kv.Key);
+                    foreach (var id in keys) mon.Volatiles.Remove(id);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set or replace battlefield weather. Re-setting the same weather is a no-op (gen 6+
+        /// behavior). Defaults to a 5-turn duration (8 with weather rocks — pass duration explicitly).
+        /// </summary>
+        public void SetWeather(Weather weather, int turns = 5)
+        {
+            if (Field.Weather == weather) return;
+            Field.Weather = weather;
+            Field.WeatherTurnsLeft = turns;
+            Log.Raw($"|-weather|{weather}");
+        }
+
+        void TickWeather()
+        {
+            if (Field.Weather == Weather.None) return;
+
+            // Sandstorm chip — Rock/Ground/Steel are immune. Ability-based immunities
+            // (Sand Force, Sand Rush, Sand Veil, Magic Guard, Overcoat) land later.
+            if (Field.Weather == Weather.Sandstorm)
+            {
+                foreach (var side in Sides)
+                    foreach (var mon in side.ActiveSlots)
+                    {
+                        if (mon == null || mon.IsFainted) continue;
+                        if (HasType(mon, MonType.Rock) || HasType(mon, MonType.Ground) || HasType(mon, MonType.Steel)) continue;
+                        int dmg = System.Math.Max(1, mon.MaxStats[(int)Stat.HP] / 16);
+                        ApplyDamage(mon, dmg);
+                        Log.Raw($"|-damage|{Ident(mon)}|{mon.CurrentHp}/{mon.MaxStats[(int)Stat.HP]}|[from] Sandstorm");
+                    }
+            }
+
+            // Decrement and clear if expired.
+            Field.WeatherTurnsLeft--;
+            if (Field.WeatherTurnsLeft <= 0)
+            {
+                Log.Raw($"|-weather|none|[from] {Field.Weather}");
+                Field.Weather = Weather.None;
+                Field.WeatherTurnsLeft = 0;
+            }
+        }
+
+        static bool HasType(Pokemon mon, MonType t)
+        {
+            if (mon?.Species == null) return false;
+            return mon.Species.Type1 == t || mon.Species.Type2 == t;
+        }
+
         /// <summary>Returns the side that owns <paramref name="mon"/>, or null if not on either team.</summary>
         public Side SideOf(Pokemon mon)
         {
@@ -234,6 +327,19 @@ namespace MonsterBattler.Sim
             var s = SideOf(mon);
             if (s == null) return null;
             return Sides[1 - s.Index];
+        }
+
+        /// <summary>
+        /// Pokemon's Speed after stat-stages + status (Paralysis) + items + abilities. Use this
+        /// anywhere ordering depends on Speed (action queue, Trick Room flip, etc.).
+        /// </summary>
+        public int GetEffectiveSpeed(Pokemon mon)
+        {
+            if (mon == null) return 0;
+            int spe = (int)(mon.MaxStats[(int)Stat.Spe] * Stats.StageMult(mon.StatStages[(int)Stat.Spe]));
+            var ev = new StatModifyEvent { Battle = this, Owner = mon, Stat = Stat.Spe, Value = System.Math.Max(1, spe) };
+            RunModifySpe(ev);
+            return System.Math.Max(1, ev.Value);
         }
 
         /// <summary>Gen 6+ crit ratio table. Stage 3+ is guaranteed crit.</summary>
@@ -313,7 +419,12 @@ namespace MonsterBattler.Sim
 
         public void RunTryHit(TryHitEvent ev)        { Dispatch(ev.Target, (e, o) => e.OnTryHit(ev, o)); }
         public void RunHit(HitEvent ev)              { Dispatch(ev.User, (e, o) => e.OnHit(ev, o)); Dispatch(ev.Target, (e, o) => e.OnHit(ev, o)); }
-        public void RunDamagingHit(HitEvent ev)      { Dispatch(ev.Target, (e, o) => e.OnDamagingHit(ev, o)); }
+        public void RunDamagingHit(HitEvent ev)
+        {
+            // Walk user (Life Orb recoil, contact-with-recoil items) AND target (Static, Rough Skin, etc.).
+            Dispatch(ev.User, (e, o) => e.OnDamagingHit(ev, o));
+            Dispatch(ev.Target, (e, o) => e.OnDamagingHit(ev, o));
+        }
         public void RunAfterMove(AfterMoveEvent ev)  { Dispatch(ev.User, (e, o) => e.OnAfterMove(ev, o)); }
 
         public void RunBasePower(BasePowerEvent ev)  { Dispatch(ev.User, (e, o) => e.OnBasePower(ev, o)); Dispatch(ev.Target, (e, o) => e.OnBasePower(ev, o)); }
@@ -321,6 +432,7 @@ namespace MonsterBattler.Sim
         public void RunModifyDef(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifyDef(ev, o)); }
         public void RunModifySpA(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpA(ev, o)); }
         public void RunModifySpD(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpD(ev, o)); }
+        public void RunModifySpe(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpe(ev, o)); }
         public void RunModifyDamage(ModifyDamageEvent ev) { Dispatch(ev.User, (e, o) => e.OnModifyDamage(ev, o)); Dispatch(ev.Target, (e, o) => e.OnModifyDamage(ev, o)); }
 
         public void RunSwitchIn(SwitchInEvent ev)    { Dispatch(ev.Pokemon, (e, o) => e.OnSwitchIn(ev, o)); }
