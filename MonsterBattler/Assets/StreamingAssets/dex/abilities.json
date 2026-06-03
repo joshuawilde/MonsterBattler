@@ -44,5 +44,10 @@
   "raindish":     {"name": "Rain Dish"},
   "icebody":      {"name": "Ice Body"},
   "magicguard":   {"name": "Magic Guard"},
-  "trace":        {"name": "Trace"}
+  "trace":        {"name": "Trace"},
+  "innerfocus":   {"name": "Inner Focus"},
+  "sandveil":     {"name": "Sand Veil"},
+  "snowcloak":    {"name": "Snow Cloak"},
+  "compoundeyes": {"name": "Compound Eyes"},
+  "tintedlens":   {"name": "Tinted Lens"}
 }

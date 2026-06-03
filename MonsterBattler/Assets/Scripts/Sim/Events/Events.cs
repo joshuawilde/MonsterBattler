@@ -39,6 +39,19 @@ namespace MonsterBattler.Sim.Events
         public string BlockReason;
     }
 
+    /// <summary>
+    /// Accuracy modifier event. Listeners scale the rolled-out accuracy% before the hit check.
+    /// Compound Eyes pushes it up; Sand Veil / Snow Cloak push it down.
+    /// </summary>
+    public sealed class ModifyAccuracyEvent : BattleEvent
+    {
+        public Pokemon User;
+        public Pokemon Target;
+        public MoveData Move;
+        /// <summary>Out of 100, mutable.</summary>
+        public int Accuracy;
+    }
+
     public sealed class HitEvent : BattleEvent
     {
         public Pokemon User;

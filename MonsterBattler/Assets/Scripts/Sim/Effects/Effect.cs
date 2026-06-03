@@ -31,6 +31,7 @@ namespace MonsterBattler.Sim.Effects
         public virtual void OnModifySpD(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnModifySpe(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnModifyDamage(ModifyDamageEvent ev, Pokemon owner) { }
+        public virtual void OnModifyAccuracy(ModifyAccuracyEvent ev, Pokemon owner) { }
 
         // -------- Lifecycle --------
         public virtual void OnSwitchIn(SwitchInEvent ev, Pokemon owner) { }

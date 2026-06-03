@@ -55,6 +55,9 @@ namespace MonsterBattler.Sim
             TurnNumber++;
             Log.Turn(TurnNumber);
 
+            // Phase 0: Pursuit intercept — a Pursuit user catches a switching foe with doubled BP.
+            InterceptPursuit(ref s0, ref s1);
+
             // Phase 1: switches (both sides, side-0 first as a placeholder for richer ordering).
             if (s0.Kind == ChoiceKind.Switch) TrySwitch(Sides[0], s0.SwitchToIndex);
             if (s1.Kind == ChoiceKind.Switch) TrySwitch(Sides[1], s1.SwitchToIndex);
@@ -115,8 +118,32 @@ namespace MonsterBattler.Sim
             if (!aGoesFirst) (moves[0], moves[1]) = (moves[1], moves[0]);
         }
 
+        void InterceptPursuit(ref Choice s0, ref Choice s1)
+        {
+            Check(Sides[0], ref s0, ref s1, Sides[1]);
+            Check(Sides[1], ref s1, ref s0, Sides[0]);
+
+            void Check(Side switching, ref Choice switchChoice, ref Choice oppChoice, Side opposing)
+            {
+                if (switching == null || opposing == null) return;
+                if (switchChoice.Kind != ChoiceKind.Switch) return;
+                if (oppChoice.Kind != ChoiceKind.Move) return;
+                if (oppChoice.MoveId != "pursuit") return;
+                if (opposing.ActiveSlots.Count == 0 || switching.ActiveSlots.Count == 0) return;
+                var pursuitUser = opposing.ActiveSlots[0];
+                var pursuitTarget = switching.ActiveSlots[0];
+                if (pursuitUser.IsFainted || pursuitTarget.IsFainted) return;
+                pursuitUser.Tags.Add("pursuitintercept");
+                UseMove(pursuitUser, pursuitTarget, "pursuit");
+                pursuitUser.Tags.Remove("pursuitintercept");
+                // Consume the Pursuit user's action so they don't try again in Phase 2.
+                oppChoice = new Choice { Kind = ChoiceKind.Skip };
+            }
+        }
+
         void ResolveAction(Side attacker, Side defender, Choice choice)
         {
+            if (choice.Kind == ChoiceKind.Skip) return;
             if (choice.Kind != ChoiceKind.Move) return;
             var user = attacker.ActiveSlots[0];
             if (user.IsFainted) return;
@@ -255,12 +282,15 @@ namespace MonsterBattler.Sim
                 return;
             }
 
-            // Accuracy check with accuracy/evasion stages folded in.
+            // Accuracy check with accuracy/evasion stages folded in, then modifier event hooks
+            // (Compound Eyes, Sand Veil, Snow Cloak, etc.) get to tweak the threshold.
             if (move.Accuracy > 0)
             {
                 int accDiff = user.StatStages[(int)Stat.Acc] - target.StatStages[(int)Stat.Eva];
                 int threshold = (int)(move.Accuracy * Stats.AccuracyStageMult(accDiff));
-                if (!Prng.Chance(threshold, 100))
+                var accEv = new ModifyAccuracyEvent { Battle = this, User = user, Target = target, Move = move, Accuracy = threshold };
+                RunModifyAccuracy(accEv);
+                if (!Prng.Chance(System.Math.Max(1, accEv.Accuracy), 100))
                 {
                     Log.Raw($"|-miss|{Ident(user)}|{Ident(target)}");
                     return;
@@ -666,6 +696,11 @@ namespace MonsterBattler.Sim
             DispatchSideOf(ev.User, (e, o) => e.OnModifyDamage(ev, o));
             DispatchSideOf(ev.Target, (e, o) => e.OnModifyDamage(ev, o));
         }
+        public void RunModifyAccuracy(ModifyAccuracyEvent ev)
+        {
+            Dispatch(ev.User, (e, o) => e.OnModifyAccuracy(ev, o));
+            Dispatch(ev.Target, (e, o) => e.OnModifyAccuracy(ev, o));
+        }
 
         void DispatchSideOf(Pokemon scope, System.Action<Effect, Pokemon> visit)
         {
@@ -742,7 +777,7 @@ namespace MonsterBattler.Sim
         static string Ident(Pokemon mon) => mon?.Nickname ?? mon?.Species?.Name ?? "?";
     }
 
-    public enum ChoiceKind { Move, Switch }
+    public enum ChoiceKind { Move, Switch, Skip }
 
     public struct Choice
     {
