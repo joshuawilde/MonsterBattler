@@ -156,6 +156,8 @@ namespace MonsterBattler.Sim
         {
             foreach (var side in Sides)
             {
+                // The player (side 0) picks their own replacement via the UI prompt.
+                if (side.Index == 0) continue;
                 if (side.ActiveSlots.Count == 0) continue;
                 var active = side.ActiveSlots[0];
                 if (!active.IsFainted) continue;
@@ -218,9 +220,26 @@ namespace MonsterBattler.Sim
             {
                 isCrit = RollCrit(move.CritRatio);
                 damage = DamageCalc.Compute(this, user, target, move, isCrit);
-                ApplyDamage(target, damage);
-                if (isCrit) Log.Raw($"|-crit|{Ident(target)}");
-                Log.Damage(target, damage);
+
+                // Substitute absorbs the hit (gen 5+: no bleed-through).
+                var sub = target.GetVolatile("substitute");
+                bool absorbed = sub != null && damage > 0 && !move.Sound && user != target;
+                if (absorbed)
+                {
+                    if (damage >= sub.Counter) RemoveVolatile(target, "substitute");
+                    else
+                    {
+                        sub.Counter -= damage;
+                        Log.Raw($"|-activate|{Ident(target)}|move: Substitute|[damage]");
+                    }
+                    damage = 0;
+                }
+                else
+                {
+                    ApplyDamage(target, damage);
+                    if (isCrit) Log.Raw($"|-crit|{Ident(target)}");
+                    Log.Damage(target, damage);
+                }
             }
 
             var hit = new HitEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = damage };
@@ -452,6 +471,13 @@ namespace MonsterBattler.Sim
         public void ApplyStatus(Pokemon target, StatusCondition status)
         {
             if (target.IsFainted || target.Status != StatusCondition.None) return;
+            var tryEv = new TryStatusEvent { Battle = this, Target = target, Status = status };
+            RunTryStatus(tryEv);
+            if (tryEv.Blocked)
+            {
+                Log.Raw($"|-immune|{Ident(target)}|[from] ability: {tryEv.BlockReason}");
+                return;
+            }
             target.Status = status;
             target.StatusEffect = EffectRegistry.Get(StatusEffectId(status));
             if (status == StatusCondition.Sleep) target.SleepTurnsLeft = Prng.Range(1, 4); // gen 5+: 1..3 turns
@@ -517,6 +543,7 @@ namespace MonsterBattler.Sim
         }
         public void RunSwitchOut(SwitchOutEvent ev)  { Dispatch(ev.Pokemon, (e, o) => e.OnSwitchOut(ev, o)); }
         public void RunResidual(ResidualEvent ev)    { Dispatch(ev.Target, (e, o) => e.OnResidual(ev, o)); }
+        public void RunTryStatus(TryStatusEvent ev)  { Dispatch(ev.Target, (e, o) => e.OnTryStatus(ev, o)); }
 
         static void Dispatch(Pokemon scope, System.Action<Effect, Pokemon> visit)
         {

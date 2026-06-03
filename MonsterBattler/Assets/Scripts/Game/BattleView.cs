@@ -58,6 +58,8 @@ namespace MonsterBattler.Game
         SwitchButton[] _switches;
         Choice? _pendingChoice;
         IBattleAI _opponentAI;
+        bool _isInForcedSwitch;
+        int _pendingForcedSwitchIdx = -1;
 
         void Start()
         {
@@ -125,6 +127,14 @@ namespace MonsterBattler.Game
         {
             while (!_battle.IsFinished)
             {
+                // Forced switch: if our active fainted (engine no longer auto-switches us),
+                // require the player to pick a replacement before the next turn.
+                if (_battle.Sides[0].ActiveSlots[0].IsFainted && HasAliveBench(_battle.Sides[0]))
+                {
+                    yield return PromptForcedSwitch();
+                    if (_battle.IsFinished) break;
+                }
+
                 _pendingChoice = null;
                 SetInputEnabled(true);
                 while (_pendingChoice == null) yield return null;
@@ -142,8 +152,37 @@ namespace MonsterBattler.Game
             Debug.Log($"[Battle] Winner: side {_battle.WinningSide}");
         }
 
+        IEnumerator PromptForcedSwitch()
+        {
+            // Disable moves; only the (non-fainted) switch buttons should be tappable.
+            _isInForcedSwitch = true;
+            _pendingForcedSwitchIdx = -1;
+            SetForcedSwitchUI(true);
+            while (_pendingForcedSwitchIdx < 0) yield return null;
+            _battle.Switch(_battle.Sides[0], _pendingForcedSwitchIdx);
+            _isInForcedSwitch = false;
+            FlushLog();
+            RefreshAll();
+            yield return new WaitForSeconds(0.4f);
+        }
+
+        static bool HasAliveBench(Side side)
+        {
+            for (int i = 0; i < side.Team.Count; i++)
+                if (side.Team[i] != side.ActiveSlots[0] && !side.Team[i].IsFainted) return true;
+            return false;
+        }
+
+        void SetForcedSwitchUI(bool on)
+        {
+            foreach (var b in _moves) if (b != null) b.SetInteractable(false);
+            // Switch buttons obey their own per-mon Show() interactability — RefreshAll already
+            // ran with the post-faint state, so fainted/active mons are correctly grayed out.
+        }
+
         void OnMoveClicked(int idx)
         {
+            if (_isInForcedSwitch) return; // moves locked during forced-switch prompt
             var player = _battle.Sides[0].ActiveSlots[0];
             if (idx >= player.Moves.Count) return;
             _pendingChoice = Choice.UseMove(player.Moves[idx].Move.Id);
@@ -154,8 +193,17 @@ namespace MonsterBattler.Game
             var side = _battle.Sides[0];
             if (idx < 0 || idx >= side.Team.Count) return;
             var candidate = side.Team[idx];
-            if (candidate.IsFainted || candidate.IsActive) return;
-            _pendingChoice = Choice.SwitchTo(idx);
+            if (candidate.IsFainted) return;
+            if (_isInForcedSwitch)
+            {
+                if (candidate == side.ActiveSlots[0]) return; // can't pick the fainted slot
+                _pendingForcedSwitchIdx = idx;
+            }
+            else
+            {
+                if (candidate.IsActive) return;
+                _pendingChoice = Choice.SwitchTo(idx);
+            }
         }
 
         void SetInputEnabled(bool on)

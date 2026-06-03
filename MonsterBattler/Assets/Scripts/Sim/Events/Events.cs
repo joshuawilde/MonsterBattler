@@ -104,6 +104,18 @@ namespace MonsterBattler.Sim.Events
         public Pokemon Pokemon;
     }
 
+    /// <summary>
+    /// Fires inside <see cref="Battle.ApplyStatus"/> before the status is applied. Listeners
+    /// (Limber, Insomnia, Immunity, Magma Armor, Vital Spirit, etc.) set Blocked=true to refuse.
+    /// </summary>
+    public sealed class TryStatusEvent : BattleEvent
+    {
+        public Pokemon Target;
+        public StatusCondition Status;
+        public bool Blocked;
+        public string BlockReason;
+    }
+
     public sealed class ResidualEvent : BattleEvent
     {
         public Pokemon Target;

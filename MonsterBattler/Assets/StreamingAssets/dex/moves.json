@@ -201,5 +201,10 @@
     "basePower": 75, "accuracy": 100, "pp": 10, "priority": 0,
     "drainNum": 1, "drainDen": 2,
     "flags": {"contact": 1, "punch": 1, "protect": 1}
+  },
+  "substitute": {
+    "name": "Substitute", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 10, "priority": 0,
+    "target": "self", "effectId": "substitutemove"
   }
 }

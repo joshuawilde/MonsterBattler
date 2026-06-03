@@ -36,6 +36,7 @@ namespace MonsterBattler.Sim.Effects
         public virtual void OnSwitchIn(SwitchInEvent ev, Pokemon owner) { }
         public virtual void OnSwitchOut(SwitchOutEvent ev, Pokemon owner) { }
         public virtual void OnFaint(FaintEvent ev, Pokemon owner) { }
+        public virtual void OnTryStatus(TryStatusEvent ev, Pokemon owner) { }
 
         // -------- End-of-turn --------
         public virtual void OnResidual(ResidualEvent ev, Pokemon owner) { }
