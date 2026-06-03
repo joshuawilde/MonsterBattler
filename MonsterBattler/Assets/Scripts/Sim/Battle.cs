@@ -56,8 +56,8 @@ namespace MonsterBattler.Sim
             Log.Turn(TurnNumber);
 
             // Phase 1: switches (both sides, side-0 first as a placeholder for richer ordering).
-            if (s0.Kind == ChoiceKind.Switch) Switch(Sides[0], s0.SwitchToIndex);
-            if (s1.Kind == ChoiceKind.Switch) Switch(Sides[1], s1.SwitchToIndex);
+            if (s0.Kind == ChoiceKind.Switch) TrySwitch(Sides[0], s0.SwitchToIndex);
+            if (s1.Kind == ChoiceKind.Switch) TrySwitch(Sides[1], s1.SwitchToIndex);
 
             // Phase 2: moves in priority/Speed order.
             var moveActions = new List<(Side attacker, Side defender, Choice c)>();
@@ -141,6 +141,19 @@ namespace MonsterBattler.Sim
         /// <summary>
         /// Swap the side's active slot with a bench mon. Fires OnSwitchOut/OnSwitchIn.
         /// </summary>
+        /// <summary>Try to swap, blocked by trapping volatiles (Bind, Wrap, etc.). Logs and no-ops if trapped.</summary>
+        public void TrySwitch(Side side, int newIndex)
+        {
+            if (side == null) return;
+            var outgoing = side.ActiveSlots.Count > 0 ? side.ActiveSlots[0] : null;
+            if (outgoing != null && outgoing.Volatiles.ContainsKey("partiallytrapped"))
+            {
+                Log.Raw($"|cant|{Ident(outgoing)}|partiallytrapped");
+                return;
+            }
+            Switch(side, newIndex);
+        }
+
         public void Switch(Side side, int newIndex)
         {
             if (newIndex < 0 || newIndex >= side.Team.Count) return;
@@ -208,6 +221,30 @@ namespace MonsterBattler.Sim
             RunBeforeMove(before);
             if (before.Cancelled) return;
 
+            // Two-turn charge moves (Solar Beam, Sky Attack, Phantom Force).
+            if (move.TwoTurn)
+            {
+                bool alreadyCharging = user.Volatiles.ContainsKey("twoturncharge");
+                if (!alreadyCharging)
+                {
+                    // Solar Beam fires same turn in Sun.
+                    bool skipCharge = move.Id == "solarbeam" &&
+                        (Field.Weather == Weather.Sun || Field.Weather == Weather.HarshSun);
+                    if (!skipCharge)
+                    {
+                        AddVolatile(user, "twoturncharge", source: user);
+                        user.LockedMoveId = move.Id;
+                        Log.Raw($"|-prepare|{Ident(user)}|{move.Name}");
+                        return;
+                    }
+                }
+                else
+                {
+                    RemoveVolatile(user, "twoturncharge");
+                    user.LockedMoveId = null;
+                }
+            }
+
             Log.Move(user, move, target);
 
             var tryHit = new TryHitEvent { Battle = this, User = user, Target = target, Move = move };
@@ -261,6 +298,7 @@ namespace MonsterBattler.Sim
                         ApplyDamage(target, hitDamage);
                         if (isCrit) Log.Raw($"|-crit|{Ident(target)}");
                         Log.Damage(target, hitDamage);
+                        RecordIncomingDamage(target, hitDamage, move.Category, user);
                     }
 
                     var hit = new HitEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = hitDamage };
@@ -303,14 +341,14 @@ namespace MonsterBattler.Sim
             if (move.RecoilDen > 0 && totalDamage > 0 && !user.IsFainted)
             {
                 int recoil = System.Math.Max(1, totalDamage * move.RecoilNum / move.RecoilDen);
-                ApplyDamage(user, recoil);
+                ApplyDamage(user, recoil, DamageSource.Recoil);
                 Log.Raw($"|-damage|{Ident(user)}|{user.CurrentHp}/{user.MaxStats[(int)Stat.HP]}|[from] Recoil");
             }
 
-            // Self-KO moves (Explosion, Self-Destruct, Memento).
+            // Self-KO moves: bypass Magic Guard, so use Move source intentionally.
             if (move.SelfKO && !user.IsFainted)
             {
-                ApplyDamage(user, user.CurrentHp);
+                ApplyDamage(user, user.CurrentHp, DamageSource.Move);
                 Log.Faint(user);
             }
 
@@ -434,7 +472,7 @@ namespace MonsterBattler.Sim
                         if (mon == null || mon.IsFainted) continue;
                         if (HasType(mon, MonType.Rock) || HasType(mon, MonType.Ground) || HasType(mon, MonType.Steel)) continue;
                         int dmg = System.Math.Max(1, mon.MaxStats[(int)Stat.HP] / 16);
-                        ApplyDamage(mon, dmg);
+                        ApplyDamage(mon, dmg, DamageSource.Sandstorm);
                         Log.Raw($"|-damage|{Ident(mon)}|{mon.CurrentHp}/{mon.MaxStats[(int)Stat.HP]}|[from] Sandstorm");
                     }
             }
@@ -537,9 +575,22 @@ namespace MonsterBattler.Sim
             return true;
         }
 
-        public void ApplyDamage(Pokemon mon, int amount)
+        public void ApplyDamage(Pokemon mon, int amount, DamageSource source = DamageSource.Move)
         {
+            if (mon == null || mon.IsFainted || amount <= 0) return;
+            // Magic Guard suppresses everything that isn't a direct move hit.
+            if (source != DamageSource.Move && mon.AbilityEffect is Effects.Abilities.MagicGuardEffect) return;
             mon.CurrentHp = System.Math.Max(0, mon.CurrentHp - amount);
+        }
+
+        /// <summary>Tracks the last damage instance received — used by Counter / Mirror Coat / Metal Burst.</summary>
+        public void RecordIncomingDamage(Pokemon target, int amount, MoveCategory category, Pokemon source)
+        {
+            if (target == null || amount <= 0) return;
+            target.LastDamageAmount = amount;
+            target.LastDamageCategory = category;
+            target.LastDamageSource = source;
+            target.LastDamageTurn = TurnNumber;
         }
 
         public void ApplyStatus(Pokemon target, StatusCondition status)
@@ -669,8 +720,18 @@ namespace MonsterBattler.Sim
                     cond.Effect?.OnSwitchIn(ev, ev.Pokemon);
         }
         public void RunSwitchOut(SwitchOutEvent ev)  { Dispatch(ev.Pokemon, (e, o) => e.OnSwitchOut(ev, o)); }
-        public void RunResidual(ResidualEvent ev)    { Dispatch(ev.Target, (e, o) => e.OnResidual(ev, o)); }
-        public void RunTryStatus(TryStatusEvent ev)  { Dispatch(ev.Target, (e, o) => e.OnTryStatus(ev, o)); }
+        public void RunResidual(ResidualEvent ev)
+        {
+            Dispatch(ev.Target, (e, o) => e.OnResidual(ev, o));
+            // Side residuals (Wish, future Light Screen flicker, etc.) fire for the active mon.
+            DispatchSideOf(ev.Target, (e, o) => e.OnResidual(ev, o));
+        }
+        public void RunTryStatus(TryStatusEvent ev)
+        {
+            Dispatch(ev.Target, (e, o) => e.OnTryStatus(ev, o));
+            // Safeguard lives as a side condition — let it block status applications.
+            DispatchSideOf(ev.Target, (e, o) => e.OnTryStatus(ev, o));
+        }
 
         static void Dispatch(Pokemon scope, System.Action<Effect, Pokemon> visit)
         {

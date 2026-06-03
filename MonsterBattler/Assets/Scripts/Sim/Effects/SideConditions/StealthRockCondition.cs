@@ -21,7 +21,7 @@ namespace MonsterBattler.Sim.Effects.SideConditions
             if (eff <= 0f) return;
             int dmg = (int)(mon.MaxStats[(int)Stat.HP] * eff / 8f);
             if (dmg <= 0) return;
-            ev.Battle.ApplyDamage(mon, dmg);
+            ev.Battle.ApplyDamage(mon, dmg, DamageSource.Hazard);
             ev.Battle.Log.Raw($"|-damage|{mon.Species?.Name ?? mon.Nickname}|{mon.CurrentHp}/{mon.MaxStats[(int)Stat.HP]}|[from] Stealth Rock");
         }
     }

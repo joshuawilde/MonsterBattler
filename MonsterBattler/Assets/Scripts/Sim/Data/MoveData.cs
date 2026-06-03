@@ -32,6 +32,8 @@ namespace MonsterBattler.Sim.Data
         public int MultihitMax;
         // 0..100 probability of flinching the target after a damaging hit.
         public int FlinchChance;
+        /// <summary>Two-turn charge moves: spend turn 1 charging, hit on turn 2.</summary>
+        public bool TwoTurn;
 
         public MoveTarget Target = MoveTarget.Normal;
 

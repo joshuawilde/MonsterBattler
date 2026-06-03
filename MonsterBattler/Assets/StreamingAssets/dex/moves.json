@@ -310,5 +310,95 @@
     "name": "Trick Room", "type": "Psychic", "category": "Status",
     "basePower": 0, "accuracy": 0, "pp": 5, "priority": -7,
     "target": "field", "effectId": "trickroommove"
+  },
+  "bind": {
+    "name": "Bind", "type": "Normal", "category": "Physical",
+    "basePower": 15, "accuracy": 85, "pp": 20, "priority": 0,
+    "effectId": "trappingmove",
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "wrap": {
+    "name": "Wrap", "type": "Normal", "category": "Physical",
+    "basePower": 15, "accuracy": 90, "pp": 20, "priority": 0,
+    "effectId": "trappingmove",
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "whirlpool": {
+    "name": "Whirlpool", "type": "Water", "category": "Special",
+    "basePower": 35, "accuracy": 85, "pp": 15, "priority": 0,
+    "effectId": "trappingmove",
+    "flags": {"protect": 1}
+  },
+  "firespin": {
+    "name": "Fire Spin", "type": "Fire", "category": "Special",
+    "basePower": 35, "accuracy": 85, "pp": 15, "priority": 0,
+    "effectId": "trappingmove",
+    "flags": {"protect": 1}
+  },
+  "solarbeam": {
+    "name": "Solar Beam", "type": "Grass", "category": "Special",
+    "basePower": 120, "accuracy": 100, "pp": 10, "priority": 0,
+    "twoTurn": true, "flags": {"protect": 1}
+  },
+  "skyattack": {
+    "name": "Sky Attack", "type": "Flying", "category": "Physical",
+    "basePower": 140, "accuracy": 90, "pp": 5, "priority": 0,
+    "twoTurn": true, "critRatio": 1, "flinchChance": 30,
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "phantomforce": {
+    "name": "Phantom Force", "type": "Ghost", "category": "Physical",
+    "basePower": 90, "accuracy": 100, "pp": 10, "priority": 0,
+    "twoTurn": true, "flags": {"contact": 1}
+  },
+  "counter": {
+    "name": "Counter", "type": "Fighting", "category": "Physical",
+    "basePower": 0, "accuracy": 100, "pp": 20, "priority": -5,
+    "effectId": "countermove", "flags": {"contact": 1}
+  },
+  "mirrorcoat": {
+    "name": "Mirror Coat", "type": "Psychic", "category": "Special",
+    "basePower": 0, "accuracy": 100, "pp": 20, "priority": -5,
+    "effectId": "mirrorcoatmove"
+  },
+  "metalburst": {
+    "name": "Metal Burst", "type": "Steel", "category": "Physical",
+    "basePower": 0, "accuracy": 100, "pp": 10, "priority": 0,
+    "effectId": "metalburstmove", "flags": {"protect": 1}
+  },
+  "endeavor": {
+    "name": "Endeavor", "type": "Normal", "category": "Physical",
+    "basePower": 0, "accuracy": 100, "pp": 5, "priority": 0,
+    "effectId": "endeavormove", "flags": {"contact": 1, "protect": 1}
+  },
+  "painsplit": {
+    "name": "Pain Split", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": 0,
+    "effectId": "painsplitmove"
+  },
+  "superfang": {
+    "name": "Super Fang", "type": "Normal", "category": "Physical",
+    "basePower": 0, "accuracy": 90, "pp": 10, "priority": 0,
+    "effectId": "superfangmove", "flags": {"contact": 1, "bite": 1, "protect": 1}
+  },
+  "mist": {
+    "name": "Mist", "type": "Ice", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 30, "priority": 0,
+    "target": "allySide", "effectId": "mistmove"
+  },
+  "safeguard": {
+    "name": "Safeguard", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 25, "priority": 0,
+    "target": "allySide", "effectId": "safeguardmove"
+  },
+  "wish": {
+    "name": "Wish", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 10, "priority": 0,
+    "target": "self", "effectId": "wishmove"
+  },
+  "skillswap": {
+    "name": "Skill Swap", "type": "Psychic", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 10, "priority": 0,
+    "effectId": "skillswapmove", "flags": {"protect": 1}
   }
 }

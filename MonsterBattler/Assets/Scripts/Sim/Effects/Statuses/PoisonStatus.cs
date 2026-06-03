@@ -12,7 +12,7 @@ namespace MonsterBattler.Sim.Effects.Statuses
         {
             if (owner != ev.Target || owner.IsFainted) return;
             int dmg = System.Math.Max(1, owner.MaxStats[(int)Stat.HP] / 8);
-            ev.Battle.ApplyDamage(owner, dmg);
+            ev.Battle.ApplyDamage(owner, dmg, DamageSource.Poison);
             ev.Battle.Log.Raw($"|-damage|{owner.Species?.Name ?? owner.Nickname}|{owner.CurrentHp}/{owner.MaxStats[(int)Stat.HP]}|[from] psn");
         }
     }

@@ -95,6 +95,7 @@ namespace MonsterBattler.Game
                     MultihitMin = (int?)o["multihitMin"] ?? 0,
                     MultihitMax = (int?)o["multihitMax"] ?? 0,
                     FlinchChance = (int?)o["flinchChance"] ?? 0,
+                    TwoTurn = (bool?)o["twoTurn"] ?? false,
                     Target = ParseTarget((string)o["target"]),
                     EffectId = (string)o["effectId"],
                     Contact = (int?)flags["contact"] == 1,

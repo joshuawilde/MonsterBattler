@@ -42,5 +42,7 @@
   "slushrush":    {"name": "Slush Rush"},
   "solarpower":   {"name": "Solar Power"},
   "raindish":     {"name": "Rain Dish"},
-  "icebody":      {"name": "Ice Body"}
+  "icebody":      {"name": "Ice Body"},
+  "magicguard":   {"name": "Magic Guard"},
+  "trace":        {"name": "Trace"}
 }

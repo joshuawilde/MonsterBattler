@@ -21,7 +21,7 @@ namespace MonsterBattler.Sim.Effects.Statuses
         {
             if (owner != ev.Target) return;
             int dmg = System.Math.Max(1, owner.MaxStats[(int)Stat.HP] / 16);
-            ev.Battle.ApplyDamage(owner, dmg);
+            ev.Battle.ApplyDamage(owner, dmg, DamageSource.Burn);
             ev.Battle.Log.Raw($"|-damage|{owner.Nickname ?? owner.Species?.Name}|{owner.CurrentHp}/{owner.MaxStats[(int)Stat.HP]}|[from] brn");
         }
     }

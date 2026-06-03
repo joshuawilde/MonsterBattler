@@ -20,7 +20,7 @@ namespace MonsterBattler.Sim.Effects.SideConditions
             int layers = System.Math.Clamp(cond.Layers, 1, 3);
             int denom = layers switch { 1 => 8, 2 => 6, 3 => 4, _ => 8 };
             int dmg = System.Math.Max(1, mon.MaxStats[(int)Stat.HP] / denom);
-            ev.Battle.ApplyDamage(mon, dmg);
+            ev.Battle.ApplyDamage(mon, dmg, DamageSource.Hazard);
             ev.Battle.Log.Raw($"|-damage|{mon.Species?.Name ?? mon.Nickname}|{mon.CurrentHp}/{mon.MaxStats[(int)Stat.HP]}|[from] Spikes");
         }
 

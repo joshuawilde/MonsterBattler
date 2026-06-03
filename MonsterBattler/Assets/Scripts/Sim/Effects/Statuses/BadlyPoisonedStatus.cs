@@ -16,7 +16,7 @@ namespace MonsterBattler.Sim.Effects.Statuses
             if (owner != ev.Target || owner.IsFainted) return;
             owner.ToxicCounter++;
             int dmg = System.Math.Max(1, owner.MaxStats[(int)Stat.HP] * owner.ToxicCounter / 16);
-            ev.Battle.ApplyDamage(owner, dmg);
+            ev.Battle.ApplyDamage(owner, dmg, DamageSource.Toxic);
             ev.Battle.Log.Raw($"|-damage|{owner.Species?.Name ?? owner.Nickname}|{owner.CurrentHp}/{owner.MaxStats[(int)Stat.HP]}|[from] tox");
         }
     }

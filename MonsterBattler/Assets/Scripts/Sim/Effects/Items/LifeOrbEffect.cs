@@ -23,7 +23,7 @@ namespace MonsterBattler.Sim.Effects.Items
             if (ev.Move == null || ev.Move.Category == MoveCategory.Status) return;
             int max = owner.MaxStats[(int)Stat.HP];
             int recoil = System.Math.Max(1, max / 10);
-            ev.Battle.ApplyDamage(owner, recoil);
+            ev.Battle.ApplyDamage(owner, recoil, DamageSource.LifeOrb);
             ev.Battle.Log.Raw($"|-damage|{owner.Species?.Name ?? owner.Nickname}|{owner.CurrentHp}/{max}|[from] item: Life Orb");
         }
     }

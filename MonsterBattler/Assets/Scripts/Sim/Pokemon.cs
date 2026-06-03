@@ -41,8 +41,14 @@ namespace MonsterBattler.Sim
 
         /// <summary>Last move successfully used. Cleared on switch out. Used by Encore/Disable/Choice items.</summary>
         public Data.MoveData LastMoveUsed;
-        /// <summary>If non-null, the Pokemon is locked into using this move (Choice items, Outrage, etc.).</summary>
+        /// <summary>If non-null, the Pokemon is locked into using this move (Choice items, Outrage, two-turn charge).</summary>
         public string LockedMoveId;
+
+        // Last incoming damage — Counter / Mirror Coat / Metal Burst read these.
+        public int LastDamageAmount;
+        public MoveCategory LastDamageCategory;
+        public Pokemon LastDamageSource;
+        public int LastDamageTurn = -1;
 
         public MonType TeraType;
         public bool IsTerastallized;
