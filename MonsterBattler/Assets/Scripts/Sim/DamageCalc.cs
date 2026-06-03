@@ -63,12 +63,20 @@ namespace MonsterBattler.Sim
             int roll = battle.Prng.Range(85, 101);
             dmg = dmg * roll / 100;
 
-            bool stab = user.Species != null && (move.Type == user.Species.Type1 || move.Type == user.Species.Type2);
-            if (stab) dmg = dmg * 3 / 2;
+            // STAB (gen 9 Tera rules):
+            //   • match original type only             → ×1.5
+            //   • match Tera type only (post-tera)     → ×1.5
+            //   • match both (post-tera)               → ×2.0
+            bool originalStab = user.Species != null &&
+                (move.Type == user.Species.Type1 || move.Type == user.Species.Type2);
+            bool teraStab = user.IsTerastallized && move.Type == user.TeraType;
+            if (originalStab && teraStab) dmg = dmg * 2;
+            else if (originalStab || teraStab) dmg = dmg * 3 / 2;
 
-            var eff = target.Species != null
-                ? TypeChart.Effectiveness(move.Type, target.Species.Type1, target.Species.Type2)
-                : 1f;
+            // Defensive types: Terastallization replaces the defender's types with TeraType.
+            MonType defType1 = target.IsTerastallized ? target.TeraType : (target.Species?.Type1 ?? MonType.None);
+            MonType defType2 = target.IsTerastallized ? MonType.None : (target.Species?.Type2 ?? MonType.None);
+            float eff = TypeChart.Effectiveness(move.Type, defType1, defType2);
             dmg = (int)(dmg * eff);
 
             // Weather damage multipliers (after STAB/type, before crit).
@@ -94,7 +102,7 @@ namespace MonsterBattler.Sim
 
             if (isCrit) dmg = dmg * 3 / 2;
 
-            var modEv = new ModifyDamageEvent { Battle = battle, User = user, Target = target, Move = move, Damage = dmg };
+            var modEv = new ModifyDamageEvent { Battle = battle, User = user, Target = target, Move = move, Damage = dmg, IsCrit = isCrit };
             battle.RunModifyDamage(modEv);
             return Math.Max(1, modEv.Damage);
         }

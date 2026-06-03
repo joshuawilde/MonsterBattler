@@ -206,5 +206,36 @@
     "name": "Substitute", "type": "Normal", "category": "Status",
     "basePower": 0, "accuracy": 0, "pp": 10, "priority": 0,
     "target": "self", "effectId": "substitutemove"
+  },
+  "reflect": {
+    "name": "Reflect", "type": "Psychic", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": 0,
+    "target": "allySide", "effectId": "reflectmove"
+  },
+  "lightscreen": {
+    "name": "Light Screen", "type": "Psychic", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 30, "priority": 0,
+    "target": "allySide", "effectId": "lightscreenmove"
+  },
+  "auroraveil": {
+    "name": "Aurora Veil", "type": "Ice", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": 0,
+    "target": "allySide", "effectId": "auroraveilmove"
+  },
+  "tailwind": {
+    "name": "Tailwind", "type": "Flying", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 15, "priority": 0,
+    "target": "allySide", "effectId": "tailwindmove"
+  },
+  "rapidspin": {
+    "name": "Rapid Spin", "type": "Normal", "category": "Physical",
+    "basePower": 50, "accuracy": 100, "pp": 40, "priority": 0,
+    "effectId": "rapidspinmove",
+    "flags": {"contact": 1, "protect": 1}
+  },
+  "defog": {
+    "name": "Defog", "type": "Flying", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 15, "priority": 0,
+    "effectId": "defogmove"
   }
 }

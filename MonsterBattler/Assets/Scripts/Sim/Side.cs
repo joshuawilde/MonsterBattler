@@ -13,6 +13,8 @@ namespace MonsterBattler.Sim
         public string Name;
         public List<Pokemon> Team = new();
         public List<Pokemon> ActiveSlots = new();
+        /// <summary>True once any mon on this side has Terastallized — one tera per battle.</summary>
+        public bool HasUsedTera;
 
         /// <summary>Persistent side conditions (hazards, screens, Tailwind, Mist, Wish).</summary>
         public Dictionary<string, SideCondition> Conditions = new();

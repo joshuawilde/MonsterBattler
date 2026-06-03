@@ -47,6 +47,10 @@ namespace MonsterBattler.Game
         [SerializeField] SwitchButton _switch4;
         [SerializeField] SwitchButton _switch5;
 
+        [Header("Terastallize (scene-authored)")]
+        [SerializeField] Button _teraButton;
+        [SerializeField] Text _teraLabel;
+
         [Header("Demo")]
         [SerializeField] ulong _seed = 12345;
         [Tooltip("PS RandomPlayerAI 'move' bias. 1.0 = always attack, lower values cause occasional voluntary switches.")]
@@ -60,6 +64,7 @@ namespace MonsterBattler.Game
         IBattleAI _opponentAI;
         bool _isInForcedSwitch;
         int _pendingForcedSwitchIdx = -1;
+        bool _teraQueued;
 
         void Start()
         {
@@ -110,6 +115,7 @@ namespace MonsterBattler.Game
                 int idx = i;
                 if (_switches[i] != null) _switches[i].Clicked += () => OnSwitchClicked(idx);
             }
+            if (_teraButton != null) _teraButton.onClick.AddListener(OnTeraClicked);
 
             RefreshAll();
             StartCoroutine(BattleLoop());
@@ -185,7 +191,31 @@ namespace MonsterBattler.Game
             if (_isInForcedSwitch) return; // moves locked during forced-switch prompt
             var player = _battle.Sides[0].ActiveSlots[0];
             if (idx >= player.Moves.Count) return;
-            _pendingChoice = Choice.UseMove(player.Moves[idx].Move.Id);
+            _pendingChoice = Choice.UseMove(player.Moves[idx].Move.Id, _teraQueued);
+            _teraQueued = false;
+        }
+
+        void OnTeraClicked()
+        {
+            var side = _battle.Sides[0];
+            var player = side.ActiveSlots[0];
+            if (side.HasUsedTera || player.IsTerastallized || player.TeraType == MonType.None) return;
+            _teraQueued = !_teraQueued;
+            RefreshTeraLabel();
+        }
+
+        void RefreshTeraLabel()
+        {
+            if (_teraLabel == null) return;
+            var side = _battle.Sides[0];
+            var player = side.ActiveSlots[0];
+            if (player.IsTerastallized)      _teraLabel.text = $"Tera: {player.TeraType} (active)";
+            else if (side.HasUsedTera)       _teraLabel.text = "Tera (used)";
+            else                             _teraLabel.text = _teraQueued
+                ? $"Tera: {player.TeraType} [armed]"
+                : $"Tera: {player.TeraType}";
+            if (_teraButton != null)
+                _teraButton.interactable = !side.HasUsedTera && !player.IsTerastallized && player.TeraType != MonType.None;
         }
 
         void OnSwitchClicked(int idx)
@@ -251,6 +281,7 @@ namespace MonsterBattler.Game
                 if (_switches[i] == null) continue;
                 _switches[i].Show(i < team.Count ? team[i] : null, isActive: i < team.Count && team[i] == p0);
             }
+            RefreshTeraLabel();
         }
 
         static void SetMonInfo(Text name, Text hp, Image fill, Pokemon mon)

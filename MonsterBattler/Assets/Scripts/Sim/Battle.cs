@@ -80,7 +80,10 @@ namespace MonsterBattler.Sim
             // Phase 3b: weather chip damage + duration tick.
             TickWeather();
 
-            // Phase 3c: clean up single-turn volatiles (Protect / Detect / etc.).
+            // Phase 3c: side condition duration tick (screens, Tailwind, etc.).
+            TickSideConditions();
+
+            // Phase 3d: clean up single-turn volatiles (Protect / Detect / etc.).
             ClearSingleTurnVolatiles();
 
             // Phase 4: faint logs + auto-switch from bench. TODO: surface a forced-switch
@@ -113,6 +116,15 @@ namespace MonsterBattler.Sim
             if (choice.Kind != ChoiceKind.Move) return;
             var user = attacker.ActiveSlots[0];
             if (user.IsFainted) return;
+
+            // Terastallize before the move — once per battle per side, requires a TeraType set.
+            if (choice.Terastallize && !user.IsTerastallized && user.TeraType != MonType.None && !attacker.HasUsedTera)
+            {
+                user.IsTerastallized = true;
+                attacker.HasUsedTera = true;
+                Log.Raw($"|-terastallize|{Ident(user)}|{user.TeraType}");
+            }
+
             var moveData = Dex.GetMove(choice.MoveId);
             // Self-targeting moves (Swords Dance, Roost, etc.) route back to the user.
             // Other targeting modes (spread, ally, field) collapse to "the opposing slot"
@@ -529,8 +541,43 @@ namespace MonsterBattler.Sim
         public void RunModifyDef(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifyDef(ev, o)); }
         public void RunModifySpA(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpA(ev, o)); }
         public void RunModifySpD(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpD(ev, o)); }
-        public void RunModifySpe(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpe(ev, o)); }
-        public void RunModifyDamage(ModifyDamageEvent ev) { Dispatch(ev.User, (e, o) => e.OnModifyDamage(ev, o)); Dispatch(ev.Target, (e, o) => e.OnModifyDamage(ev, o)); }
+        public void RunModifySpe(StatModifyEvent ev)
+        {
+            Dispatch(ev.Owner, (e, o) => e.OnModifySpe(ev, o));
+            DispatchSideOf(ev.Owner, (e, o) => e.OnModifySpe(ev, o));
+        }
+        public void RunModifyDamage(ModifyDamageEvent ev)
+        {
+            Dispatch(ev.User, (e, o) => e.OnModifyDamage(ev, o));
+            Dispatch(ev.Target, (e, o) => e.OnModifyDamage(ev, o));
+            DispatchSideOf(ev.User, (e, o) => e.OnModifyDamage(ev, o));
+            DispatchSideOf(ev.Target, (e, o) => e.OnModifyDamage(ev, o));
+        }
+
+        void DispatchSideOf(Pokemon scope, System.Action<Effect, Pokemon> visit)
+        {
+            var side = SideOf(scope);
+            if (side == null) return;
+            foreach (var cond in side.Conditions.Values)
+                if (cond.Effect != null) visit(cond.Effect, scope);
+        }
+
+        void TickSideConditions()
+        {
+            foreach (var side in Sides)
+            {
+                if (side == null) continue;
+                var toRemove = new System.Collections.Generic.List<string>();
+                foreach (var kv in side.Conditions)
+                {
+                    var c = kv.Value;
+                    if (c.TurnsLeft <= 0) continue;
+                    c.TurnsLeft--;
+                    if (c.TurnsLeft <= 0) toRemove.Add(kv.Key);
+                }
+                foreach (var id in toRemove) RemoveSideCondition(side, id);
+            }
+        }
 
         public void RunSwitchIn(SwitchInEvent ev)
         {

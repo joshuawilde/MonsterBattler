@@ -83,6 +83,8 @@ namespace MonsterBattler.Sim.Events
         public Pokemon Target;
         public MoveData Move;
         public int Damage;
+        /// <summary>True if this hit was a critical hit — screens skip halving on crits.</summary>
+        public bool IsCrit;
     }
 
     /* ------------------------------------------------------------------ */
