@@ -420,5 +420,20 @@
     "name": "Acrobatics", "type": "Flying", "category": "Physical",
     "basePower": 55, "accuracy": 100, "pp": 15, "priority": 0,
     "effectId": "acrobaticsmove", "flags": {"contact": 1, "protect": 1}
+  },
+  "kingsshield": {
+    "name": "King's Shield", "type": "Steel", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 10, "priority": 4,
+    "target": "self", "effectId": "kingsshieldmove"
+  },
+  "sacredsword": {
+    "name": "Sacred Sword", "type": "Fighting", "category": "Physical",
+    "basePower": 90, "accuracy": 100, "pp": 15, "priority": 0,
+    "flags": {"contact": 1, "slicing": 1, "protect": 1}
+  },
+  "shadowsneak": {
+    "name": "Shadow Sneak", "type": "Ghost", "category": "Physical",
+    "basePower": 40, "accuracy": 100, "pp": 30, "priority": 1,
+    "flags": {"contact": 1, "protect": 1}
   }
 }

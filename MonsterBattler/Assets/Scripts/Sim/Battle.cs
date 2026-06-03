@@ -623,6 +623,27 @@ namespace MonsterBattler.Sim
             target.LastDamageTurn = TurnNumber;
         }
 
+        /// <summary>
+        /// Swap a Pokemon's species in-place — used by Aegislash stance change, Wishiwashi schooling,
+        /// Palafin Zero/Hero, and gen8/9 Dawn-Wing-Lunala-style form swaps. Re-computes max stats with
+        /// neutral nature / 31 IVs / 0 EVs (matching DemoDex), preserves current HP value.
+        /// </summary>
+        public void ChangeForm(Pokemon mon, string newSpeciesId)
+        {
+            if (mon == null || !Dex.Species.TryGetValue(newSpeciesId, out var newSp)) return;
+            mon.Species = newSp;
+            int level = mon.Level;
+            mon.MaxStats[(int)Stat.HP]  = (2 * newSp.BaseStats.HP  + 31) * level / 100 + level + 10;
+            mon.MaxStats[(int)Stat.Atk] = (2 * newSp.BaseStats.Atk + 31) * level / 100 + 5;
+            mon.MaxStats[(int)Stat.Def] = (2 * newSp.BaseStats.Def + 31) * level / 100 + 5;
+            mon.MaxStats[(int)Stat.SpA] = (2 * newSp.BaseStats.SpA + 31) * level / 100 + 5;
+            mon.MaxStats[(int)Stat.SpD] = (2 * newSp.BaseStats.SpD + 31) * level / 100 + 5;
+            mon.MaxStats[(int)Stat.Spe] = (2 * newSp.BaseStats.Spe + 31) * level / 100 + 5;
+            // Clamp current HP to new max (it may have shrunk).
+            if (mon.CurrentHp > mon.MaxStats[(int)Stat.HP]) mon.CurrentHp = mon.MaxStats[(int)Stat.HP];
+            Log.Raw($"|-formechange|{Ident(mon)}|{newSp.Name}");
+        }
+
         public void ApplyStatus(Pokemon target, StatusCondition status)
         {
             if (target.IsFainted || target.Status != StatusCondition.None) return;

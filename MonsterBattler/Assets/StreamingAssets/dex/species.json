@@ -34,5 +34,41 @@
     "types": ["Normal"],
     "baseStats": {"hp": 160, "atk": 110, "def": 65, "spa": 65, "spd": 110, "spe": 30},
     "abilities": ["immunity", "thickfat"]
+  },
+  "aegislash": {
+    "name": "Aegislash",
+    "types": ["Steel", "Ghost"],
+    "baseStats": {"hp": 60, "atk": 50, "def": 150, "spa": 50, "spd": 150, "spe": 60},
+    "abilities": ["stancechange"]
+  },
+  "aegislashblade": {
+    "name": "Aegislash-Blade",
+    "types": ["Steel", "Ghost"],
+    "baseStats": {"hp": 60, "atk": 150, "def": 50, "spa": 150, "spd": 50, "spe": 60},
+    "abilities": ["stancechange"]
+  },
+  "wishiwashi": {
+    "name": "Wishiwashi",
+    "types": ["Water"],
+    "baseStats": {"hp": 45, "atk": 20, "def": 20, "spa": 25, "spd": 25, "spe": 40},
+    "abilities": ["schooling"]
+  },
+  "wishiwashischool": {
+    "name": "Wishiwashi-School",
+    "types": ["Water"],
+    "baseStats": {"hp": 45, "atk": 140, "def": 130, "spa": 140, "spd": 135, "spe": 30},
+    "abilities": ["schooling"]
+  },
+  "palafin": {
+    "name": "Palafin",
+    "types": ["Water"],
+    "baseStats": {"hp": 100, "atk": 70, "def": 72, "spa": 53, "spd": 62, "spe": 100},
+    "abilities": ["zerotohero"]
+  },
+  "palafinhero": {
+    "name": "Palafin-Hero",
+    "types": ["Water"],
+    "baseStats": {"hp": 100, "atk": 160, "def": 97, "spa": 106, "spd": 87, "spe": 100},
+    "abilities": ["zerotohero"]
   }
 }

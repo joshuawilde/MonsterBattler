@@ -49,5 +49,8 @@
   "sandveil":     {"name": "Sand Veil"},
   "snowcloak":    {"name": "Snow Cloak"},
   "compoundeyes": {"name": "Compound Eyes"},
-  "tintedlens":   {"name": "Tinted Lens"}
+  "tintedlens":   {"name": "Tinted Lens"},
+  "stancechange": {"name": "Stance Change"},
+  "schooling":    {"name": "Schooling"},
+  "zerotohero":   {"name": "Zero to Hero"}
 }
