@@ -733,6 +733,7 @@ namespace MonsterBattler.Sim
         public void RunAfterMove(AfterMoveEvent ev)  { Dispatch(ev.User, (e, o) => e.OnAfterMove(ev, o)); }
 
         public void RunBasePower(BasePowerEvent ev)  { Dispatch(ev.User, (e, o) => e.OnBasePower(ev, o)); Dispatch(ev.Target, (e, o) => e.OnBasePower(ev, o)); }
+        public void RunModifyType(ModifyTypeEvent ev) { Dispatch(ev.User, (e, o) => e.OnModifyType(ev, o)); }
         public void RunModifyAtk(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifyAtk(ev, o)); }
         public void RunModifyDef(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifyDef(ev, o)); }
         public void RunModifySpA(StatModifyEvent ev) { Dispatch(ev.Owner, (e, o) => e.OnModifySpA(ev, o)); }

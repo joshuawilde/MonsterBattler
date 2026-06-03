@@ -81,6 +81,20 @@ namespace MonsterBattler.Sim.Events
         public int BasePower;
     }
 
+    /// <summary>
+    /// Type-changing abilities (Pixilate / Aerilate / Galvanize / Refrigerate, etc.) listen
+    /// for this and rewrite the move's effective Type for the rest of the calc, plus add a
+    /// BP bonus.
+    /// </summary>
+    public sealed class ModifyTypeEvent : BattleEvent
+    {
+        public Pokemon User;
+        public MoveData Move;
+        public MonType Type;
+        /// <summary>Percentage bonus added to base power (20 → ×1.2).</summary>
+        public int BasePowerBonus;
+    }
+
     public sealed class StatModifyEvent : BattleEvent
     {
         public Pokemon Owner;

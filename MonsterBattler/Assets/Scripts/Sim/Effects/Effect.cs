@@ -25,6 +25,7 @@ namespace MonsterBattler.Sim.Effects
 
         // -------- Damage modifiers --------
         public virtual void OnBasePower(BasePowerEvent ev, Pokemon owner) { }
+        public virtual void OnModifyType(ModifyTypeEvent ev, Pokemon owner) { }
         public virtual void OnModifyAtk(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnModifyDef(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnModifySpA(StatModifyEvent ev, Pokemon owner) { }

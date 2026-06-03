@@ -59,5 +59,9 @@
   "hypercutter":  {"name": "Hyper Cutter"},
   "bigpecks":     {"name": "Big Pecks"},
   "cloudnine":    {"name": "Cloud Nine"},
-  "airlock":      {"name": "Air Lock"}
+  "airlock":      {"name": "Air Lock"},
+  "pixilate":     {"name": "Pixilate"},
+  "aerilate":     {"name": "Aerilate"},
+  "galvanize":    {"name": "Galvanize"},
+  "refrigerate":  {"name": "Refrigerate"}
 }

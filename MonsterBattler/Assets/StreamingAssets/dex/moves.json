@@ -495,5 +495,25 @@
     "name": "Healing Wish", "type": "Psychic", "category": "Status",
     "basePower": 0, "accuracy": 0, "pp": 10, "priority": 0,
     "target": "self", "effectId": "healingwishmove"
+  },
+  "whirlwind": {
+    "name": "Whirlwind", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": -6,
+    "effectId": "whirlwindmove"
+  },
+  "roar": {
+    "name": "Roar", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 20, "priority": -6,
+    "effectId": "whirlwindmove"
+  },
+  "dragontail": {
+    "name": "Dragon Tail", "type": "Dragon", "category": "Physical",
+    "basePower": 60, "accuracy": 90, "pp": 10, "priority": -6,
+    "effectId": "whirlwindmove", "flags": {"contact": 1, "protect": 1}
+  },
+  "hypervoiceboost": {
+    "name": "Boomburst", "type": "Normal", "category": "Special",
+    "basePower": 140, "accuracy": 100, "pp": 10, "priority": 0,
+    "flags": {"sound": 1, "protect": 1}
   }
 }

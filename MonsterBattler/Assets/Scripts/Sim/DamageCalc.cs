@@ -24,12 +24,19 @@ namespace MonsterBattler.Sim
         {
             if (move.Category == MoveCategory.Status || move.BasePower <= 0) return 0;
 
+            // ModifyType lets -ate abilities rewrite Normal moves to a different type + add BP%.
+            var typeEv = new ModifyTypeEvent { Battle = battle, User = user, Move = move, Type = move.Type, BasePowerBonus = 0 };
+            battle.RunModifyType(typeEv);
+            MonType effectiveType = typeEv.Type;
+            int typeBonusPct = typeEv.BasePowerBonus;
+
             var bpEv = new BasePowerEvent { Battle = battle, User = user, Target = target, Move = move, BasePower = move.BasePower };
             battle.RunBasePower(bpEv);
             // The move's own effect also gets to tweak base power (Knock Off ×1.5 on item, etc.).
             var moveEffect = Effects.EffectRegistry.Get(move.EffectId);
             if (moveEffect != null) moveEffect.OnBasePower(bpEv, null);
             int basePower = Math.Max(1, bpEv.BasePower);
+            if (typeBonusPct > 0) basePower = basePower * (100 + typeBonusPct) / 100;
 
             var atkStatKind = move.Category == MoveCategory.Physical ? Stat.Atk : Stat.SpA;
             var defStatKind = move.Category == MoveCategory.Physical ? Stat.Def : Stat.SpD;
@@ -72,15 +79,15 @@ namespace MonsterBattler.Sim
             //   • match Tera type only (post-tera)     → ×1.5
             //   • match both (post-tera)               → ×2.0
             bool originalStab = user.Species != null &&
-                (move.Type == user.Species.Type1 || move.Type == user.Species.Type2);
-            bool teraStab = user.IsTerastallized && move.Type == user.TeraType;
+                (effectiveType == user.Species.Type1 || effectiveType == user.Species.Type2);
+            bool teraStab = user.IsTerastallized && effectiveType == user.TeraType;
             if (originalStab && teraStab) dmg = dmg * 2;
             else if (originalStab || teraStab) dmg = dmg * 3 / 2;
 
             // Defensive types: Terastallization replaces the defender's types with TeraType.
             MonType defType1 = target.IsTerastallized ? target.TeraType : (target.Species?.Type1 ?? MonType.None);
             MonType defType2 = target.IsTerastallized ? MonType.None : (target.Species?.Type2 ?? MonType.None);
-            float eff = TypeChart.Effectiveness(move.Type, defType1, defType2);
+            float eff = TypeChart.Effectiveness(effectiveType, defType1, defType2);
             dmg = (int)(dmg * eff);
 
             // Weather damage multipliers (after STAB/type, before crit). Cloud Nine / Air Lock
@@ -88,20 +95,20 @@ namespace MonsterBattler.Sim
             switch (battle.ActiveWeather())
             {
                 case Weather.Sun:
-                    if (move.Type == MonType.Fire) dmg = dmg * 3 / 2;
-                    else if (move.Type == MonType.Water) dmg = dmg / 2;
+                    if (effectiveType == MonType.Fire) dmg = dmg * 3 / 2;
+                    else if (effectiveType == MonType.Water) dmg = dmg / 2;
                     break;
                 case Weather.Rain:
-                    if (move.Type == MonType.Water) dmg = dmg * 3 / 2;
-                    else if (move.Type == MonType.Fire) dmg = dmg / 2;
+                    if (effectiveType == MonType.Water) dmg = dmg * 3 / 2;
+                    else if (effectiveType == MonType.Fire) dmg = dmg / 2;
                     break;
                 case Weather.HarshSun:
-                    if (move.Type == MonType.Water) return 0; // Water moves fail in extremely harsh sunlight.
-                    if (move.Type == MonType.Fire) dmg = dmg * 3 / 2;
+                    if (effectiveType == MonType.Water) return 0; // Water moves fail in extremely harsh sunlight.
+                    if (effectiveType == MonType.Fire) dmg = dmg * 3 / 2;
                     break;
                 case Weather.HeavyRain:
-                    if (move.Type == MonType.Fire) return 0;
-                    if (move.Type == MonType.Water) dmg = dmg * 3 / 2;
+                    if (effectiveType == MonType.Fire) return 0;
+                    if (effectiveType == MonType.Water) dmg = dmg * 3 / 2;
                     break;
             }
 
