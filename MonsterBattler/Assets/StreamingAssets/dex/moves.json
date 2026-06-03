@@ -450,5 +450,50 @@
     "name": "Switcheroo", "type": "Dark", "category": "Status",
     "basePower": 0, "accuracy": 100, "pp": 10, "priority": 0,
     "effectId": "trickmove", "flags": {"protect": 1}
+  },
+  "encore": {
+    "name": "Encore", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 100, "pp": 5, "priority": 0,
+    "effectId": "encoremove", "flags": {"protect": 1}
+  },
+  "disable": {
+    "name": "Disable", "type": "Normal", "category": "Status",
+    "basePower": 0, "accuracy": 100, "pp": 20, "priority": 0,
+    "effectId": "disablemove", "flags": {"protect": 1}
+  },
+  "nightshade": {
+    "name": "Night Shade", "type": "Ghost", "category": "Special",
+    "basePower": 0, "accuracy": 100, "pp": 15, "priority": 0,
+    "effectId": "leveldamagemove"
+  },
+  "seismictoss": {
+    "name": "Seismic Toss", "type": "Fighting", "category": "Physical",
+    "basePower": 0, "accuracy": 100, "pp": 20, "priority": 0,
+    "effectId": "leveldamagemove", "flags": {"contact": 1, "protect": 1}
+  },
+  "sonicboom": {
+    "name": "Sonic Boom", "type": "Normal", "category": "Special",
+    "basePower": 0, "accuracy": 90, "pp": 20, "priority": 0,
+    "effectId": "sonicboommove"
+  },
+  "dragonrage": {
+    "name": "Dragon Rage", "type": "Dragon", "category": "Special",
+    "basePower": 0, "accuracy": 100, "pp": 10, "priority": 0,
+    "effectId": "dragonragemove"
+  },
+  "finalgambit": {
+    "name": "Final Gambit", "type": "Fighting", "category": "Special",
+    "basePower": 0, "accuracy": 100, "pp": 5, "priority": 0,
+    "effectId": "finalgambitmove", "flags": {"contact": 1, "protect": 1}
+  },
+  "memento": {
+    "name": "Memento", "type": "Dark", "category": "Status",
+    "basePower": 0, "accuracy": 100, "pp": 10, "priority": 0,
+    "effectId": "mementomove"
+  },
+  "healingwish": {
+    "name": "Healing Wish", "type": "Psychic", "category": "Status",
+    "basePower": 0, "accuracy": 0, "pp": 10, "priority": 0,
+    "target": "self", "effectId": "healingwishmove"
   }
 }
