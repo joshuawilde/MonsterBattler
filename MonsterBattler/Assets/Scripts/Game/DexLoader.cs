@@ -98,6 +98,8 @@ namespace MonsterBattler.Game
                     TwoTurn = (bool?)o["twoTurn"] ?? false,
                     Target = ParseTarget((string)o["target"]),
                     EffectId = (string)o["effectId"],
+                    Secondaries = ParseSecondaries(o["secondaries"] as JArray),
+                    SelfBoosts = ParseBoosts(o["selfBoosts"] as JArray),
                     Contact = (int?)flags["contact"] == 1,
                     Protect = (int?)flags["protect"] == 1,
                     Sound   = (int?)flags["sound"]   == 1,
@@ -141,6 +143,38 @@ namespace MonsterBattler.Game
                     ConsumedOnUse = (bool?)o["consumedOnUse"] ?? false,
                 };
             }
+        }
+
+        static MoveSecondary[] ParseSecondaries(JArray arr)
+        {
+            if (arr == null) return null;
+            var list = new List<MoveSecondary>();
+            foreach (var e in arr)
+            {
+                if (e is not JObject o) continue;
+                list.Add(new MoveSecondary
+                {
+                    Chance = (int?)o["chance"] ?? 0,
+                    Status = (string)o["status"],
+                    Volatile = (string)o["volatile"],
+                    TargetBoosts = ParseBoosts(o["boosts"] as JArray),
+                    SelfBoosts = ParseBoosts(o["self"] as JArray),
+                });
+            }
+            return list.Count > 0 ? list.ToArray() : null;
+        }
+
+        static StatChange[] ParseBoosts(JArray arr)
+        {
+            if (arr == null) return null;
+            var list = new List<StatChange>();
+            foreach (var e in arr)
+            {
+                if (e is not JObject o) continue;
+                if (Enum.TryParse<Stat>((string)o["stat"], ignoreCase: true, out var st))
+                    list.Add(new StatChange { Stat = st, Delta = (int?)o["delta"] ?? 0 });
+            }
+            return list.Count > 0 ? list.ToArray() : null;
         }
 
         static MonType ParseType(string s)

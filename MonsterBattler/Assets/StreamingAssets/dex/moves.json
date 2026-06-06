@@ -34,6 +34,17 @@
     "basePower": 40,
     "accuracy": 100,
     "pp": 30,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -55,6 +66,17 @@
     "basePower": 40,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -2
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -198,6 +220,33 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 10,
+        "self": [
+          {
+            "stat": "Atk",
+            "delta": 1
+          },
+          {
+            "stat": "Def",
+            "delta": 1
+          },
+          {
+            "stat": "SpA",
+            "delta": 1
+          },
+          {
+            "stat": "SpD",
+            "delta": 1
+          },
+          {
+            "stat": "Spe",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -210,6 +259,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -259,6 +319,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "Spe",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -285,6 +356,16 @@
     "basePower": 120,
     "accuracy": 100,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": -1
+      },
+      {
+        "stat": "SpD",
+        "delta": -1
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -398,6 +479,17 @@
     "basePower": 110,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "Spe",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -410,6 +502,17 @@
     "basePower": 65,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "Atk",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -446,6 +549,12 @@
     "basePower": 120,
     "accuracy": 90,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 30,
+        "volatile": "confusion"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -482,6 +591,12 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 50,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -624,6 +739,17 @@
     "basePower": 75,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Atk",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -649,6 +775,12 @@
     "accuracy": 90,
     "pp": 10,
     "critRatio": 1,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -662,6 +794,17 @@
     "basePower": 100,
     "accuracy": 80,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 30,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -675,6 +818,12 @@
     "basePower": 110,
     "accuracy": 70,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -709,6 +858,12 @@
     "basePower": 130,
     "accuracy": 85,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 20,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -734,6 +889,12 @@
     "basePower": 85,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -747,6 +908,12 @@
     "basePower": 130,
     "accuracy": 85,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 20,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -787,6 +954,12 @@
     "basePower": 85,
     "accuracy": 85,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "twoTurn": true,
     "target": "Normal",
     "flags": {
@@ -829,6 +1002,17 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Atk",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "contact": 1,
@@ -881,6 +1065,17 @@
     "basePower": 65,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -906,6 +1101,17 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -929,6 +1135,17 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacent",
     "flags": {
       "protect": 1
@@ -1035,6 +1252,17 @@
     "basePower": 50,
     "accuracy": 90,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 70,
+        "self": [
+          {
+            "stat": "SpA",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -1059,6 +1287,17 @@
     "basePower": 50,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Atk",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -1144,6 +1383,16 @@
     "basePower": 120,
     "accuracy": 100,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": -1
+      },
+      {
+        "stat": "SpD",
+        "delta": -1
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -1226,6 +1475,12 @@
     "basePower": 50,
     "accuracy": 100,
     "pp": 25,
+    "secondaries": [
+      {
+        "chance": 10,
+        "volatile": "confusion"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -1361,6 +1616,12 @@
     "accuracy": 100,
     "pp": 20,
     "critRatio": 1,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -1375,6 +1636,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 20,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -1389,6 +1661,17 @@
     "basePower": 75,
     "accuracy": 95,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 50,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -1533,6 +1816,12 @@
     "basePower": 100,
     "accuracy": 95,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 2
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -1598,6 +1887,12 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "target": "AllAdjacent",
     "flags": {
       "protect": 1
@@ -1709,6 +2004,12 @@
     "basePower": 130,
     "accuracy": 90,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": -2
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -1721,6 +2022,16 @@
     "basePower": 120,
     "accuracy": 100,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": -1
+      },
+      {
+        "stat": "SpD",
+        "delta": -1
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -1734,6 +2045,12 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -1930,6 +2247,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -1969,6 +2297,12 @@
     "basePower": 100,
     "accuracy": 50,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 100,
+        "volatile": "confusion"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -1983,6 +2317,17 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2093,6 +2438,17 @@
     "basePower": 55,
     "accuracy": 95,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -2105,6 +2461,12 @@
     "basePower": 40,
     "accuracy": 100,
     "pp": 25,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2155,6 +2517,17 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -2193,6 +2566,17 @@
     "accuracy": 100,
     "pp": 10,
     "critRatio": 1,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "Spe",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2392,6 +2776,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 50,
+        "self": [
+          {
+            "stat": "SpA",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2440,6 +2835,12 @@
     "basePower": 110,
     "accuracy": 85,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2453,6 +2854,12 @@
     "accuracy": 95,
     "pp": 15,
     "flinchChance": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -2467,6 +2874,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -2492,6 +2910,12 @@
     "basePower": 75,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -2558,6 +2982,17 @@
     "basePower": 50,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "Spe",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -2571,6 +3006,12 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2583,6 +3024,12 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 25,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -2598,6 +3045,12 @@
     "pp": 15,
     "recoilNum": 33,
     "recoilDen": 100,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -2611,6 +3064,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2635,6 +3099,12 @@
     "basePower": 130,
     "accuracy": 90,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": -2
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2725,6 +3195,17 @@
     "basePower": 120,
     "accuracy": 70,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -2772,6 +3253,12 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -2810,6 +3297,12 @@
     "basePower": 70,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -2822,6 +3315,12 @@
     "basePower": 140,
     "accuracy": 90,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "twoTurn": true,
     "target": "Normal",
     "flags": {
@@ -2835,6 +3334,12 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -3012,6 +3517,17 @@
     "basePower": 65,
     "accuracy": 95,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -3096,6 +3612,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -3176,6 +3703,12 @@
     "basePower": 120,
     "accuracy": 80,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -3215,6 +3748,12 @@
     "basePower": 100,
     "accuracy": 90,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Spe",
+        "delta": -1
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -3283,6 +3822,16 @@
     "basePower": 120,
     "accuracy": 100,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": -1
+      },
+      {
+        "stat": "SpD",
+        "delta": -1
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -3372,6 +3921,12 @@
     "basePower": 95,
     "accuracy": 90,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -3508,6 +4063,12 @@
     "basePower": 110,
     "accuracy": 70,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 30,
+        "volatile": "confusion"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -3581,6 +4142,12 @@
     "basePower": 100,
     "accuracy": 0,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": -1
+      }
+    ],
     "target": "Normal"
   },
   "hyperspacehole": {
@@ -3624,6 +4191,12 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -3636,6 +4209,12 @@
     "basePower": 140,
     "accuracy": 90,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ],
     "twoTurn": true,
     "target": "Normal",
     "flags": {
@@ -3650,6 +4229,12 @@
     "accuracy": 95,
     "pp": 15,
     "flinchChance": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -3664,6 +4249,12 @@
     "basePower": 100,
     "accuracy": 90,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Spe",
+        "delta": -1
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -3678,6 +4269,12 @@
     "basePower": 75,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -3745,6 +4342,17 @@
     "basePower": 55,
     "accuracy": 95,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -3779,6 +4387,12 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -3791,6 +4405,12 @@
     "basePower": 100,
     "accuracy": 50,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 100,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -3860,6 +4480,17 @@
     "basePower": 100,
     "accuracy": 75,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 30,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -4002,6 +4633,12 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ],
     "target": "AllAdjacent",
     "flags": {
       "protect": 1
@@ -4041,6 +4678,12 @@
     "basePower": 130,
     "accuracy": 90,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": -2
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4093,6 +4736,12 @@
     "basePower": 30,
     "accuracy": 100,
     "pp": 30,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -4125,6 +4774,17 @@
     "basePower": 85,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 20,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -4163,6 +4823,17 @@
     "basePower": 65,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -4176,6 +4847,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -2
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4207,6 +4889,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Atk",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -4220,6 +4913,17 @@
     "basePower": 95,
     "accuracy": 100,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 50,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4310,6 +5014,12 @@
     "basePower": 120,
     "accuracy": 100,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": -1
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -4322,6 +5032,12 @@
     "basePower": 100,
     "accuracy": 100,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 50,
+        "status": "tox"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4336,6 +5052,12 @@
     "pp": 15,
     "drainNum": 1,
     "drainDen": 2,
+    "secondaries": [
+      {
+        "chance": 20,
+        "status": "brn"
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -4438,6 +5160,17 @@
     "basePower": 50,
     "accuracy": 95,
     "pp": 35,
+    "secondaries": [
+      {
+        "chance": 10,
+        "self": [
+          {
+            "stat": "Atk",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -4477,6 +5210,17 @@
     "basePower": 90,
     "accuracy": 90,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 20,
+        "self": [
+          {
+            "stat": "Atk",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -4567,6 +5311,17 @@
     "basePower": 95,
     "accuracy": 100,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 50,
+        "boosts": [
+          {
+            "stat": "SpA",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -4602,6 +5357,17 @@
     "basePower": 95,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 30,
+        "boosts": [
+          {
+            "stat": "SpA",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4644,6 +5410,12 @@
     "basePower": 30,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "status": "psn"
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "contact": 1,
@@ -4670,6 +5442,17 @@
     "basePower": 90,
     "accuracy": 85,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 30,
+        "boosts": [
+          {
+            "stat": "Acc",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -4682,6 +5465,17 @@
     "basePower": 55,
     "accuracy": 95,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4694,6 +5488,17 @@
     "basePower": 20,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Acc",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4706,6 +5511,17 @@
     "basePower": 75,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "SpA",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4718,6 +5534,17 @@
     "basePower": 70,
     "accuracy": 90,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "SpA",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4740,6 +5567,17 @@
     "basePower": 85,
     "accuracy": 95,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 40,
+        "boosts": [
+          {
+            "stat": "Acc",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -4802,6 +5640,12 @@
     "basePower": 20,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -4865,6 +5709,12 @@
     "basePower": 130,
     "accuracy": 90,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": -2
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -5042,6 +5892,17 @@
     "basePower": 90,
     "accuracy": 90,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "Atk",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5068,6 +5929,12 @@
     "basePower": 50,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 50,
+        "status": "tox"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5094,6 +5961,12 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5119,6 +5992,12 @@
     "basePower": 15,
     "accuracy": 100,
     "pp": 35,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -5132,6 +6011,12 @@
     "accuracy": 100,
     "pp": 25,
     "critRatio": 1,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5186,6 +6071,17 @@
     "basePower": 50,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5212,6 +6108,12 @@
     "basePower": 40,
     "accuracy": 100,
     "pp": 25,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -5342,6 +6244,12 @@
     "basePower": 65,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 10,
+        "volatile": "confusion"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -5368,6 +6276,17 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -5395,6 +6314,12 @@
     "basePower": 75,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "volatile": "healblock"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -5417,6 +6342,12 @@
     "basePower": 140,
     "accuracy": 90,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": -2
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -5452,6 +6383,17 @@
     "basePower": 70,
     "accuracy": 90,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "Def",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5489,6 +6431,12 @@
     "basePower": 120,
     "accuracy": 90,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -5605,6 +6553,17 @@
     "basePower": 50,
     "accuracy": 100,
     "pp": 40,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "Spe",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5633,6 +6592,17 @@
     "basePower": 75,
     "accuracy": 95,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 50,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5688,6 +6658,12 @@
     "basePower": 75,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "slp"
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -5833,6 +6809,17 @@
     "basePower": 40,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 50,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -5858,6 +6845,17 @@
     "basePower": 60,
     "accuracy": 95,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Spe",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -5939,6 +6937,12 @@
     "basePower": 100,
     "accuracy": 95,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 50,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -5975,6 +6979,12 @@
     "basePower": 40,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "volatile": "saltcure"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -5999,6 +7009,12 @@
     "basePower": 100,
     "accuracy": 80,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 20,
+        "status": "brn"
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -6036,6 +7052,12 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -6074,6 +7096,12 @@
     "basePower": 70,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -6138,6 +7166,17 @@
     "basePower": 120,
     "accuracy": 85,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 40,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -2
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -6177,6 +7216,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 20,
+        "boosts": [
+          {
+            "stat": "SpD",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -6267,6 +7317,12 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 20,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -6384,6 +7440,17 @@
     "basePower": 70,
     "accuracy": 90,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "SpA",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -6471,6 +7538,12 @@
     "basePower": 65,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -6483,6 +7556,12 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -6496,6 +7575,12 @@
     "basePower": 95,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "psn"
+      }
+    ],
     "target": "AllAdjacent",
     "flags": {
       "protect": 1
@@ -6533,6 +7618,12 @@
     "basePower": 30,
     "accuracy": 70,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 40,
+        "status": "psn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -6557,6 +7648,17 @@
     "basePower": 55,
     "accuracy": 95,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "SpA",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -6668,6 +7770,12 @@
     "basePower": 65,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -6681,6 +7789,12 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "volatile": "sparklingaria"
+      }
+    ],
     "target": "AllAdjacent",
     "flags": {
       "protect": 1,
@@ -6738,6 +7852,12 @@
     "basePower": 100,
     "accuracy": 100,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Spe",
+        "delta": -2
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -6751,6 +7871,17 @@
     "basePower": 75,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "SpA",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -6822,6 +7953,17 @@
     "basePower": 100,
     "accuracy": 80,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 30,
+        "boosts": [
+          {
+            "stat": "Atk",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -6845,6 +7987,12 @@
     "basePower": 110,
     "accuracy": 95,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -6882,6 +8030,17 @@
     "basePower": 70,
     "accuracy": 90,
     "pp": 25,
+    "secondaries": [
+      {
+        "chance": 10,
+        "self": [
+          {
+            "stat": "Def",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -6980,6 +8139,12 @@
     "basePower": 90,
     "accuracy": 95,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 20,
+        "volatile": "confusion"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -7042,6 +8207,17 @@
     "basePower": 50,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "SpA",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1
@@ -7148,6 +8324,16 @@
     "basePower": 120,
     "accuracy": 100,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": -1
+      },
+      {
+        "stat": "Def",
+        "delta": -1
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -7293,6 +8479,12 @@
     "basePower": 60,
     "accuracy": 85,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "volatile": "syrupbomb"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -7560,6 +8752,12 @@
     "basePower": 110,
     "accuracy": 70,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -7572,6 +8770,12 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -7610,6 +8814,12 @@
     "accuracy": 95,
     "pp": 15,
     "flinchChance": 10,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -7624,6 +8834,17 @@
     "basePower": 90,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -7637,6 +8858,12 @@
     "basePower": 75,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -7651,6 +8878,12 @@
     "basePower": 40,
     "accuracy": 100,
     "pp": 30,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -7709,6 +8942,17 @@
     "basePower": 80,
     "accuracy": 100,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "SpA",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,
@@ -7769,6 +9013,17 @@
     "basePower": 50,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 100,
+        "self": [
+          {
+            "stat": "Spe",
+            "delta": 1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -7829,6 +9084,17 @@
     "pp": 10,
     "critRatio": 1,
     "flinchChance": 30,
+    "secondaries": [
+      {
+        "chance": 50,
+        "boosts": [
+          {
+            "stat": "Def",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -7886,6 +9152,17 @@
     "basePower": 70,
     "accuracy": 100,
     "pp": 15,
+    "secondaries": [
+      {
+        "chance": 100,
+        "boosts": [
+          {
+            "stat": "Atk",
+            "delta": -1
+          }
+        ]
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -8044,6 +9321,12 @@
     "pp": 15,
     "recoilNum": 33,
     "recoilDen": 100,
+    "secondaries": [
+      {
+        "chance": 10,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "contact": 1,
@@ -8095,6 +9378,12 @@
     "basePower": 60,
     "accuracy": 100,
     "pp": 20,
+    "secondaries": [
+      {
+        "chance": 20,
+        "volatile": "confusion"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1
@@ -8214,6 +9503,12 @@
     "basePower": 100,
     "accuracy": 80,
     "pp": 10,
+    "secondaries": [
+      {
+        "chance": 20,
+        "status": "par"
+      }
+    ],
     "target": "AllAdjacentFoes",
     "flags": {
       "protect": 1,
@@ -8372,6 +9667,12 @@
     "basePower": 120,
     "accuracy": 50,
     "pp": 5,
+    "secondaries": [
+      {
+        "chance": 100,
+        "status": "par"
+      }
+    ],
     "target": "Normal",
     "flags": {
       "protect": 1,

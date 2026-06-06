@@ -95,6 +95,8 @@ namespace MonsterBattler.Sim.Tests
                     MultihitMin = Int(o, "multihitMin"), MultihitMax = Int(o, "multihitMax"),
                     FlinchChance = Int(o, "flinchChance"), TwoTurn = Bool(o, "twoTurn"), Target = tgt,
                     EffectId = Str(o, "effectId"),
+                    Secondaries = ParseSecondaries(o),
+                    SelfBoosts = o.TryGetProperty("selfBoosts", out var sb) ? ParseBoosts(sb) : null,
                     Contact = Flag(flags, "contact"), Protect = Flag(flags, "protect"),
                     Sound = Flag(flags, "sound"), Punch = Flag(flags, "punch"), Bite = Flag(flags, "bite"),
                     Slicing = Flag(flags, "slicing"), Wind = Flag(flags, "wind"), Bullet = Flag(flags, "bullet"),
@@ -112,6 +114,33 @@ namespace MonsterBattler.Sim.Tests
                 };
 
             return dex;
+        }
+
+        static MoveSecondary[] ParseSecondaries(JsonElement move)
+        {
+            if (!move.TryGetProperty("secondaries", out var arr) || arr.ValueKind != JsonValueKind.Array)
+                return null;
+            var list = new List<MoveSecondary>();
+            foreach (var e in arr.EnumerateArray())
+                list.Add(new MoveSecondary
+                {
+                    Chance = Int(e, "chance"),
+                    Status = Str(e, "status"),
+                    Volatile = Str(e, "volatile"),
+                    TargetBoosts = e.TryGetProperty("boosts", out var b) ? ParseBoosts(b) : null,
+                    SelfBoosts = e.TryGetProperty("self", out var s) ? ParseBoosts(s) : null,
+                });
+            return list.Count > 0 ? list.ToArray() : null;
+        }
+
+        static StatChange[] ParseBoosts(JsonElement arr)
+        {
+            if (arr.ValueKind != JsonValueKind.Array) return null;
+            var list = new List<StatChange>();
+            foreach (var e in arr.EnumerateArray())
+                if (Enum.TryParse<Stat>(Str(e, "stat"), true, out var st))
+                    list.Add(new StatChange { Stat = st, Delta = Int(e, "delta") });
+            return list.Count > 0 ? list.ToArray() : null;
         }
 
         static readonly Regex NonAlnum = new("[^a-z0-9]", RegexOptions.Compiled);

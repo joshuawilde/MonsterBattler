@@ -51,6 +51,12 @@ namespace MonsterBattler.Game
         [SerializeField] Button _teraButton;
         [SerializeField] Text _teraLabel;
 
+        [Header("Opponent roster (scene-authored: parent of 6 RosterIcon chips)")]
+        [SerializeField] Transform _opponentRosterParent;
+
+        [Header("Battle log feed (scene-authored Text)")]
+        [SerializeField] Text _logText;
+
         [Header("Demo")]
         [SerializeField] ulong _seed = 12345;
         [Tooltip("PS RandomPlayerAI 'move' bias. 1.0 = always attack, lower values cause occasional voluntary switches.")]
@@ -62,6 +68,9 @@ namespace MonsterBattler.Game
         Battle _battle;
         MoveButton[] _moves;
         SwitchButton[] _switches;
+        UI.RosterIcon[] _oppRoster = System.Array.Empty<UI.RosterIcon>();
+        readonly List<string> _logFeed = new();
+        const int MaxLogLines = 14;
         Choice? _pendingChoice;
         IBattleAI _opponentAI;
         bool _isInForcedSwitch;
@@ -117,6 +126,9 @@ namespace MonsterBattler.Game
 
             _moves = new[] { _move0, _move1, _move2, _move3 };
             _switches = new[] { _switch0, _switch1, _switch2, _switch3, _switch4, _switch5 };
+            _oppRoster = _opponentRosterParent != null
+                ? _opponentRosterParent.GetComponentsInChildren<UI.RosterIcon>(includeInactive: true)
+                : System.Array.Empty<UI.RosterIcon>();
 
             for (int i = 0; i < _moves.Length; i++)
             {
@@ -130,6 +142,8 @@ namespace MonsterBattler.Game
             }
             if (_teraButton != null) _teraButton.onClick.AddListener(OnTeraClicked);
 
+            _logFeed.Add("Battle started!");
+            FlushLog(); // surface any lead switch-in / weather / ability activations from Setup
             RefreshAll();
             StartCoroutine(BattleLoop());
         }
@@ -294,6 +308,14 @@ namespace MonsterBattler.Game
                 if (_switches[i] == null) continue;
                 _switches[i].Show(i < team.Count ? team[i] : null, isActive: i < team.Count && team[i] == p0);
             }
+
+            var oppTeam = _battle.Sides[1].Team;
+            for (int i = 0; i < _oppRoster.Length; i++)
+            {
+                if (_oppRoster[i] == null) continue;
+                _oppRoster[i].Show(i < oppTeam.Count ? oppTeam[i] : null,
+                                   isActive: i < oppTeam.Count && oppTeam[i] == p1);
+            }
             RefreshTeraLabel();
         }
 
@@ -310,8 +332,14 @@ namespace MonsterBattler.Game
 
         void FlushLog()
         {
-            foreach (var line in _battle.Log.Lines) Debug.Log(line);
+            foreach (var line in _battle.Log.Lines)
+            {
+                var readable = BattleLogFormatter.Format(line);
+                if (!string.IsNullOrEmpty(readable)) _logFeed.Add(readable);
+            }
             _battle.Log.Lines.Clear();
+            while (_logFeed.Count > MaxLogLines) _logFeed.RemoveAt(0);
+            if (_logText != null) _logText.text = string.Join("\n", _logFeed);
         }
     }
 }

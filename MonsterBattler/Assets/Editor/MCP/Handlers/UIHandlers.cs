@@ -62,8 +62,59 @@ namespace MonsterBattler.Editor.MCP.Handlers
                 EditorSceneManager.MarkSceneDirty(go.scene);
                 return new JObject { ["ok"] = true };
             });
+
+            // Create a uGUI Text the "proper" way — with the built-in font assigned, so it
+            // actually renders (script-added Text components have a null font otherwise).
+            MCPCommandRegistry.Register("ui.create_text", p =>
+            {
+                var go = CreateUIChild(p);
+                var text = go.AddComponent<Text>();
+                text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                text.text = (string)p["text"] ?? "";
+                text.fontSize = (int?)p["fontSize"] ?? 24;
+                text.color = p["color"] is JArray c ? ToColor(c) : Color.white;
+                text.alignment = ParseAnchor((string)p["alignment"], TextAnchor.UpperLeft);
+                text.horizontalOverflow = HorizontalWrapMode.Wrap;
+                text.verticalOverflow = VerticalWrapMode.Truncate;
+                if ((bool?)p["bestFit"] == true)
+                {
+                    text.resizeTextForBestFit = true;
+                    text.resizeTextMinSize = 6;
+                    text.resizeTextMaxSize = (int?)p["fontSize"] ?? 24;
+                }
+                Undo.RegisterCreatedObjectUndo(go, "MCP Create Text");
+                EditorSceneManager.MarkSceneDirty(go.scene);
+                return new JObject { ["path"] = GameObjectLookup.PathOf(go), ["id"] = go.GetInstanceID() };
+            });
+
+            // Create a uGUI Image (gets RectTransform + CanvasRenderer automatically).
+            MCPCommandRegistry.Register("ui.create_image", p =>
+            {
+                var go = CreateUIChild(p);
+                var img = go.AddComponent<Image>();
+                img.color = p["color"] is JArray c ? ToColor(c) : Color.white;
+                if ((bool?)p["raycastTarget"] == false) img.raycastTarget = false;
+                Undo.RegisterCreatedObjectUndo(go, "MCP Create Image");
+                EditorSceneManager.MarkSceneDirty(go.scene);
+                return new JObject { ["path"] = GameObjectLookup.PathOf(go), ["id"] = go.GetInstanceID() };
+            });
+        }
+
+        static GameObject CreateUIChild(JObject p)
+        {
+            var go = new GameObject((string)p["name"] ?? "UIElement", typeof(RectTransform));
+            if (p["parent"] is JObject par)
+            {
+                var parent = GameObjectLookup.Resolve(par);
+                if (parent != null) go.transform.SetParent(parent.transform, worldPositionStays: false);
+            }
+            return go;
         }
 
         static Vector2 ToVec2(JArray a) => new Vector2((float)a[0], (float)a[1]);
+        static Color ToColor(JArray a) =>
+            new Color((float)a[0], (float)a[1], (float)a[2], a.Count > 3 ? (float)a[3] : 1f);
+        static TextAnchor ParseAnchor(string s, TextAnchor fallback) =>
+            string.IsNullOrEmpty(s) ? fallback : System.Enum.TryParse<TextAnchor>(s, out var t) ? t : fallback;
     }
 }

@@ -36,6 +36,23 @@ function readExisting(name) {
   try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return {}; }
 }
 
+// PS boost stat keys → our Stat enum names.
+const STAT_NAME = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe', accuracy: 'Acc', evasion: 'Eva' };
+const boostsToArr = (b) =>
+  Object.entries(b).map(([k, v]) => ({ stat: STAT_NAME[k] || k, delta: v }));
+
+// Convert one PS secondary entry to our shape, or null if it carries nothing we model
+// (pure-flinch entries are handled via flinchChance and dropped here).
+function convertSecondary(s) {
+  if (!s) return null;
+  const e = { chance: s.chance || 0 };
+  if (s.status) e.status = s.status;
+  if (s.volatileStatus && s.volatileStatus !== 'flinch') e.volatile = s.volatileStatus;
+  if (s.boosts) e.boosts = boostsToArr(s.boosts);
+  if (s.self && s.self.boosts) e.self = boostsToArr(s.self.boosts);
+  return (e.status || e.volatile || e.boosts || e.self) ? e : null;
+}
+
 function flinchChance(move) {
   const all = move.secondaries || (move.secondary ? [move.secondary] : []);
   for (const s of all) if (s && s.volatileStatus === 'flinch') return s.chance || 0;
@@ -85,6 +102,13 @@ function convertMoves() {
     }
     const fl = flinchChance(m);
     if (fl) o.flinchChance = fl;
+    // Chance-based secondaries (status / stat-drop / confusion / self-boost). Pure flinch is
+    // already captured by flinchChance above, so we drop those here to avoid double-applying.
+    const secs = (m.secondaries || (m.secondary ? [m.secondary] : []))
+      .map(convertSecondary).filter(Boolean);
+    if (secs.length) o.secondaries = secs;
+    // Guaranteed self stat changes (Close Combat, Overheat, Draco Meteor, …).
+    if (m.self && m.self.boosts) o.selfBoosts = boostsToArr(m.self.boosts);
     if (m.flags && m.flags.charge) o.twoTurn = true;
     o.target = TARGET_MAP[m.target] || 'Normal';
 

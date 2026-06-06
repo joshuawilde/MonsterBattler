@@ -49,6 +49,34 @@ namespace MonsterBattler.Sim.Data
 
         /// <summary>Optional name of an effect class that supplies callback overrides (see Effects/).</summary>
         public string EffectId;
+
+        /// <summary>
+        /// Chance-based secondary effects (Flamethrower's 10% burn, Crunch's 20% −Def, …).
+        /// Suppressed by Sheer Force, blocked on the target by Shield Dust, doubled by Serene Grace.
+        /// Pure-flinch secondaries live in <see cref="FlinchChance"/> instead. Null if none.
+        /// </summary>
+        public MoveSecondary[] Secondaries;
+
+        /// <summary>Guaranteed self stat changes after the move connects (Close Combat, Overheat,
+        /// Draco Meteor, …). NOT affected by Sheer Force / Shield Dust. Null if none.</summary>
+        public StatChange[] SelfBoosts;
+    }
+
+    /// <summary>One chance-based secondary effect attached to a move.</summary>
+    public sealed class MoveSecondary
+    {
+        public int Chance;            // 0..100; treated as guaranteed when <= 0
+        public string Status;         // "brn"/"par"/"psn"/"tox"/"frz"/"slp", or null
+        public string Volatile;       // "confusion" etc., or null (flinch uses MoveData.FlinchChance)
+        public StatChange[] TargetBoosts; // stat changes applied to the target
+        public StatChange[] SelfBoosts;   // stat changes applied to the user (e.g. Charge Beam)
+    }
+
+    /// <summary>A single stat-stage change.</summary>
+    public struct StatChange
+    {
+        public Stat Stat;
+        public int Delta;
     }
 
     public enum MoveTarget

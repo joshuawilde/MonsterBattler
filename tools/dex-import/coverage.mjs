@@ -27,10 +27,12 @@ for (const id of mv) {
   if (ps.category === 'Status') {
     if (hasEffectId) statusDone++; else statusMissing.push(id);
   } else {
-    // damaging: needs an effect only if it has a secondary (status/stat/volatile) we don't model
+    // damaging: needs custom code only if it has a meaningful secondary that the data-driven
+    // secondary system doesn't already cover (status/boosts/self/non-flinch volatile).
     const secs = ps.secondaries || (ps.secondary ? [ps.secondary] : []);
     const meaningful = secs.some((s) => s && (s.status || s.boosts || s.self || (s.volatileStatus && s.volatileStatus !== 'flinch')));
-    if (meaningful && !hasEffectId) dmgSecMissing.push(id);
+    const modelled = (ours && (ours.secondaries || ours.selfBoosts)) || hasEffectId;
+    if (meaningful && !modelled) dmgSecMissing.push(id);
     else pureData++;
   }
 }

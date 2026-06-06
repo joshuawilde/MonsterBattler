@@ -354,6 +354,11 @@ namespace MonsterBattler.Sim
             if (move.FlinchChance > 0 && totalDamage > 0 && !target.IsFainted && Prng.Chance(move.FlinchChance, 100))
                 AddVolatile(target, "flinch", singleTurn: true);
 
+            // Chance-based secondaries (status / stat-drop / confusion / self-boost) and guaranteed
+            // self stat changes. For damaging moves these only fire if at least one hit connected.
+            bool connected = move.Category != MoveCategory.Status ? totalDamage > 0 : true;
+            ApplySecondaries(user, target, move, connected);
+
             // Drain: heal user for a fraction of total damage dealt.
             if (move.DrainDen > 0 && totalDamage > 0 && !user.IsFainted)
             {
@@ -692,6 +697,59 @@ namespace MonsterBattler.Sim
             if (status == StatusCondition.BadlyPoisoned) target.ToxicCounter = 0;
             Log.Raw($"|-status|{Ident(target)}|{StatusEffectId(status)}");
         }
+
+        /// <summary>
+        /// Rolls and applies a move's chance-based secondaries plus its guaranteed self stat changes.
+        /// Sheer Force suppresses all chance-based secondaries (its +BP is handled in DamageCalc);
+        /// Serene Grace doubles their chance; Shield Dust blocks the target-facing parts.
+        /// </summary>
+        void ApplySecondaries(Pokemon user, Pokemon target, Data.MoveData move, bool connected)
+        {
+            if (!connected || user == null) return;
+
+            bool sheerForce = user.AbilityEffect is Effects.Abilities.SheerForceEffect;
+            if (move.Secondaries != null && !sheerForce)
+            {
+                bool serene = user.AbilityEffect is Effects.Abilities.SereneGraceEffect;
+                bool shieldDust = target != null && target.AbilityEffect is Effects.Abilities.ShieldDustEffect;
+                foreach (var sec in move.Secondaries)
+                {
+                    int chance = sec.Chance <= 0 ? 100 : (serene ? System.Math.Min(100, sec.Chance * 2) : sec.Chance);
+                    if (!Prng.Chance(chance, 100)) continue;
+
+                    // Self-boosts (e.g. Charge Beam) hit the user and ignore Shield Dust.
+                    if (sec.SelfBoosts != null && !user.IsFainted)
+                        foreach (var sc in sec.SelfBoosts) BoostStat(user, sc.Stat, sc.Delta, user);
+
+                    if (shieldDust || target == null || target.IsFainted) continue;
+                    if (!string.IsNullOrEmpty(sec.Status)) ApplyStatus(target, ParseStatus(sec.Status));
+                    if (!string.IsNullOrEmpty(sec.Volatile))
+                    {
+                        var v = AddVolatile(target, sec.Volatile);
+                        if (v != null && sec.Volatile == "confusion") v.Turns = Prng.Range(2, 6);
+                    }
+                    if (sec.TargetBoosts != null)
+                        foreach (var sc in sec.TargetBoosts) BoostStat(target, sc.Stat, sc.Delta, user);
+                }
+            }
+
+            // Guaranteed self stat changes (Close Combat, Overheat, …) — not a secondary, so Sheer
+            // Force and Shield Dust never touch them.
+            if (move.SelfBoosts != null && !user.IsFainted)
+                foreach (var sc in move.SelfBoosts) BoostStat(user, sc.Stat, sc.Delta, user);
+        }
+
+        static StatusCondition ParseStatus(string code) => code switch
+        {
+            "brn" => StatusCondition.Burn,
+            "par" => StatusCondition.Paralysis,
+            "psn" => StatusCondition.Poison,
+            "tox" => StatusCondition.BadlyPoisoned,
+            "slp" => StatusCondition.Sleep,
+            "frz" => StatusCondition.Freeze,
+            "frb" or "fbt" or "frostbite" => StatusCondition.Frostbite,
+            _ => StatusCondition.None,
+        };
 
         static string StatusEffectId(StatusCondition s) => s switch
         {
