@@ -97,6 +97,7 @@ namespace MonsterBattler.Sim.Tests
                     EffectId = Str(o, "effectId"),
                     Secondaries = ParseSecondaries(o),
                     SelfBoosts = o.TryGetProperty("selfBoosts", out var sb) ? ParseBoosts(sb) : null,
+                    ShortDesc = Str(o, "desc"),
                     Contact = Flag(flags, "contact"), Protect = Flag(flags, "protect"),
                     Sound = Flag(flags, "sound"), Punch = Flag(flags, "punch"), Bite = Flag(flags, "bite"),
                     Slicing = Flag(flags, "slicing"), Wind = Flag(flags, "wind"), Bullet = Flag(flags, "bullet"),
@@ -104,7 +105,7 @@ namespace MonsterBattler.Sim.Tests
             }
 
             foreach (var (id, o) in Read("abilities.json").EnumerateObject().Select())
-                dex.Abilities[id] = new AbilityData { Id = id, Name = Str(o, "name", id), EffectId = Str(o, "effectId") };
+                dex.Abilities[id] = new AbilityData { Id = id, Name = Str(o, "name", id), EffectId = Str(o, "effectId"), ShortDesc = Str(o, "desc") };
 
             foreach (var (id, o) in Read("items.json").EnumerateObject().Select())
                 dex.Items[id] = new ItemData

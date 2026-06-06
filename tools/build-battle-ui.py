@@ -32,6 +32,7 @@ for i in range(6):
     cmd("component.add", path=chip, type="UnityEngine.UI.Outline")
     cmd("component.set_fields", path=chip, type="UnityEngine.UI.Outline",
         fields={"m_EffectColor": [1.0, 0.9, 0.2, 1.0], "m_EffectDistance": [3, -3]})
+    cmd("component.add", path=chip, type="UnityEngine.UI.Button")  # tap to inspect
     cmd("component.add", path=chip, type="MonsterBattler.Game.UI.RosterIcon")
     cmd("ui.create_text", name="Label", parent={"path": chip},
         text="?", fontSize=20, alignment="MiddleCenter", color=[1, 1, 1, 1], bestFit=True)
@@ -40,6 +41,7 @@ for i in range(6):
         "_background":    {"sceneObjectPath": chip, "componentType": "UnityEngine.UI.Image"},
         "_label":         {"sceneObjectPath": f"{chip}/Label", "componentType": "UnityEngine.UI.Text"},
         "_activeOutline": {"sceneObjectPath": chip, "componentType": "UnityEngine.UI.Outline"},
+        "_button":        {"sceneObjectPath": chip, "componentType": "UnityEngine.UI.Button"},
     })
 
 # --- battle log feed: semi-transparent panel in the lower-center, above the move buttons ---

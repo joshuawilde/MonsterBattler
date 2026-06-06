@@ -50,6 +50,9 @@ namespace MonsterBattler.Sim.Data
         /// <summary>Optional name of an effect class that supplies callback overrides (see Effects/).</summary>
         public string EffectId;
 
+        /// <summary>One-line human description (Showdown's shortDesc), e.g. "10% chance to burn the target."</summary>
+        public string ShortDesc;
+
         /// <summary>
         /// Chance-based secondary effects (Flamethrower's 10% burn, Crunch's 20% −Def, …).
         /// Suppressed by Sheer Force, blocked on the target by Shield Dust, doubled by Serene Grace.

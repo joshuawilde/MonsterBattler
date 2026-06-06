@@ -1,3 +1,4 @@
+using System;
 using MonsterBattler.Sim;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,15 +6,23 @@ using UnityEngine.UI;
 namespace MonsterBattler.Game.UI
 {
     /// <summary>
-    /// A read-only team-roster chip (PS shows six of these per side). Displays a teammate's
-    /// species, tinted by its primary type, dimmed when fainted and outlined when it's the
-    /// currently-active mon. Used for the opponent's roster row at the top of the screen.
+    /// A team-roster chip (PS shows six of these per side). Displays a teammate's species, tinted
+    /// by its primary type, dimmed when fainted and outlined when it's the currently-active mon.
+    /// Tapping it raises <see cref="Clicked"/> (BattleView uses this to inspect that mon).
     /// </summary>
     public sealed class RosterIcon : MonoBehaviour
     {
         [SerializeField] Image _background;
         [SerializeField] Text _label;
         [SerializeField] Outline _activeOutline; // optional; highlights the active mon
+        [SerializeField] Button _button;          // optional; raises Clicked when tapped
+
+        public event Action Clicked;
+
+        void Awake()
+        {
+            if (_button != null) _button.onClick.AddListener(() => Clicked?.Invoke());
+        }
 
         public void Show(Pokemon mon, bool isActive)
         {

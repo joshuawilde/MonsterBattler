@@ -24,11 +24,18 @@ namespace MonsterBattler.Game
         [SerializeField] Text _name0;
         [SerializeField] Text _hp0Text;
         [SerializeField] Image _hp0Fill;
+        [SerializeField] Text _status0;   // status badge (BRN/PAR/…), optional
 
         [Header("Opponent mon info")]
         [SerializeField] Text _name1;
         [SerializeField] Text _hp1Text;
         [SerializeField] Image _hp1Fill;
+        [SerializeField] Text _status1;   // status badge, optional
+
+        [Header("Field / side conditions (scene-authored Text, optional)")]
+        [SerializeField] Text _fieldText;   // weather / terrain / Trick Room
+        [SerializeField] Text _sideText0;   // player hazards / screens / tailwind
+        [SerializeField] Text _sideText1;   // opponent hazards / screens / tailwind
 
         [Header("Turn counter")]
         [SerializeField] Text _turnText;
@@ -57,6 +64,9 @@ namespace MonsterBattler.Game
         [Header("Battle log feed (scene-authored Text)")]
         [SerializeField] Text _logText;
 
+        [Header("Info overlay (scene-authored)")]
+        [SerializeField] UI.InfoPanel _infoPanel;
+
         [Header("Demo")]
         [SerializeField] ulong _seed = 12345;
         [Tooltip("PS RandomPlayerAI 'move' bias. 1.0 = always attack, lower values cause occasional voluntary switches.")]
@@ -76,6 +86,14 @@ namespace MonsterBattler.Game
         bool _isInForcedSwitch;
         int _pendingForcedSwitchIdx = -1;
         bool _teraQueued;
+
+        // HP-bar animation: lerp the displayed fill toward the true value each frame, snapping on
+        // switch-in (a new mon shouldn't drain/refill from the previous mon's HP).
+        const float HpLerpPerSecond = 1.6f;
+        Image[] _hpFills;
+        readonly float[] _hpShown = { 1f, 1f };
+        readonly float[] _hpTarget = { 1f, 1f };
+        readonly Pokemon[] _hpLastMon = new Pokemon[2];
 
         void Start()
         {
@@ -126,9 +144,15 @@ namespace MonsterBattler.Game
 
             _moves = new[] { _move0, _move1, _move2, _move3 };
             _switches = new[] { _switch0, _switch1, _switch2, _switch3, _switch4, _switch5 };
+            _hpFills = new[] { _hp0Fill, _hp1Fill };
             _oppRoster = _opponentRosterParent != null
                 ? _opponentRosterParent.GetComponentsInChildren<UI.RosterIcon>(includeInactive: true)
                 : System.Array.Empty<UI.RosterIcon>();
+            for (int i = 0; i < _oppRoster.Length; i++)
+            {
+                int idx = i;
+                if (_oppRoster[i] != null) _oppRoster[i].Clicked += () => OnOppRosterClicked(idx);
+            }
 
             for (int i = 0; i < _moves.Length; i++)
             {
@@ -141,6 +165,12 @@ namespace MonsterBattler.Game
                 if (_switches[i] != null) _switches[i].Clicked += () => OnSwitchClicked(idx);
             }
             if (_teraButton != null) _teraButton.onClick.AddListener(OnTeraClicked);
+            if (_infoPanel != null)
+            {
+                _infoPanel.CloseRequested += OnCloseInfo;
+                _infoPanel.SwapRequested += OnSwapRequested;
+                _infoPanel.SetVisible(false); // hidden until requested
+            }
 
             _logFeed.Add("Battle started!");
             FlushLog(); // surface any lead switch-in / weather / ability activations from Setup
@@ -222,6 +252,49 @@ namespace MonsterBattler.Game
             _teraQueued = false;
         }
 
+        Pokemon _inspectTarget;
+        bool _acceptingInput;
+
+        void OnOppRosterClicked(int idx)
+        {
+            var team = _battle.Sides[1].Team;
+            if (idx >= 0 && idx < team.Count) Inspect(team[idx]);
+        }
+
+        /// <summary>Open the info panel on a specific mon (any side, active or benched). Shows a
+        /// Swap button when it's one of your benched mons and a switch is currently allowed.</summary>
+        void Inspect(Pokemon mon)
+        {
+            if (_infoPanel == null || mon == null) return;
+            _inspectTarget = mon;
+            _infoPanel.SetVisible(true);
+            _infoPanel.Show(mon, CanSwap(mon));
+        }
+
+        /// <summary>True if <paramref name="mon"/> is a legal switch target for the player right now.</summary>
+        bool CanSwap(Pokemon mon)
+        {
+            var side = _battle.Sides[0];
+            if (!side.Team.Contains(mon)) return false;          // must be your mon
+            if (mon.IsFainted || mon == side.ActiveSlots[0]) return false; // not fainted / not already out
+            return _isInForcedSwitch || _acceptingInput;          // a state that accepts a switch
+        }
+
+        void OnCloseInfo()
+        {
+            if (_infoPanel != null) _infoPanel.SetVisible(false);
+        }
+
+        void OnSwapRequested()
+        {
+            if (_inspectTarget == null || !CanSwap(_inspectTarget)) return;
+            int idx = _battle.Sides[0].Team.IndexOf(_inspectTarget);
+            if (idx < 0) return;
+            if (_isInForcedSwitch) _pendingForcedSwitchIdx = idx;
+            else _pendingChoice = Choice.SwitchTo(idx);
+            if (_infoPanel != null) _infoPanel.SetVisible(false);
+        }
+
         void OnTeraClicked()
         {
             var side = _battle.Sides[0];
@@ -245,26 +318,17 @@ namespace MonsterBattler.Game
                 _teraButton.interactable = !side.HasUsedTera && !player.IsTerastallized && player.TeraType != MonType.None;
         }
 
+        // A "switch button" is now just a portrait button: tapping any of your mons inspects it.
+        // The actual swap happens from the info panel's Swap button (see OnSwapRequested).
         void OnSwitchClicked(int idx)
         {
             var side = _battle.Sides[0];
-            if (idx < 0 || idx >= side.Team.Count) return;
-            var candidate = side.Team[idx];
-            if (candidate.IsFainted) return;
-            if (_isInForcedSwitch)
-            {
-                if (candidate == side.ActiveSlots[0]) return; // can't pick the fainted slot
-                _pendingForcedSwitchIdx = idx;
-            }
-            else
-            {
-                if (candidate.IsActive) return;
-                _pendingChoice = Choice.SwitchTo(idx);
-            }
+            if (idx >= 0 && idx < side.Team.Count) Inspect(side.Team[idx]);
         }
 
         void SetInputEnabled(bool on)
         {
+            _acceptingInput = on; // gates whether the panel offers a Swap action
             var player = _battle.Sides[0].ActiveSlots[0];
             // Choice items lock the player into one move. Disable everything else when locked.
             bool isLocked = !string.IsNullOrEmpty(player.LockedMoveId);
@@ -276,16 +340,35 @@ namespace MonsterBattler.Game
                 bool isLockedMove = isLocked && active && player.Moves[i].Move.Id == player.LockedMoveId;
                 _moves[i].SetInteractable(on && active && (!isLocked || isLockedMove));
             }
-            // Switch buttons keep their own interactable state per Show(), but a global
-            // disable while a turn is animating is also useful.
-            for (int i = 0; i < _switches.Length; i++)
-                if (_switches[i] != null)
-                {
-                    var b = _switches[i].GetComponent<Button>();
-                    // Show() already set interactable; we just additionally suppress while resolving.
-                    if (b != null && !on) b.interactable = false;
-                }
+            // Portrait/switch buttons stay tappable at all times so you can inspect any mon; the
+            // open panel re-evaluates whether a swap is currently legal.
+            if (_infoPanel != null && _infoPanel.IsVisible && _inspectTarget != null)
+                _infoPanel.Show(_inspectTarget, CanSwap(_inspectTarget));
         }
+
+        void Update()
+        {
+            if (_hpFills == null) return;
+            for (int i = 0; i < _hpFills.Length; i++)
+            {
+                if (_hpFills[i] == null) continue;
+                _hpShown[i] = Mathf.MoveTowards(_hpShown[i], _hpTarget[i], HpLerpPerSecond * Time.deltaTime);
+                _hpFills[i].fillAmount = _hpShown[i];
+                _hpFills[i].color = HpColor(_hpShown[i]);
+            }
+        }
+
+        void SetHpTarget(int side, Pokemon mon)
+        {
+            int max = mon.MaxStats[(int)Stat.HP];
+            _hpTarget[side] = max == 0 ? 0f : (float)mon.CurrentHp / max;
+            if (mon != _hpLastMon[side]) { _hpShown[side] = _hpTarget[side]; _hpLastMon[side] = mon; } // snap on switch
+        }
+
+        static Color HpColor(float frac) =>
+            frac > 0.5f ? new Color(0.30f, 0.78f, 0.33f) :
+            frac > 0.2f ? new Color(0.95f, 0.77f, 0.20f) :
+                          new Color(0.86f, 0.25f, 0.22f);
 
         void RefreshAll()
         {
@@ -294,8 +377,16 @@ namespace MonsterBattler.Game
 
             if (_turnText != null) _turnText.text = $"Turn {_battle.TurnNumber + 1}";
 
-            SetMonInfo(_name0, _hp0Text, _hp0Fill, p0);
-            SetMonInfo(_name1, _hp1Text, _hp1Fill, p1);
+            SetMonInfo(_name0, _hp0Text, p0);
+            SetMonInfo(_name1, _hp1Text, p1);
+            SetHpTarget(0, p0);
+            SetHpTarget(1, p1);
+            SetStatusBadge(_status0, p0);
+            SetStatusBadge(_status1, p1);
+
+            if (_fieldText != null) _fieldText.text = FieldStatusText.Field(_battle);
+            if (_sideText0 != null) _sideText0.text = FieldStatusText.Side(_battle.Sides[0]);
+            if (_sideText1 != null) _sideText1.text = FieldStatusText.Side(_battle.Sides[1]);
 
             for (int i = 0; i < _moves.Length; i++)
             {
@@ -316,10 +407,16 @@ namespace MonsterBattler.Game
                 _oppRoster[i].Show(i < oppTeam.Count ? oppTeam[i] : null,
                                    isActive: i < oppTeam.Count && oppTeam[i] == p1);
             }
+            // Keep the open panel current (the inspected mon's HP/status may have changed).
+            if (_infoPanel != null && _infoPanel.IsVisible)
+            {
+                var target = _inspectTarget ?? p0;
+                _infoPanel.Show(target, CanSwap(target));
+            }
             RefreshTeraLabel();
         }
 
-        static void SetMonInfo(Text name, Text hp, Image fill, Pokemon mon)
+        static void SetMonInfo(Text name, Text hp, Pokemon mon)
         {
             if (mon == null) return;
             int cur = mon.CurrentHp;
@@ -327,7 +424,25 @@ namespace MonsterBattler.Game
             int pct = max == 0 ? 0 : 100 * cur / max;
             if (name != null) name.text = $"{mon.Species?.Name ?? mon.Nickname} L{mon.Level}";
             if (hp != null)   hp.text   = $"{cur}/{max}  ({pct}%)";
-            if (fill != null) fill.fillAmount = max == 0 ? 0 : (float)cur / max;
+        }
+
+        static void SetStatusBadge(Text badge, Pokemon mon)
+        {
+            if (badge == null) return;
+            if (mon == null || mon.Status == StatusCondition.None) { badge.text = ""; return; }
+            (string label, Color color) = mon.Status switch
+            {
+                StatusCondition.Burn          => ("BRN", new Color(0.94f, 0.42f, 0.20f)),
+                StatusCondition.Paralysis     => ("PAR", new Color(0.95f, 0.80f, 0.20f)),
+                StatusCondition.Poison        => ("PSN", new Color(0.64f, 0.34f, 0.74f)),
+                StatusCondition.BadlyPoisoned => ("TOX", new Color(0.50f, 0.18f, 0.55f)),
+                StatusCondition.Sleep         => ("SLP", new Color(0.60f, 0.60f, 0.65f)),
+                StatusCondition.Freeze        => ("FRZ", new Color(0.40f, 0.75f, 0.90f)),
+                StatusCondition.Frostbite     => ("FRB", new Color(0.55f, 0.70f, 0.95f)),
+                _ => ("", Color.white),
+            };
+            badge.text = label;
+            badge.color = color;
         }
 
         void FlushLog()

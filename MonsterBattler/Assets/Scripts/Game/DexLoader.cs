@@ -100,6 +100,7 @@ namespace MonsterBattler.Game
                     EffectId = (string)o["effectId"],
                     Secondaries = ParseSecondaries(o["secondaries"] as JArray),
                     SelfBoosts = ParseBoosts(o["selfBoosts"] as JArray),
+                    ShortDesc = (string)o["desc"],
                     Contact = (int?)flags["contact"] == 1,
                     Protect = (int?)flags["protect"] == 1,
                     Sound   = (int?)flags["sound"]   == 1,
@@ -124,6 +125,7 @@ namespace MonsterBattler.Game
                     Id = id,
                     Name = (string)o["name"] ?? id,
                     EffectId = (string)o["effectId"],
+                    ShortDesc = (string)o["desc"],
                 };
             }
         }

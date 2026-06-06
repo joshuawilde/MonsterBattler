@@ -110,6 +110,7 @@ function convertMoves() {
     // Guaranteed self stat changes (Close Combat, Overheat, Draco Meteor, …).
     if (m.self && m.self.boosts) o.selfBoosts = boostsToArr(m.self.boosts);
     if (m.flags && m.flags.charge) o.twoTurn = true;
+    if (m.shortDesc) o.desc = m.shortDesc;
     o.target = TARGET_MAP[m.target] || 'Normal';
 
     const f = m.flags || {};
@@ -136,6 +137,7 @@ function convertAbilities() {
   for (const a of g.abilities) {
     if (a.isNonstandard) continue;
     const o = { name: a.name };
+    if (a.shortDesc) o.desc = a.shortDesc;
     const prev = existing[a.id];
     if (prev && prev.effectId) o.effectId = prev.effectId;
     out[a.id] = o;

@@ -35,7 +35,9 @@ namespace MonsterBattler.Game.UI
                 else if (isActive)        _background.color = new Color(0.20f, 0.40f, 0.25f, 0.95f);
                 else                      _background.color = new Color(0.18f, 0.18f, 0.22f, 0.90f);
             }
-            if (_button != null) _button.interactable = !mon.IsFainted && !isActive;
+            // Always tappable — every portrait opens the info panel; whether an actual swap is legal
+            // is decided there. Color (above) conveys fainted/active state.
+            if (_button != null) _button.interactable = true;
         }
     }
 }
