@@ -1,6 +1,7 @@
 using System;
 using MonsterBattler.Sim;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 namespace MonsterBattler.Game.UI
@@ -13,7 +14,7 @@ namespace MonsterBattler.Game.UI
     /// </summary>
     public sealed class InfoPanel : MonoBehaviour
     {
-        [SerializeField] Text _text;
+        [SerializeField] TextMeshProUGUI _text;
         [SerializeField] Button _closeButton;
         [SerializeField] Button _swapButton;
 

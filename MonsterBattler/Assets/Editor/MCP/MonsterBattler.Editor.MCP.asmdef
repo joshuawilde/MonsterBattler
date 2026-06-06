@@ -4,7 +4,8 @@
     "references": [
         "MonsterBattler.Sim",
         "MonsterBattler.Game",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

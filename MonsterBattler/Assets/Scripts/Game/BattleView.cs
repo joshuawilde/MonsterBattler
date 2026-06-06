@@ -5,6 +5,7 @@ using MonsterBattler.Game.UI;
 using MonsterBattler.Sim;
 using MonsterBattler.Sim.Data;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 namespace MonsterBattler.Game
@@ -21,24 +22,24 @@ namespace MonsterBattler.Game
         [SerializeField] Transform _slot1;
 
         [Header("Player mon info")]
-        [SerializeField] Text _name0;
-        [SerializeField] Text _hp0Text;
+        [SerializeField] TextMeshProUGUI _name0;
+        [SerializeField] TextMeshProUGUI _hp0Text;
         [SerializeField] Image _hp0Fill;
-        [SerializeField] Text _status0;   // status badge (BRN/PAR/…), optional
+        [SerializeField] TextMeshProUGUI _status0;   // status badge (BRN/PAR/…), optional
 
         [Header("Opponent mon info")]
-        [SerializeField] Text _name1;
-        [SerializeField] Text _hp1Text;
+        [SerializeField] TextMeshProUGUI _name1;
+        [SerializeField] TextMeshProUGUI _hp1Text;
         [SerializeField] Image _hp1Fill;
-        [SerializeField] Text _status1;   // status badge, optional
+        [SerializeField] TextMeshProUGUI _status1;   // status badge, optional
 
         [Header("Field / side conditions (scene-authored Text, optional)")]
-        [SerializeField] Text _fieldText;   // weather / terrain / Trick Room
-        [SerializeField] Text _sideText0;   // player hazards / screens / tailwind
-        [SerializeField] Text _sideText1;   // opponent hazards / screens / tailwind
+        [SerializeField] TextMeshProUGUI _fieldText;   // weather / terrain / Trick Room
+        [SerializeField] TextMeshProUGUI _sideText0;   // player hazards / screens / tailwind
+        [SerializeField] TextMeshProUGUI _sideText1;   // opponent hazards / screens / tailwind
 
         [Header("Turn counter")]
-        [SerializeField] Text _turnText;
+        [SerializeField] TextMeshProUGUI _turnText;
 
         [Header("Move buttons (scene-authored)")]
         [SerializeField] MoveButton _move0;
@@ -56,13 +57,13 @@ namespace MonsterBattler.Game
 
         [Header("Terastallize (scene-authored)")]
         [SerializeField] Button _teraButton;
-        [SerializeField] Text _teraLabel;
+        [SerializeField] TextMeshProUGUI _teraLabel;
 
         [Header("Opponent roster (scene-authored: parent of 6 RosterIcon chips)")]
         [SerializeField] Transform _opponentRosterParent;
 
         [Header("Battle log feed (scene-authored Text)")]
-        [SerializeField] Text _logText;
+        [SerializeField] TextMeshProUGUI _logText;
 
         [Header("Info overlay (scene-authored)")]
         [SerializeField] UI.InfoPanel _infoPanel;
@@ -74,6 +75,9 @@ namespace MonsterBattler.Game
         [SerializeField] float _opponentMoveBias = 1.0f;
         [Tooltip("Generate Showdown-style gen9 random-battle teams instead of the hardcoded demo teams.")]
         [SerializeField] bool _useRandomTeams = true;
+        [Tooltip("Seconds between each beat of a turn (move, damage, faint, …) during playback.")]
+        [Range(0f, 2f)]
+        [SerializeField] float _turnStepDelay = 0.7f;
 
         Battle _battle;
         MoveButton[] _moves;
@@ -91,6 +95,8 @@ namespace MonsterBattler.Game
         // switch-in (a new mon shouldn't drain/refill from the previous mon's HP).
         const float HpLerpPerSecond = 1.6f;
         Image[] _hpFills;
+        TextMeshProUGUI[] _hpTexts;
+        TextMeshProUGUI[] _nameTexts;
         readonly float[] _hpShown = { 1f, 1f };
         readonly float[] _hpTarget = { 1f, 1f };
         readonly Pokemon[] _hpLastMon = new Pokemon[2];
@@ -145,6 +151,8 @@ namespace MonsterBattler.Game
             _moves = new[] { _move0, _move1, _move2, _move3 };
             _switches = new[] { _switch0, _switch1, _switch2, _switch3, _switch4, _switch5 };
             _hpFills = new[] { _hp0Fill, _hp1Fill };
+            _hpTexts = new[] { _hp0Text, _hp1Text };
+            _nameTexts = new[] { _name0, _name1 };
             _oppRoster = _opponentRosterParent != null
                 ? _opponentRosterParent.GetComponentsInChildren<UI.RosterIcon>(includeInactive: true)
                 : System.Array.Empty<UI.RosterIcon>();
@@ -205,11 +213,17 @@ namespace MonsterBattler.Game
 
                 var playerChoice = _pendingChoice.Value;
                 var opponentChoice = _opponentAI.ChooseAction(_battle, _battle.Sides[1], _battle.Sides[0]);
-                _battle.Step(playerChoice, opponentChoice);
 
-                FlushLog();
-                RefreshAll();
-                yield return new WaitForSeconds(0.6f);
+                // The sim resolves the whole turn at once and records an ordered log; capture the
+                // names that were active going in, then replay that log beat-by-beat with delays.
+                var preActive = new[] { MonName(_battle.Sides[0].ActiveSlots[0]), MonName(_battle.Sides[1].ActiveSlots[0]) };
+                _battle.Step(playerChoice, opponentChoice);
+                var lines = new List<string>(_battle.Log.Lines);
+                _battle.Log.Lines.Clear();
+
+                yield return PlaybackTurn(lines, preActive);
+                RefreshAll(); // final authoritative sync (status badges, field, stat stages, roster)
+                yield return new WaitForSeconds(0.3f);
             }
             SetInputEnabled(false);
             Debug.Log($"[Battle] Winner: side {_battle.WinningSide}");
@@ -416,7 +430,7 @@ namespace MonsterBattler.Game
             RefreshTeraLabel();
         }
 
-        static void SetMonInfo(Text name, Text hp, Pokemon mon)
+        static void SetMonInfo(TextMeshProUGUI name, TextMeshProUGUI hp, Pokemon mon)
         {
             if (mon == null) return;
             int cur = mon.CurrentHp;
@@ -426,7 +440,7 @@ namespace MonsterBattler.Game
             if (hp != null)   hp.text   = $"{cur}/{max}  ({pct}%)";
         }
 
-        static void SetStatusBadge(Text badge, Pokemon mon)
+        static void SetStatusBadge(TextMeshProUGUI badge, Pokemon mon)
         {
             if (badge == null) return;
             if (mon == null || mon.Status == StatusCondition.None) { badge.text = ""; return; }
@@ -450,11 +464,92 @@ namespace MonsterBattler.Game
             foreach (var line in _battle.Log.Lines)
             {
                 var readable = BattleLogFormatter.Format(line);
-                if (!string.IsNullOrEmpty(readable)) _logFeed.Add(readable);
+                if (!string.IsNullOrEmpty(readable)) AppendLog(readable);
             }
             _battle.Log.Lines.Clear();
+        }
+
+        void AppendLog(string line)
+        {
+            _logFeed.Add(line);
             while (_logFeed.Count > MaxLogLines) _logFeed.RemoveAt(0);
             if (_logText != null) _logText.text = string.Join("\n", _logFeed);
+        }
+
+        // Replays one turn's protocol log entry-by-entry: reveals each readable line into the feed,
+        // animates the HP bars to the value embedded in each damage/heal line, and re-labels a slot
+        // when a mon switches in — pausing _turnStepDelay between beats so the turn plays in sequence.
+        IEnumerator PlaybackTurn(List<string> lines, string[] active)
+        {
+            foreach (var raw in lines)
+            {
+                var parts = raw.Split('|'); // ["", tag, arg1, arg2, ...]
+                string tag = parts.Length > 1 ? parts[1] : "";
+                bool beat = false;
+
+                var readable = BattleLogFormatter.Format(raw);
+                if (!string.IsNullOrEmpty(readable)) { AppendLog(readable); beat = true; }
+
+                if ((tag == "-damage" || tag == "-heal" || tag == "-sethp") && parts.Length > 3)
+                {
+                    int side = SideForName(parts[2], active);
+                    if (side >= 0) { ApplyHpFromLog(side, parts[3], snap: false); beat = true; }
+                }
+                else if (tag == "switch" && parts.Length > 3)
+                {
+                    int side = SideOfTeamName(parts[2]);
+                    if (side >= 0)
+                    {
+                        active[side] = parts[2];
+                        var mon = FindByName(parts[2]);
+                        if (mon != null && _nameTexts != null && _nameTexts[side] != null)
+                            _nameTexts[side].text = $"{MonName(mon)} L{mon.Level}";
+                        ApplyHpFromLog(side, parts[3], snap: true); // new mon — no drain animation
+                        beat = true;
+                    }
+                }
+
+                if (beat && _turnStepDelay > 0f) yield return new WaitForSeconds(_turnStepDelay);
+            }
+        }
+
+        // Parse "cur/max" and drive the side's HP bar + text. snap=true jumps instantly (switch-in).
+        void ApplyHpFromLog(int side, string hp, bool snap)
+        {
+            int slash = hp.IndexOf('/');
+            if (slash < 0) return;
+            if (!int.TryParse(hp.Substring(0, slash), out int cur)) return;
+            if (!int.TryParse(hp.Substring(slash + 1), out int max) || max <= 0) return;
+            float frac = Mathf.Clamp01((float)cur / max);
+            _hpTarget[side] = frac;
+            if (snap) _hpShown[side] = frac;
+            if (_hpTexts != null && _hpTexts[side] != null)
+                _hpTexts[side].text = $"{cur}/{max}  ({100 * cur / max}%)";
+        }
+
+        static string MonName(Pokemon m) => m?.Nickname ?? m?.Species?.Name;
+
+        int SideForName(string name, string[] active)
+        {
+            if (name == active[0]) return 0;
+            if (name == active[1]) return 1;
+            return SideOfTeamName(name);
+        }
+
+        int SideOfTeamName(string name)
+        {
+            for (int s = 0; s < 2; s++)
+                foreach (var m in _battle.Sides[s].Team)
+                    if (MonName(m) == name) return s;
+            return -1;
+        }
+
+        Pokemon FindByName(string name)
+        {
+            foreach (var s in _battle.Sides)
+                foreach (var m in s.Team)
+                    if (MonName(m) == name) return m;
+            return null;
         }
     }
 }

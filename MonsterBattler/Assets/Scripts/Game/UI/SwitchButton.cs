@@ -1,6 +1,7 @@
 using System;
 using MonsterBattler.Sim;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 namespace MonsterBattler.Game.UI
@@ -12,7 +13,7 @@ namespace MonsterBattler.Game.UI
     {
         [SerializeField] Button _button;
         [SerializeField] Image _background;
-        [SerializeField] Text _nameText;
+        [SerializeField] TextMeshProUGUI _nameText;
         [SerializeField] Image _hpFill;
 
         public event Action Clicked;

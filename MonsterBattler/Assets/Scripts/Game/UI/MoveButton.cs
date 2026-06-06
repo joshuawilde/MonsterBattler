@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MonsterBattler.Sim;
 using MonsterBattler.Sim.Data;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 namespace MonsterBattler.Game.UI
@@ -16,10 +17,10 @@ namespace MonsterBattler.Game.UI
     {
         [SerializeField] Button _button;
         [SerializeField] Image _background;
-        [SerializeField] Text _nameText;
-        [SerializeField] Text _typeText;
-        [SerializeField] Text _ppText;
-        [SerializeField] Text _descText;   // power/accuracy + description
+        [SerializeField] TextMeshProUGUI _nameText;
+        [SerializeField] TextMeshProUGUI _typeText;
+        [SerializeField] TextMeshProUGUI _ppText;
+        [SerializeField] TextMeshProUGUI _descText;   // power/accuracy + description
 
         /// <summary>Fired when the player taps this button.</summary>
         public event Action Clicked;

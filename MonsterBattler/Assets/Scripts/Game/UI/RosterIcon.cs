@@ -1,6 +1,7 @@
 using System;
 using MonsterBattler.Sim;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 namespace MonsterBattler.Game.UI
@@ -13,7 +14,7 @@ namespace MonsterBattler.Game.UI
     public sealed class RosterIcon : MonoBehaviour
     {
         [SerializeField] Image _background;
-        [SerializeField] Text _label;
+        [SerializeField] TextMeshProUGUI _label;
         [SerializeField] Outline _activeOutline; // optional; highlights the active mon
         [SerializeField] Button _button;          // optional; raises Clicked when tapped
 
