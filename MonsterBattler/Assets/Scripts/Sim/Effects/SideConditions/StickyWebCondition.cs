@@ -12,6 +12,7 @@ namespace MonsterBattler.Sim.Effects.SideConditions
         {
             var mon = owner;
             if (mon == null || mon.IsFainted || mon.Species == null) return;
+            if (mon.HasItem("heavydutyboots")) return;
             if (IsType(mon, MonType.Flying)) return;
             if (mon.AbilityEffect is Abilities.LevitateEffect) return;
             ev.Battle.BoostStat(mon, Stat.Spe, -1);

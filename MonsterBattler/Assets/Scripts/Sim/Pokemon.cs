@@ -57,6 +57,9 @@ namespace MonsterBattler.Sim
         public bool IsActive;
         public bool IsFainted => CurrentHp <= 0;
 
+        /// <summary>True if this Pokemon is currently holding the item with the given id.</summary>
+        public bool HasItem(string itemId) => Item != null && Item.Id == itemId;
+
         /// <summary>
         /// Walks every effect currently attached to this Pokemon. Stable order: ability →
         /// item → status → volatiles (insertion order). The engine uses this to fan events out.

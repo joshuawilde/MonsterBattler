@@ -17,6 +17,7 @@ namespace MonsterBattler.Sim.Effects.SideConditions
             // owner here is the switching-in Pokemon (passed from RunSwitchIn).
             var mon = owner;
             if (mon == null || mon.IsFainted || mon.Species == null) return;
+            if (mon.HasItem("heavydutyboots")) return;
             float eff = TypeChart.Effectiveness(MonType.Rock, mon.Species.Type1, mon.Species.Type2);
             if (eff <= 0f) return;
             int dmg = (int)(mon.MaxStats[(int)Stat.HP] * eff / 8f);

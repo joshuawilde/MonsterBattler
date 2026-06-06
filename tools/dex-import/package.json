@@ -1,0 +1,12 @@
+{
+  "name": "dex-import",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Converts @pkmn gen9 data into MonsterBattler StreamingAssets/dex JSON schema.",
+  "dependencies": {
+    "@pkmn/data": "^0.10.10",
+    "@pkmn/dex": "^0.10.10",
+    "@pkmn/randoms": "^0.10.10"
+  }
+}

@@ -56,6 +56,8 @@ namespace MonsterBattler.Game
         [Tooltip("PS RandomPlayerAI 'move' bias. 1.0 = always attack, lower values cause occasional voluntary switches.")]
         [Range(0f, 1f)]
         [SerializeField] float _opponentMoveBias = 1.0f;
+        [Tooltip("Generate Showdown-style gen9 random-battle teams instead of the hardcoded demo teams.")]
+        [SerializeField] bool _useRandomTeams = true;
 
         Battle _battle;
         MoveButton[] _moves;
@@ -73,24 +75,35 @@ namespace MonsterBattler.Game
             var dex = DexLoader.LoadFromStreamingAssets();
             _battle = new Battle(dex, _seed);
 
-            var playerTeam = BuildTeam(dex, new (string species, string ability, string[] moves, string item)[]
+            List<Pokemon> playerTeam, opponentTeam;
+            if (_useRandomTeams)
             {
-                ("bulbasaur",  "overgrow", new[] { "leechseed", "razorleaf", "vinewhip", "swordsdance" },     null),
-                ("charmander", "blaze",    new[] { "flamethrower", "slash", "dragondance", "quickattack" },   "lifeorb"),
-                ("squirtle",   "torrent",  new[] { "protect", "hydropump", "icebeam", "calmmind" },           null),
-                ("pikachu",    "static",   new[] { "thunderwave", "thunderbolt", "nastyplot", "quickattack" },null),
-                ("gengar",     "levitate", new[] { "willowisp", "shadowball", "thunderbolt", "nastyplot" },   null),
-                ("snorlax",    "thickfat", new[] { "bulkup", "earthquake", "hypervoice", "icebeam" },         "leftovers"),
-            });
-            var opponentTeam = BuildTeam(dex, new (string species, string ability, string[] moves, string item)[]
+                var randbats = RandbatsLoader.LoadFromStreamingAssets();
+                // Fork independent PRNGs off the seed so each side's team is reproducible.
+                playerTeam   = new RandomTeamGenerator(dex, randbats, new Prng(_seed)).GenerateTeam();
+                opponentTeam = new RandomTeamGenerator(dex, randbats, new Prng(_seed ^ 0x9E3779B97F4A7C15UL)).GenerateTeam();
+            }
+            else
             {
-                ("gengar",     "levitate", new[] { "shadowball", "hypervoice", "thunderbolt", "icebeam" },    null),
-                ("snorlax",    "thickfat", new[] { "stoneedge", "earthquake", "hypervoice", "icebeam" },      "leftovers"),
-                ("charmander", "blaze",    new[] { "flamethrower", "slash", "ember", "quickattack" },         "lifeorb"),
-                ("squirtle",   "torrent",  new[] { "hydropump", "watergun", "icebeam", "tackle" },            null),
-                ("pikachu",    "static",   new[] { "thunderwave", "thunderbolt", "quickattack", "ironhead" }, null),
-                ("bulbasaur",  "overgrow", new[] { "leechseed", "razorleaf", "vinewhip", "tackle" },          null),
-            });
+                playerTeam = BuildTeam(dex, new (string species, string ability, string[] moves, string item)[]
+                {
+                    ("bulbasaur",  "overgrow", new[] { "leechseed", "razorleaf", "vinewhip", "swordsdance" },     null),
+                    ("charmander", "blaze",    new[] { "flamethrower", "slash", "dragondance", "quickattack" },   "lifeorb"),
+                    ("squirtle",   "torrent",  new[] { "protect", "hydropump", "icebeam", "calmmind" },           null),
+                    ("pikachu",    "static",   new[] { "thunderwave", "thunderbolt", "nastyplot", "quickattack" },null),
+                    ("gengar",     "levitate", new[] { "willowisp", "shadowball", "thunderbolt", "nastyplot" },   null),
+                    ("snorlax",    "thickfat", new[] { "bulkup", "earthquake", "hypervoice", "icebeam" },         "leftovers"),
+                });
+                opponentTeam = BuildTeam(dex, new (string species, string ability, string[] moves, string item)[]
+                {
+                    ("gengar",     "levitate", new[] { "shadowball", "hypervoice", "thunderbolt", "icebeam" },    null),
+                    ("snorlax",    "thickfat", new[] { "stoneedge", "earthquake", "hypervoice", "icebeam" },      "leftovers"),
+                    ("charmander", "blaze",    new[] { "flamethrower", "slash", "ember", "quickattack" },         "lifeorb"),
+                    ("squirtle",   "torrent",  new[] { "hydropump", "watergun", "icebeam", "tackle" },            null),
+                    ("pikachu",    "static",   new[] { "thunderwave", "thunderbolt", "quickattack", "ironhead" }, null),
+                    ("bulbasaur",  "overgrow", new[] { "leechseed", "razorleaf", "vinewhip", "tackle" },          null),
+                });
+            }
 
             var side0 = new Side { Name = "Player" };
             side0.Team.AddRange(playerTeam);
