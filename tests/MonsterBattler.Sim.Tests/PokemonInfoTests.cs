@@ -28,7 +28,7 @@ namespace MonsterBattler.Sim.Tests
             int baseAtk = mon.MaxStats[(int)Stat.Atk];
             mon.StatStages[(int)Stat.Atk] = 2; // +2 Attack (e.g. after Swords Dance)
 
-            var text = PokemonInfoText.Build(mon);
+            var text = PokemonInfoText.TopBodyText(mon);
 
             int boosted = (int)(baseAtk * Stats.StageMult(2)); // ×2 at +2
             Assert.Contains($"{boosted} (×2)", text);          // shows the boosted value + multiplier
@@ -36,25 +36,24 @@ namespace MonsterBattler.Sim.Tests
         }
 
         [Fact]
-        public void InfoText_IncludesStatsAbilityItemMatchupAndMoveDescriptions()
+        public void InfoText_HeaderBodyAndTypesCoverStatsAbilityItemMoves()
         {
             var mon = TestBattlers.Make("charizard", "blaze", "heavydutyboots", 100, "flamethrower", "earthquake");
             // Resolve ability/item effects + descriptions the way a real battle does.
             TestBattlers.SetupBattle(mon, TestBattlers.Make("pikachu"));
 
-            var text = PokemonInfoText.Build(mon);
+            Assert.Contains("Charizard", PokemonInfoText.HeaderText(mon));
 
-            Assert.Contains("Charizard", text);
-            Assert.Contains("FIRE", text);                       // type badge (uppercase)
-            Assert.Contains("FLYING", text);
-            Assert.Contains("Atk", text);                        // stats line
-            Assert.Contains("Blaze", text);                      // ability
-            Assert.Contains("Heavy-Duty Boots", text);           // item
-            Assert.Contains("x4", text);                         // ×4 weakness row
-            Assert.Contains("ROCK", text);                       // weakness badge
-            Assert.Contains("GROUND", text);                     // immunity badge
-            Assert.Contains("<mark=#", text);                    // rich-text badges present
-            Assert.Contains("10% chance to burn the target.", text); // Flamethrower move description
+            Assert.Contains("Atk", PokemonInfoText.TopBodyText(mon));   // stats (top block)
+            var bottom = PokemonInfoText.BottomBodyText(mon);
+            Assert.Contains("Blaze", bottom);                          // ability
+            Assert.Contains("Heavy-Duty Boots", bottom);              // item
+            Assert.Contains("10% chance to burn the target.", bottom); // Flamethrower description
+
+            // Types/matchup are chips now, not text — verify the data feeding them.
+            var types = PokemonInfoText.EffectiveTypes(mon);
+            Assert.Contains(MonType.Fire, types);
+            Assert.Contains(MonType.Flying, types);
         }
     }
 }
