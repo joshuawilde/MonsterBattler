@@ -31,12 +31,15 @@ namespace MonsterBattler.Sim.Tests
             var text = PokemonInfoText.Build(mon);
 
             Assert.Contains("Charizard", text);
-            Assert.Contains("Fire/Flying", text);
+            Assert.Contains("FIRE", text);                       // type badge (uppercase)
+            Assert.Contains("FLYING", text);
             Assert.Contains("Atk", text);                        // stats line
-            Assert.Contains("Ability: Blaze", text);
-            Assert.Contains("Item: Heavy-Duty Boots", text);
-            Assert.Contains("Rock ×4", text);                    // weakness
-            Assert.Contains("Ground", text);                     // immunity listed
+            Assert.Contains("Blaze", text);                      // ability
+            Assert.Contains("Heavy-Duty Boots", text);           // item
+            Assert.Contains("x4", text);                         // ×4 weakness row
+            Assert.Contains("ROCK", text);                       // weakness badge
+            Assert.Contains("GROUND", text);                     // immunity badge
+            Assert.Contains("<mark=#", text);                    // rich-text badges present
             Assert.Contains("10% chance to burn the target.", text); // Flamethrower move description
         }
     }

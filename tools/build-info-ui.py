@@ -19,12 +19,12 @@ for path in (f"{ROOT}/InfoPanel", f"{ROOT}/InfoButton"):  # InfoButton is legacy
     except Exception: pass
 
 # --- Info overlay: a dark panel covering the mid screen, with the details Text + InfoPanel component ---
-cmd("ui.create_image", name="InfoPanel", parent={"path": ROOT}, color=[0.04, 0.05, 0.08, 0.95])
+cmd("ui.create_image", name="InfoPanel", parent={"path": ROOT}, color=[0.09, 0.10, 0.13, 0.97])
 cmd("ui.set_rect", path=f"{ROOT}/InfoPanel",
     anchorMin=[0.03, 0.12], anchorMax=[0.97, 0.88], offsetMin=[0, 0], offsetMax=[0, 0])
 cmd("component.add", path=f"{ROOT}/InfoPanel", type="MonsterBattler.Game.UI.InfoPanel")
 cmd("ui.create_text", name="InfoText", parent={"path": f"{ROOT}/InfoPanel"},
-    text="", fontSize=26, alignment="UpperLeft", color=[0.95, 0.96, 0.98, 1])
+    text="", fontSize=26, alignment="UpperLeft", color=[0.92, 0.93, 0.96, 1])
 cmd("ui.set_rect", path=f"{ROOT}/InfoPanel/InfoText",
     anchorMin=[0, 0], anchorMax=[1, 1], offsetMin=[24, 100], offsetMax=[-24, -20])  # leave room for buttons
 

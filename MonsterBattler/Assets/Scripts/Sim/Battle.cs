@@ -818,7 +818,7 @@ namespace MonsterBattler.Sim
         {
             var side = SideOf(scope);
             if (side == null) return;
-            foreach (var cond in side.Conditions.Values)
+            foreach (var cond in new System.Collections.Generic.List<SideCondition>(side.Conditions.Values))
                 if (cond.Effect != null) visit(cond.Effect, scope);
         }
 
@@ -863,7 +863,9 @@ namespace MonsterBattler.Sim
             // Hazards live on the side the incoming Pokemon belongs to.
             var side = SideOf(ev.Pokemon);
             if (side != null)
-                foreach (var cond in side.Conditions.Values)
+                // Snapshot: a hazard may remove itself on switch-in (Toxic Spikes absorbed by a
+                // Poison type), which would invalidate a live enumerator over the conditions.
+                foreach (var cond in new System.Collections.Generic.List<SideCondition>(side.Conditions.Values))
                     cond.Effect?.OnSwitchIn(ev, ev.Pokemon);
         }
         public void RunSwitchOut(SwitchOutEvent ev)  { Dispatch(ev.Pokemon, (e, o) => e.OnSwitchOut(ev, o)); }
@@ -883,7 +885,10 @@ namespace MonsterBattler.Sim
         static void Dispatch(Pokemon scope, System.Action<Effect, Pokemon> visit)
         {
             if (scope == null) return;
-            foreach (var e in scope.ActiveEffects()) visit(e, scope);
+            // Snapshot first: a handler may add/remove a volatile (Confusion/Disable/Encore
+            // expiring, Substitute breaking, …), which would invalidate a live enumerator.
+            var effects = new System.Collections.Generic.List<Effect>(scope.ActiveEffects());
+            foreach (var e in effects) visit(e, scope);
         }
 
         static string Ident(Pokemon mon) => mon?.Nickname ?? mon?.Species?.Name ?? "?";

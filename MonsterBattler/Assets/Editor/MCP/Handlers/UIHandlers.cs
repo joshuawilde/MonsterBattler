@@ -126,6 +126,29 @@ namespace MonsterBattler.Editor.MCP.Handlers
                 EditorSceneManager.MarkSceneDirty(go.scene);
                 return new JObject { ["path"] = GameObjectLookup.PathOf(go), ["id"] = go.GetInstanceID() };
             });
+
+            // Configure an existing TextMeshProUGUI: alignment / fontSize / autosize / color / wrap.
+            MCPCommandRegistry.Register("ui.config_text", p =>
+            {
+                var go = GameObjectLookup.Resolve(p);
+                var tmp = go.GetComponent<TextMeshProUGUI>();
+                if (tmp == null) throw new InvalidOperationException($"{go.name} has no TextMeshProUGUI");
+                if (p["alignment"] != null)
+                    tmp.alignment = ParseTmpAlign((string)p["alignment"], tmp.alignment);
+                if (p["fontSize"] != null) { tmp.fontSize = (float)p["fontSize"]; }
+                if (p["color"] is JArray c) tmp.color = ToColor(c);
+                if (p["wrap"] != null) tmp.enableWordWrapping = (bool)p["wrap"];
+                if ((bool?)p["autoSize"] == true)
+                {
+                    tmp.enableAutoSizing = true;
+                    tmp.fontSizeMin = (float?)p["fontSizeMin"] ?? 8f;
+                    tmp.fontSizeMax = (float?)p["fontSize"] ?? tmp.fontSize;
+                }
+                else if ((bool?)p["autoSize"] == false) tmp.enableAutoSizing = false;
+                if ((bool?)p["bold"] == true) tmp.fontStyle |= FontStyles.Bold;
+                EditorSceneManager.MarkSceneDirty(go.scene);
+                return new JObject { ["ok"] = true };
+            });
         }
 
         static GameObject CreateUIChild(JObject p)
