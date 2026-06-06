@@ -22,11 +22,17 @@ namespace MonsterBattler.Game.UI
             if (_label != null) _label.text = TypeStyle.Display(type).ToUpperInvariant();
         }
 
-        /// <summary>Generic setter (e.g. for a "×2" multiplier chip) — arbitrary label + color.</summary>
+        /// <summary>Generic setter (e.g. for a "×2" multiplier chip) — arbitrary label + bg color.</summary>
         public void Set(string label, Color color)
         {
             if (_background != null) _background.color = color;
             if (_label != null) _label.text = label;
+        }
+
+        /// <summary>Set the label + text color, keeping the prefab's styled background (for boost chips).</summary>
+        public void SetChip(string label, Color textColor)
+        {
+            if (_label != null) { _label.text = label; _label.color = textColor; }
         }
     }
 }

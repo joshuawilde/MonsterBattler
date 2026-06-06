@@ -112,6 +112,7 @@ namespace MonsterBattler.Sim.Tests
                 {
                     Id = id, Name = Str(o, "name", id), EffectId = Str(o, "effectId"),
                     IsBerry = Bool(o, "isBerry"), ConsumedOnUse = Bool(o, "consumedOnUse"),
+                    ShortDesc = Str(o, "desc"),
                 };
 
             return dex;

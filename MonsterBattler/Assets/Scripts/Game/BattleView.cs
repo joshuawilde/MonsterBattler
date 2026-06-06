@@ -38,6 +38,11 @@ namespace MonsterBattler.Game
         [SerializeField] TextMeshProUGUI _sideText0;   // player hazards / screens / tailwind
         [SerializeField] TextMeshProUGUI _sideText1;   // opponent hazards / screens / tailwind
 
+        [Header("Active stat-boost chips (scene-authored HorizontalLayoutGroup rows + chip prefab)")]
+        [SerializeField] Transform _boostRow0;         // player: parent (HLG) for boost chips
+        [SerializeField] Transform _boostRow1;         // opponent: parent (HLG) for boost chips
+        [SerializeField] UI.TypeBadge _statChipPrefab; // chip prefab instantiated per boost
+
         [Header("Turn counter")]
         [SerializeField] TextMeshProUGUI _turnText;
 
@@ -401,6 +406,8 @@ namespace MonsterBattler.Game
             if (_fieldText != null) _fieldText.text = FieldStatusText.Field(_battle);
             if (_sideText0 != null) _sideText0.text = FieldStatusText.Side(_battle.Sides[0]);
             if (_sideText1 != null) _sideText1.text = FieldStatusText.Side(_battle.Sides[1]);
+            PopulateBoostChips(_boostRow0, p0);
+            PopulateBoostChips(_boostRow1, p1);
 
             for (int i = 0; i < _moves.Length; i++)
             {
@@ -438,6 +445,27 @@ namespace MonsterBattler.Game
             int pct = max == 0 ? 0 : 100 * cur / max;
             if (name != null) name.text = $"{mon.Species?.Name ?? mon.Nickname} L{mon.Level}";
             if (hp != null)   hp.text   = $"{cur}/{max}  ({pct}%)";
+        }
+
+        static readonly (Stat stat, string label)[] BoostStats =
+        {
+            (Stat.Atk, "Atk"), (Stat.Def, "Def"), (Stat.SpA, "SpA"), (Stat.SpD, "SpD"), (Stat.Spe, "Spe"),
+        };
+
+        // Rebuild a nameplate's boost row: one chip prefab per active stat stage (cyan up / red down).
+        void PopulateBoostChips(Transform row, Pokemon mon)
+        {
+            if (row == null) return;
+            for (int i = row.childCount - 1; i >= 0; i--) Destroy(row.GetChild(i).gameObject);
+            if (mon == null || _statChipPrefab == null) return;
+            foreach (var (stat, label) in BoostStats)
+            {
+                int stage = mon.StatStages[(int)stat];
+                if (stage == 0) continue;
+                var chip = Instantiate(_statChipPrefab, row);
+                var color = stage > 0 ? new Color(0.30f, 0.78f, 1f) : new Color(1f, 0.42f, 0.42f);
+                chip.SetChip($"{label} ×{Stats.StageMult(stage):0.##}", color);
+            }
         }
 
         static void SetStatusBadge(TextMeshProUGUI badge, Pokemon mon)

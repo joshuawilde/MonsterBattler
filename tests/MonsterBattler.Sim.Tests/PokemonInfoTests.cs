@@ -22,6 +22,20 @@ namespace MonsterBattler.Sim.Tests
         }
 
         [Fact]
+        public void InfoText_ShowsBoostedStatsWithStage()
+        {
+            var mon = TestBattlers.Make("lucario", "innerfocus", null, 100, "closecombat");
+            int baseAtk = mon.MaxStats[(int)Stat.Atk];
+            mon.StatStages[(int)Stat.Atk] = 2; // +2 Attack (e.g. after Swords Dance)
+
+            var text = PokemonInfoText.Build(mon);
+
+            int boosted = (int)(baseAtk * Stats.StageMult(2)); // ×2 at +2
+            Assert.Contains($"{boosted} (×2)", text);          // shows the boosted value + multiplier
+            Assert.DoesNotContain($"<b>Atk</b> {baseAtk} ", text); // not the raw base
+        }
+
+        [Fact]
         public void InfoText_IncludesStatsAbilityItemMatchupAndMoveDescriptions()
         {
             var mon = TestBattlers.Make("charizard", "blaze", "heavydutyboots", 100, "flamethrower", "earthquake");

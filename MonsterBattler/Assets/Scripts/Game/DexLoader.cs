@@ -143,6 +143,7 @@ namespace MonsterBattler.Game
                     EffectId = (string)o["effectId"],
                     IsBerry = (bool?)o["isBerry"] ?? false,
                     ConsumedOnUse = (bool?)o["consumedOnUse"] ?? false,
+                    ShortDesc = (string)o["desc"],
                 };
             }
         }

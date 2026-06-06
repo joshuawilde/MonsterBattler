@@ -154,6 +154,7 @@ function convertItems() {
     const o = { name: it.name };
     if (it.isBerry) o.isBerry = true;
     if (it.isBerry || it.isGem) o.consumedOnUse = true;
+    if (it.shortDesc) o.desc = it.shortDesc;
     const prev = existing[it.id];
     if (prev && prev.effectId) o.effectId = prev.effectId;
     out[it.id] = o;

@@ -23,10 +23,9 @@ namespace MonsterBattler.Game
             sb.AppendLine();
             sb.AppendLine(Badges(Types(m)));
 
-            // Stats.
-            var s = m.MaxStats;
-            sb.AppendLine($"<b>HP</b> {s[(int)Stat.HP]}  <b>Atk</b> {s[(int)Stat.Atk]}  <b>Def</b> {s[(int)Stat.Def]}  " +
-                          $"<b>SpA</b> {s[(int)Stat.SpA]}  <b>SpD</b> {s[(int)Stat.SpD]}  <b>Spe</b> {s[(int)Stat.Spe]}");
+            // Stats — boosted values shown with their stage (blue up / red down). HP has no stage.
+            sb.AppendLine($"<b>HP</b> {m.MaxStats[(int)Stat.HP]}  {StatCell(m, "Atk", Stat.Atk)}  {StatCell(m, "Def", Stat.Def)}  " +
+                          $"{StatCell(m, "SpA", Stat.SpA)}  {StatCell(m, "SpD", Stat.SpD)}  {StatCell(m, "Spe", Stat.Spe)}");
 
             // Ability + item.
             if (m.Ability != null)
@@ -35,7 +34,13 @@ namespace MonsterBattler.Game
                 if (!string.IsNullOrEmpty(m.Ability.ShortDesc)) sb.Append($" <size=85%>— {m.Ability.ShortDesc}</size>");
                 sb.AppendLine();
             }
-            sb.AppendLine($"<b>Item:</b> {(m.Item != null ? m.Item.Name : "None")}");
+            if (m.Item != null)
+            {
+                sb.Append($"<b>Item:</b> {m.Item.Name}");
+                if (!string.IsNullOrEmpty(m.Item.ShortDesc)) sb.Append($" <size=85%>— {m.Item.ShortDesc}</size>");
+                sb.AppendLine();
+            }
+            else sb.AppendLine("<b>Item:</b> None");
 
             // Defensive matchup, one row per multiplier (Tera type when terastallized).
             var t1 = m.IsTerastallized ? m.TeraType : m.Species.Type1;
@@ -93,6 +98,18 @@ namespace MonsterBattler.Game
             if (type == MonType.None) return "";
             // Opaque badge with white text on every type (matches Showdown).
             return $"<mark=#{TypeColors.Hex(type)}FF><color=#FFFFFF> {type.ToString().ToUpperInvariant()} </color></mark>";
+        }
+
+        // "Atk 226", or boosted "Atk 339 (×1.5)" in blue / dropped in red.
+        static string StatCell(Pokemon m, string label, Stat stat)
+        {
+            int baseV = m.MaxStats[(int)stat];
+            int stage = m.StatStages[(int)stat];
+            if (stage == 0) return $"<b>{label}</b> {baseV}";
+            float mult = Stats.StageMult(stage);
+            int eff = (int)(baseV * mult);
+            string col = stage > 0 ? "5AB0FF" : "FF7A7A";
+            return $"<b>{label}</b> <color=#{col}>{eff} (×{mult:0.##})</color>";
         }
 
         static int Pct(Pokemon m)

@@ -7,5 +7,7 @@ namespace MonsterBattler.Sim.Data
         public string EffectId;
         public bool IsBerry;
         public bool ConsumedOnUse;
+        /// <summary>One-line human description (Showdown's shortDesc).</summary>
+        public string ShortDesc;
     }
 }
