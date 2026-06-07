@@ -47,6 +47,7 @@ namespace MonsterBattler.Game.UI
 
         public void PlayEnter() => Run(EnterCo());
         public void PlayAttack() => Run(AttackCo());
+        public void PlayUse() => Run(UseCo());   // self/status move — bob in place, no forward lunge
         public void PlayHit() => Run(HitCo());
         public void PlayFaint() => Run(FaintCo());
 
@@ -74,6 +75,14 @@ namespace MonsterBattler.Game.UI
             Vector3 lunged = _home + Lunge;
             yield return Tween(0.12f, t => transform.localPosition = Vector3.Lerp(_home, lunged, t));
             yield return Tween(0.20f, t => transform.localPosition = Vector3.Lerp(lunged, _home, EaseOut(t)));
+            transform.localPosition = _home;
+        }
+
+        IEnumerator UseCo()
+        {
+            Vector3 up = _home + new Vector3(0f, 0.22f, 0f);
+            yield return Tween(0.15f, t => transform.localPosition = Vector3.Lerp(_home, up, t));
+            yield return Tween(0.22f, t => transform.localPosition = Vector3.Lerp(up, _home, EaseOut(t)));
             transform.localPosition = _home;
         }
 

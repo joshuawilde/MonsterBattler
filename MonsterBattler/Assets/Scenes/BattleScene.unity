@@ -467,6 +467,7 @@ MonoBehaviour:
   _rematchButton: {fileID: 1140258893}
   _seed: 12345
   _opponentMoveBias: 1
+  _opponentElo: 1200
   _useRandomTeams: 1
   _turnStepDelay: 0.9
   _actionGapDelay: 0.75

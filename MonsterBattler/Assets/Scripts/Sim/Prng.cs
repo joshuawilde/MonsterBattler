@@ -46,5 +46,13 @@ namespace MonsterBattler.Sim
         public float NextFloat() => (NextU32() & 0xFFFFFF) / (float)(1 << 24);
 
         public Prng Fork() => new Prng((((ulong)NextU32()) << 32) | NextU32());
+
+        /// <summary>Exact copy of the current internal state (for AI battle-state cloning).</summary>
+        public Prng Clone()
+        {
+            var p = new Prng(Seed);
+            p._state = _state;
+            return p;
+        }
     }
 }

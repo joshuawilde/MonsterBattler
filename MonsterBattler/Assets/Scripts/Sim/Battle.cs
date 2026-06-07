@@ -19,7 +19,7 @@ namespace MonsterBattler.Sim
     ///   6. Auto-switch any fainted active slots from the bench.
     ///   7. Win condition: all team mons fainted on one side.
     /// </summary>
-    public sealed class Battle
+    public sealed partial class Battle
     {
         public readonly Dex Dex;
         public readonly Prng Prng;

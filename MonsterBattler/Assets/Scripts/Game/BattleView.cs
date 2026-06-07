@@ -93,9 +93,13 @@ namespace MonsterBattler.Game
 
         [Header("Demo")]
         [SerializeField] ulong _seed = 12345;
-        [Tooltip("PS RandomPlayerAI 'move' bias. 1.0 = always attack, lower values cause occasional voluntary switches.")]
+        [Tooltip("PS RandomPlayerAI 'move' bias (only used when Opponent Elo < 0). 1.0 = always attack.")]
         [Range(0f, 1f)]
         [SerializeField] float _opponentMoveBias = 1.0f;
+        [Tooltip("Opponent skill as a self-consistent Elo on one smooth scale (calibrated by " +
+                 "tools/calibrate-ai 'unified'): ~871-1262 = heuristic temperature dial, up to ~1514 = " +
+                 "eval-guided search. Set < 0 to use the old random AI.")]
+        [SerializeField] int _opponentElo = 1200;
         [Tooltip("Generate Showdown-style gen9 random-battle teams instead of the hardcoded demo teams.")]
         [SerializeField] bool _useRandomTeams = true;
         [Tooltip("Seconds between each beat of a turn (move, damage, faint, …) during playback.")]
@@ -173,7 +177,9 @@ namespace MonsterBattler.Game
             side1.ActiveSlots.Add(opponentTeam[0]); opponentTeam[0].IsActive = true;
             _battle.Setup(side0, side1);
 
-            _opponentAI = new RandomPlayerAI(_opponentMoveBias);
+            _opponentAI = _opponentElo >= 0
+                ? AI.BattleAIFactory.ForElo(_opponentElo, _seed ^ 0x9E3779B97F4A7C15)
+                : new RandomPlayerAI(_opponentMoveBias);
 
             _moves = new[] { _move0, _move1, _move2, _move3 };
             _switches = new[] { _switch0, _switch1, _switch2, _switch3, _switch4, _switch5 };
@@ -643,7 +649,8 @@ namespace MonsterBattler.Game
                 else if (tag == "move" && parts.Length > 2)
                 {
                     int side = SideForName(parts[2], active);
-                    View(side)?.PlayAttack();
+                    bool selfTarget = parts.Length > 4 && parts[4] == parts[2]; // |move|user|Move|target
+                    if (selfTarget) View(side)?.PlayUse(); else View(side)?.PlayAttack();
                 }
                 else if (tag == "switch" && parts.Length > 3)
                 {
