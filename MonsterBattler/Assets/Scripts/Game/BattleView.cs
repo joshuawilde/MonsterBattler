@@ -22,6 +22,12 @@ namespace MonsterBattler.Game
         [SerializeField] Transform _slot0;
         [SerializeField] Transform _slot1;
 
+        [Header("On-field monster sprites (scene-authored)")]
+        [SerializeField] UI.MonsterView _monView0; // player (back sprite)
+        [SerializeField] UI.MonsterView _monView1; // opponent (front sprite)
+        UI.MonsterView[] _monViews;
+        readonly string[] _shownSpecies = { null, null };
+
         [Header("Player mon info")]
         [SerializeField] TextMeshProUGUI _name0;
         [SerializeField] TextMeshProUGUI _hp0Text;
@@ -94,7 +100,11 @@ namespace MonsterBattler.Game
         [SerializeField] bool _useRandomTeams = true;
         [Tooltip("Seconds between each beat of a turn (move, damage, faint, …) during playback.")]
         [Range(0f, 2f)]
-        [SerializeField] float _turnStepDelay = 0.7f;
+        [SerializeField] float _turnStepDelay = 0.9f;
+
+        [Tooltip("Extra pause between one action's message box fading and the next action's (e.g. player A's move → player B's move).")]
+        [Range(0f, 2f)]
+        [SerializeField] float _actionGapDelay = 0.75f;
 
         Battle _battle;
         MoveButton[] _moves;
@@ -196,6 +206,7 @@ namespace MonsterBattler.Game
                 _infoPanel.SwapRequested += OnSwapRequested;
                 _infoPanel.SetVisible(false); // hidden until requested
             }
+            _monViews = new[] { _monView0, _monView1 };
             if (_rematchButton != null) _rematchButton.onClick.AddListener(OnRematch);
             if (_endScreen != null) _endScreen.SetActive(false); // hidden until the battle ends
 
@@ -432,6 +443,8 @@ namespace MonsterBattler.Game
             SetMonInfo(_name1, _hp1Text, p1);
             SetHpTarget(0, p0);
             SetHpTarget(1, p1);
+            SyncMonView(0, p0);
+            SyncMonView(1, p1);
             SetStatusBadge(_status0, p0);
             SetStatusBadge(_status1, p1);
 
@@ -551,6 +564,20 @@ namespace MonsterBattler.Game
         static readonly Color FaintBg = new Color(0.32f, 0.20f, 0.22f);
         static readonly Color SwitchBg = new Color(0.26f, 0.52f, 0.46f);
 
+        // Show the active mon's sprite; if it changed (battle start or switch-in), play the enter anim.
+        void SyncMonView(int side, Pokemon mon)
+        {
+            if (_monViews == null || side >= _monViews.Length || _monViews[side] == null || mon?.Species == null) return;
+            string id = mon.Species.Id;
+            if (_shownSpecies[side] == id) return;
+            _shownSpecies[side] = id;
+            _monViews[side].SetSpecies(id);
+            _monViews[side].PlayEnter();
+        }
+
+        UI.MonsterView View(int side) =>
+            _monViews != null && side >= 0 && side < _monViews.Length ? _monViews[side] : null;
+
         void SpawnPopup(int side, string text, Color bg)
         {
             var anchor = side == 0 ? _popupAnchor0 : _popupAnchor1;
@@ -590,7 +617,7 @@ namespace MonsterBattler.Game
                     {
                         if (!tag.StartsWith("-"))
                         {
-                            if (groupActive) { _messageBar.FadeOut(); yield return new WaitForSeconds(0.28f); }
+                            if (groupActive) { _messageBar.FadeOut(); yield return new WaitForSeconds(_actionGapDelay); }
                             _messageBar.BeginGroup(readable);
                             groupActive = true;
                         }
@@ -609,8 +636,14 @@ namespace MonsterBattler.Game
                         int d = Mathf.RoundToInt((_hpTarget[side] - oldFrac) * 100f);
                         if (tag != "-sethp" && d != 0)
                             SpawnPopup(side, (d > 0 ? "+" : "") + d + "%", d > 0 ? HealBg : DmgBg);
+                        if (tag == "-damage") View(side)?.PlayHit();
                         beat = true;
                     }
+                }
+                else if (tag == "move" && parts.Length > 2)
+                {
+                    int side = SideForName(parts[2], active);
+                    View(side)?.PlayAttack();
                 }
                 else if (tag == "switch" && parts.Length > 3)
                 {
@@ -623,13 +656,14 @@ namespace MonsterBattler.Game
                             _nameTexts[side].text = $"{MonName(mon)} L{mon.Level}";
                         ApplyHpFromLog(side, parts[3], snap: true); // new mon — no drain animation
                         SpawnPopup(side, $"Go! {MonName(mon) ?? parts[2]}", SwitchBg);
+                        SyncMonView(side, mon); // swap sprite + enter anim
                         beat = true;
                     }
                 }
                 else if (tag == "faint" && parts.Length > 2)
                 {
                     int side = SideForName(parts[2], active);
-                    if (side >= 0) { SpawnPopup(side, "Fainted", FaintBg); beat = true; }
+                    if (side >= 0) { SpawnPopup(side, "Fainted", FaintBg); View(side)?.PlayFaint(); beat = true; }
                 }
                 else if ((tag == "-boost" || tag == "-unboost") && parts.Length > 4)
                 {

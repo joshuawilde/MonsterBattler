@@ -35,10 +35,16 @@ def exit_play():
         time.sleep(0.5)
     return False
 
-args = [a for a in sys.argv[1:] if not a.startswith("--")]
 wait = 8.0
-if "--wait" in sys.argv:
-    wait = float(sys.argv[sys.argv.index("--wait") + 1])
+raw = sys.argv[1:]
+args = []
+i = 0
+while i < len(raw):
+    if raw[i] == "--wait":
+        wait = float(raw[i + 1]); i += 2; continue
+    if raw[i].startswith("--"):
+        i += 1; continue
+    args.append(raw[i]); i += 1
 out = os.path.abspath(args[0]) if args else "/tmp/mb.png"
 clicks = args[1:]
 

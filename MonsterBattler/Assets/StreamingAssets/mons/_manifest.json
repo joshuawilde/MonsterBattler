@@ -1,0 +1,2542 @@
+{
+"abomasnow": {
+"type": "grass",
+"line": "grass_fakemon_line_1",
+"stage": "base"
+},
+"amoonguss": {
+"type": "grass",
+"line": "grass_fakemon_line_1",
+"stage": "stage_1"
+},
+"appletun": {
+"type": "grass",
+"line": "grass_fakemon_line_1",
+"stage": "stage_2"
+},
+"arboliva": {
+"type": "grass",
+"line": "grass_fakemon_line_10",
+"stage": "base"
+},
+"arceusgrass": {
+"type": "grass",
+"line": "grass_fakemon_line_10",
+"stage": "stage_1"
+},
+"bellossom": {
+"type": "grass",
+"line": "grass_fakemon_line_10",
+"stage": "stage_2"
+},
+"brambleghast": {
+"type": "grass",
+"line": "grass_fakemon_line_100",
+"stage": "base"
+},
+"breloom": {
+"type": "grass",
+"line": "grass_fakemon_line_100",
+"stage": "stage_1"
+},
+"brutebonnet": {
+"type": "grass",
+"line": "grass_fakemon_line_100",
+"stage": "stage_2"
+},
+"cacturne": {
+"type": "grass",
+"line": "grass_fakemon_line_101",
+"stage": "base"
+},
+"chesnaught": {
+"type": "grass",
+"line": "grass_fakemon_line_101",
+"stage": "stage_1"
+},
+"decidueye": {
+"type": "grass",
+"line": "grass_fakemon_line_101",
+"stage": "stage_2"
+},
+"decidueyehisui": {
+"type": "grass",
+"line": "grass_fakemon_line_102",
+"stage": "base"
+},
+"dipplin": {
+"type": "grass",
+"line": "grass_fakemon_line_102",
+"stage": "stage_1"
+},
+"exeggutor": {
+"type": "grass",
+"line": "grass_fakemon_line_102",
+"stage": "stage_2"
+},
+"exeggutoralola": {
+"type": "grass",
+"line": "grass_fakemon_line_103",
+"stage": "base"
+},
+"flapple": {
+"type": "grass",
+"line": "grass_fakemon_line_103",
+"stage": "stage_1"
+},
+"gogoat": {
+"type": "grass",
+"line": "grass_fakemon_line_103",
+"stage": "stage_2"
+},
+"hydrapple": {
+"type": "grass",
+"line": "grass_fakemon_line_104",
+"stage": "base"
+},
+"ironleaves": {
+"type": "grass",
+"line": "grass_fakemon_line_104",
+"stage": "stage_1"
+},
+"jumpluff": {
+"type": "grass",
+"line": "grass_fakemon_line_104",
+"stage": "stage_2"
+},
+"leafeon": {
+"type": "grass",
+"line": "grass_fakemon_line_105",
+"stage": "base"
+},
+"lilligant": {
+"type": "grass",
+"line": "grass_fakemon_line_105",
+"stage": "stage_1"
+},
+"lilliganthisui": {
+"type": "grass",
+"line": "grass_fakemon_line_105",
+"stage": "stage_2"
+},
+"lurantis": {
+"type": "grass",
+"line": "grass_fakemon_line_106",
+"stage": "base"
+},
+"meganium": {
+"type": "grass",
+"line": "grass_fakemon_line_106",
+"stage": "stage_1"
+},
+"meowscarada": {
+"type": "grass",
+"line": "grass_fakemon_line_106",
+"stage": "stage_2"
+},
+"ogerpon": {
+"type": "grass",
+"line": "grass_fakemon_line_107",
+"stage": "base"
+},
+"ogerponcornerstone": {
+"type": "grass",
+"line": "grass_fakemon_line_107",
+"stage": "stage_1"
+},
+"ogerponhearthflame": {
+"type": "grass",
+"line": "grass_fakemon_line_107",
+"stage": "stage_2"
+},
+"ogerponwellspring": {
+"type": "grass",
+"line": "grass_fakemon_line_108",
+"stage": "base"
+},
+"rillaboom": {
+"type": "grass",
+"line": "grass_fakemon_line_108",
+"stage": "stage_1"
+},
+"sceptile": {
+"type": "grass",
+"line": "grass_fakemon_line_108",
+"stage": "stage_2"
+},
+"scovillain": {
+"type": "grass",
+"line": "grass_fakemon_line_109",
+"stage": "base"
+},
+"serperior": {
+"type": "grass",
+"line": "grass_fakemon_line_109",
+"stage": "stage_1"
+},
+"shaymin": {
+"type": "grass",
+"line": "grass_fakemon_line_109",
+"stage": "stage_2"
+},
+"shayminsky": {
+"type": "grass",
+"line": "grass_fakemon_line_11",
+"stage": "base"
+},
+"shiftry": {
+"type": "grass",
+"line": "grass_fakemon_line_11",
+"stage": "stage_1"
+},
+"sinistcha": {
+"type": "grass",
+"line": "grass_fakemon_line_11",
+"stage": "stage_2"
+},
+"sunflora": {
+"type": "grass",
+"line": "grass_fakemon_line_110",
+"stage": "base"
+},
+"torterra": {
+"type": "grass",
+"line": "grass_fakemon_line_110",
+"stage": "stage_1"
+},
+"tropius": {
+"type": "grass",
+"line": "grass_fakemon_line_110",
+"stage": "stage_2"
+},
+"tsareena": {
+"type": "grass",
+"line": "grass_fakemon_line_112",
+"stage": "base"
+},
+"venusaur": {
+"type": "grass",
+"line": "grass_fakemon_line_112",
+"stage": "stage_1"
+},
+"victreebel": {
+"type": "grass",
+"line": "grass_fakemon_line_112",
+"stage": "stage_2"
+},
+"vileplume": {
+"type": "grass",
+"line": "grass_fakemon_line_113",
+"stage": "base"
+},
+"virizion": {
+"type": "grass",
+"line": "grass_fakemon_line_113",
+"stage": "stage_1"
+},
+"whimsicott": {
+"type": "grass",
+"line": "grass_fakemon_line_113",
+"stage": "stage_2"
+},
+"arcanine": {
+"type": "fire",
+"line": "fire_fakemon_line_1",
+"stage": "base"
+},
+"arcaninehisui": {
+"type": "fire",
+"line": "fire_fakemon_line_1",
+"stage": "stage_1"
+},
+"arceusfire": {
+"type": "fire",
+"line": "fire_fakemon_line_1",
+"stage": "stage_2"
+},
+"armarouge": {
+"type": "fire",
+"line": "fire_fakemon_line_10",
+"stage": "base"
+},
+"blaziken": {
+"type": "fire",
+"line": "fire_fakemon_line_10",
+"stage": "stage_1"
+},
+"camerupt": {
+"type": "fire",
+"line": "fire_fakemon_line_10",
+"stage": "stage_2"
+},
+"ceruledge": {
+"type": "fire",
+"line": "fire_fakemon_line_100",
+"stage": "base"
+},
+"charizard": {
+"type": "fire",
+"line": "fire_fakemon_line_100",
+"stage": "stage_1"
+},
+"cinderace": {
+"type": "fire",
+"line": "fire_fakemon_line_100",
+"stage": "stage_2"
+},
+"delphox": {
+"type": "fire",
+"line": "fire_fakemon_line_101",
+"stage": "base"
+},
+"emboar": {
+"type": "fire",
+"line": "fire_fakemon_line_101",
+"stage": "stage_1"
+},
+"entei": {
+"type": "fire",
+"line": "fire_fakemon_line_101",
+"stage": "stage_2"
+},
+"flareon": {
+"type": "fire",
+"line": "fire_fakemon_line_102",
+"stage": "base"
+},
+"gougingfire": {
+"type": "fire",
+"line": "fire_fakemon_line_102",
+"stage": "stage_1"
+},
+"heatran": {
+"type": "fire",
+"line": "fire_fakemon_line_102",
+"stage": "stage_2"
+},
+"hooh": {
+"type": "fire",
+"line": "fire_fakemon_line_103",
+"stage": "base"
+},
+"incineroar": {
+"type": "fire",
+"line": "fire_fakemon_line_103",
+"stage": "stage_1"
+},
+"infernape": {
+"type": "fire",
+"line": "fire_fakemon_line_103",
+"stage": "stage_2"
+},
+"ironmoth": {
+"type": "fire",
+"line": "fire_fakemon_line_104",
+"stage": "base"
+},
+"magcargo": {
+"type": "fire",
+"line": "fire_fakemon_line_104",
+"stage": "stage_1"
+},
+"magmortar": {
+"type": "fire",
+"line": "fire_fakemon_line_104",
+"stage": "stage_2"
+},
+"moltres": {
+"type": "fire",
+"line": "fire_fakemon_line_105",
+"stage": "base"
+},
+"ninetales": {
+"type": "fire",
+"line": "fire_fakemon_line_105",
+"stage": "stage_1"
+},
+"oricorio": {
+"type": "fire",
+"line": "fire_fakemon_line_105",
+"stage": "stage_2"
+},
+"pyroar": {
+"type": "fire",
+"line": "fire_fakemon_line_106",
+"stage": "base"
+},
+"skeledirge": {
+"type": "fire",
+"line": "fire_fakemon_line_106",
+"stage": "stage_1"
+},
+"talonflame": {
+"type": "fire",
+"line": "fire_fakemon_line_106",
+"stage": "stage_2"
+},
+"torkoal": {
+"type": "fire",
+"line": "fire_fakemon_line_107",
+"stage": "base"
+},
+"typhlosion": {
+"type": "fire",
+"line": "fire_fakemon_line_107",
+"stage": "stage_1"
+},
+"typhlosionhisui": {
+"type": "fire",
+"line": "fire_fakemon_line_107",
+"stage": "stage_2"
+},
+"volcanion": {
+"type": "fire",
+"line": "fire_fakemon_line_108",
+"stage": "base"
+},
+"alomomola": {
+"type": "water",
+"line": "water_fakemon_line_1",
+"stage": "base"
+},
+"araquanid": {
+"type": "water",
+"line": "water_fakemon_line_1",
+"stage": "stage_1"
+},
+"arceuswater": {
+"type": "water",
+"line": "water_fakemon_line_1",
+"stage": "stage_2"
+},
+"azumarill": {
+"type": "water",
+"line": "water_fakemon_line_10",
+"stage": "base"
+},
+"barraskewda": {
+"type": "water",
+"line": "water_fakemon_line_10",
+"stage": "stage_1"
+},
+"basculegion": {
+"type": "water",
+"line": "water_fakemon_line_10",
+"stage": "stage_2"
+},
+"basculegionf": {
+"type": "water",
+"line": "water_fakemon_line_100",
+"stage": "base"
+},
+"basculin": {
+"type": "water",
+"line": "water_fakemon_line_100",
+"stage": "stage_1"
+},
+"blastoise": {
+"type": "water",
+"line": "water_fakemon_line_100",
+"stage": "stage_2"
+},
+"bruxish": {
+"type": "water",
+"line": "water_fakemon_line_101",
+"stage": "base"
+},
+"clawitzer": {
+"type": "water",
+"line": "water_fakemon_line_101",
+"stage": "stage_1"
+},
+"cloyster": {
+"type": "water",
+"line": "water_fakemon_line_101",
+"stage": "stage_2"
+},
+"crawdaunt": {
+"type": "water",
+"line": "water_fakemon_line_11",
+"stage": "base"
+},
+"dewgong": {
+"type": "water",
+"line": "water_fakemon_line_11",
+"stage": "stage_1"
+},
+"dondozo": {
+"type": "water",
+"line": "water_fakemon_line_11",
+"stage": "stage_2"
+},
+"drednaw": {
+"type": "water",
+"line": "water_fakemon_line_12",
+"stage": "base"
+},
+"empoleon": {
+"type": "water",
+"line": "water_fakemon_line_12",
+"stage": "stage_1"
+},
+"feraligatr": {
+"type": "water",
+"line": "water_fakemon_line_12",
+"stage": "stage_2"
+},
+"floatzel": {
+"type": "water",
+"line": "water_fakemon_line_13",
+"stage": "base"
+},
+"gastrodon": {
+"type": "water",
+"line": "water_fakemon_line_13",
+"stage": "stage_1"
+},
+"golduck": {
+"type": "water",
+"line": "water_fakemon_line_13",
+"stage": "stage_2"
+},
+"greninja": {
+"type": "water",
+"line": "water_fakemon_line_14",
+"stage": "base"
+},
+"greninjabond": {
+"type": "water",
+"line": "water_fakemon_line_14",
+"stage": "stage_1"
+},
+"gyarados": {
+"type": "water",
+"line": "water_fakemon_line_14",
+"stage": "stage_2"
+},
+"inteleon": {
+"type": "water",
+"line": "water_fakemon_line_15",
+"stage": "base"
+},
+"keldeoresolute": {
+"type": "water",
+"line": "water_fakemon_line_15",
+"stage": "stage_1"
+},
+"kingdra": {
+"type": "water",
+"line": "water_fakemon_line_15",
+"stage": "stage_2"
+},
+"kyogre": {
+"type": "water",
+"line": "water_fakemon_line_16",
+"stage": "base"
+},
+"lanturn": {
+"type": "water",
+"line": "water_fakemon_line_16",
+"stage": "stage_1"
+},
+"lapras": {
+"type": "water",
+"line": "water_fakemon_line_16",
+"stage": "stage_2"
+},
+"ludicolo": {
+"type": "water",
+"line": "water_fakemon_line_17",
+"stage": "base"
+},
+"lumineon": {
+"type": "water",
+"line": "water_fakemon_line_17",
+"stage": "stage_1"
+},
+"luvdisc": {
+"type": "water",
+"line": "water_fakemon_line_17",
+"stage": "stage_2"
+},
+"manaphy": {
+"type": "water",
+"line": "water_fakemon_line_18",
+"stage": "base"
+},
+"milotic": {
+"type": "water",
+"line": "water_fakemon_line_18",
+"stage": "stage_1"
+},
+"palafin": {
+"type": "water",
+"line": "water_fakemon_line_18",
+"stage": "stage_2"
+},
+"palkia": {
+"type": "water",
+"line": "water_fakemon_line_19",
+"stage": "base"
+},
+"palkiaorigin": {
+"type": "water",
+"line": "water_fakemon_line_19",
+"stage": "stage_1"
+},
+"pelipper": {
+"type": "water",
+"line": "water_fakemon_line_19",
+"stage": "stage_2"
+},
+"phione": {
+"type": "water",
+"line": "water_fakemon_line_2",
+"stage": "base"
+},
+"politoed": {
+"type": "water",
+"line": "water_fakemon_line_2",
+"stage": "stage_1"
+},
+"poliwrath": {
+"type": "water",
+"line": "water_fakemon_line_2",
+"stage": "stage_2"
+},
+"primarina": {
+"type": "water",
+"line": "water_fakemon_line_20",
+"stage": "base"
+},
+"quagsire": {
+"type": "water",
+"line": "water_fakemon_line_20",
+"stage": "stage_1"
+},
+"quaquaval": {
+"type": "water",
+"line": "water_fakemon_line_20",
+"stage": "stage_2"
+},
+"qwilfish": {
+"type": "water",
+"line": "water_fakemon_line_21",
+"stage": "base"
+},
+"samurott": {
+"type": "water",
+"line": "water_fakemon_line_21",
+"stage": "stage_1"
+},
+"samurotthisui": {
+"type": "water",
+"line": "water_fakemon_line_21",
+"stage": "stage_2"
+},
+"slowbro": {
+"type": "water",
+"line": "water_fakemon_line_22",
+"stage": "base"
+},
+"slowking": {
+"type": "water",
+"line": "water_fakemon_line_22",
+"stage": "stage_1"
+},
+"suicune": {
+"type": "water",
+"line": "water_fakemon_line_22",
+"stage": "stage_2"
+},
+"swampert": {
+"type": "water",
+"line": "water_fakemon_line_23",
+"stage": "base"
+},
+"swanna": {
+"type": "water",
+"line": "water_fakemon_line_23",
+"stage": "stage_1"
+},
+"tentacruel": {
+"type": "water",
+"line": "water_fakemon_line_23",
+"stage": "stage_2"
+},
+"vaporeon": {
+"type": "water",
+"line": "water_fakemon_line_24",
+"stage": "base"
+},
+"veluza": {
+"type": "water",
+"line": "water_fakemon_line_24",
+"stage": "stage_1"
+},
+"walkingwake": {
+"type": "water",
+"line": "water_fakemon_line_24",
+"stage": "stage_2"
+},
+"whiscash": {
+"type": "water",
+"line": "water_fakemon_line_25",
+"stage": "base"
+},
+"wugtrio": {
+"type": "water",
+"line": "water_fakemon_line_25",
+"stage": "stage_1"
+},
+"arbok": {
+"type": "poison",
+"line": "poison_fakemon_line_1",
+"stage": "base"
+},
+"arceuspoison": {
+"type": "poison",
+"line": "poison_fakemon_line_1",
+"stage": "stage_1"
+},
+"clodsire": {
+"type": "poison",
+"line": "poison_fakemon_line_1",
+"stage": "stage_2"
+},
+"dragalge": {
+"type": "poison",
+"line": "poison_fakemon_line_10",
+"stage": "base"
+},
+"eternatus": {
+"type": "poison",
+"line": "poison_fakemon_line_10",
+"stage": "stage_1"
+},
+"fezandipiti": {
+"type": "poison",
+"line": "poison_fakemon_line_10",
+"stage": "stage_2"
+},
+"grafaiai": {
+"type": "poison",
+"line": "poison_fakemon_line_11",
+"stage": "base"
+},
+"muk": {
+"type": "poison",
+"line": "poison_fakemon_line_11",
+"stage": "stage_1"
+},
+"mukalola": {
+"type": "poison",
+"line": "poison_fakemon_line_11",
+"stage": "stage_2"
+},
+"munkidori": {
+"type": "poison",
+"line": "poison_fakemon_line_12",
+"stage": "base"
+},
+"okidogi": {
+"type": "poison",
+"line": "poison_fakemon_line_12",
+"stage": "stage_1"
+},
+"pecharunt": {
+"type": "poison",
+"line": "poison_fakemon_line_12",
+"stage": "stage_2"
+},
+"salazzle": {
+"type": "poison",
+"line": "poison_fakemon_line_13",
+"stage": "base"
+},
+"seviper": {
+"type": "poison",
+"line": "poison_fakemon_line_13",
+"stage": "stage_1"
+},
+"skuntank": {
+"type": "poison",
+"line": "poison_fakemon_line_13",
+"stage": "stage_2"
+},
+"slowbrogalar": {
+"type": "poison",
+"line": "poison_fakemon_line_14",
+"stage": "base"
+},
+"slowkinggalar": {
+"type": "poison",
+"line": "poison_fakemon_line_14",
+"stage": "stage_1"
+},
+"swalot": {
+"type": "poison",
+"line": "poison_fakemon_line_14",
+"stage": "stage_2"
+},
+"toxapex": {
+"type": "poison",
+"line": "poison_fakemon_line_15",
+"stage": "base"
+},
+"toxicroak": {
+"type": "poison",
+"line": "poison_fakemon_line_15",
+"stage": "stage_1"
+},
+"weezing": {
+"type": "poison",
+"line": "poison_fakemon_line_15",
+"stage": "stage_2"
+},
+"weezinggalar": {
+"type": "poison",
+"line": "poison_fakemon_line_16",
+"stage": "base"
+},
+"ampharos": {
+"type": "electric",
+"line": "electric_fakemon_line_1",
+"stage": "base"
+},
+"arceuselectric": {
+"type": "electric",
+"line": "electric_fakemon_line_1",
+"stage": "stage_1"
+},
+"bellibolt": {
+"type": "electric",
+"line": "electric_fakemon_line_1",
+"stage": "stage_2"
+},
+"dedenne": {
+"type": "electric",
+"line": "electric_fakemon_line_10",
+"stage": "base"
+},
+"eelektross": {
+"type": "electric",
+"line": "electric_fakemon_line_10",
+"stage": "stage_1"
+},
+"electivire": {
+"type": "electric",
+"line": "electric_fakemon_line_10",
+"stage": "stage_2"
+},
+"electrode": {
+"type": "electric",
+"line": "electric_fakemon_line_11",
+"stage": "base"
+},
+"electrodehisui": {
+"type": "electric",
+"line": "electric_fakemon_line_11",
+"stage": "stage_1"
+},
+"jolteon": {
+"type": "electric",
+"line": "electric_fakemon_line_11",
+"stage": "stage_2"
+},
+"kilowattrel": {
+"type": "electric",
+"line": "electric_fakemon_line_12",
+"stage": "base"
+},
+"luxray": {
+"type": "electric",
+"line": "electric_fakemon_line_12",
+"stage": "stage_1"
+},
+"magnezone": {
+"type": "electric",
+"line": "electric_fakemon_line_12",
+"stage": "stage_2"
+},
+"minun": {
+"type": "electric",
+"line": "electric_fakemon_line_13",
+"stage": "base"
+},
+"miraidon": {
+"type": "electric",
+"line": "electric_fakemon_line_13",
+"stage": "stage_1"
+},
+"morpeko": {
+"type": "electric",
+"line": "electric_fakemon_line_13",
+"stage": "stage_2"
+},
+"oricoriopompom": {
+"type": "electric",
+"line": "electric_fakemon_line_14",
+"stage": "base"
+},
+"pachirisu": {
+"type": "electric",
+"line": "electric_fakemon_line_14",
+"stage": "stage_1"
+},
+"pawmot": {
+"type": "electric",
+"line": "electric_fakemon_line_14",
+"stage": "stage_2"
+},
+"pikachu": {
+"type": "electric",
+"line": "electric_fakemon_line_16",
+"stage": "base"
+},
+"pincurchin": {
+"type": "electric",
+"line": "electric_fakemon_line_16",
+"stage": "stage_1"
+},
+"plusle": {
+"type": "electric",
+"line": "electric_fakemon_line_16",
+"stage": "stage_2"
+},
+"ragingbolt": {
+"type": "electric",
+"line": "electric_fakemon_line_17",
+"stage": "base"
+},
+"raichu": {
+"type": "electric",
+"line": "electric_fakemon_line_17",
+"stage": "stage_1"
+},
+"raichualola": {
+"type": "electric",
+"line": "electric_fakemon_line_17",
+"stage": "stage_2"
+},
+"raikou": {
+"type": "electric",
+"line": "electric_fakemon_line_18",
+"stage": "base"
+},
+"regieleki": {
+"type": "electric",
+"line": "electric_fakemon_line_18",
+"stage": "stage_1"
+},
+"rotom": {
+"type": "electric",
+"line": "electric_fakemon_line_18",
+"stage": "stage_2"
+},
+"rotomfan": {
+"type": "electric",
+"line": "electric_fakemon_line_19",
+"stage": "base"
+},
+"rotomfrost": {
+"type": "electric",
+"line": "electric_fakemon_line_19",
+"stage": "stage_1"
+},
+"rotomheat": {
+"type": "electric",
+"line": "electric_fakemon_line_19",
+"stage": "stage_2"
+},
+"rotommow": {
+"type": "electric",
+"line": "electric_fakemon_line_2",
+"stage": "base"
+},
+"rotomwash": {
+"type": "electric",
+"line": "electric_fakemon_line_2",
+"stage": "stage_1"
+},
+"sandyshocks": {
+"type": "electric",
+"line": "electric_fakemon_line_2",
+"stage": "stage_2"
+},
+"thundurus": {
+"type": "electric",
+"line": "electric_fakemon_line_20",
+"stage": "base"
+},
+"thundurustherian": {
+"type": "electric",
+"line": "electric_fakemon_line_20",
+"stage": "stage_1"
+},
+"toxtricity": {
+"type": "electric",
+"line": "electric_fakemon_line_20",
+"stage": "stage_2"
+},
+"zapdos": {
+"type": "electric",
+"line": "electric_fakemon_line_21",
+"stage": "base"
+},
+"zebstrika": {
+"type": "electric",
+"line": "electric_fakemon_line_21",
+"stage": "stage_1"
+},
+"arceusground": {
+"type": "ground",
+"line": "ground_fakemon_line_1",
+"stage": "base"
+},
+"donphan": {
+"type": "ground",
+"line": "ground_fakemon_line_1",
+"stage": "stage_1"
+},
+"dugtrio": {
+"type": "ground",
+"line": "ground_fakemon_line_1",
+"stage": "stage_2"
+},
+"dugtrioalola": {
+"type": "ground",
+"line": "ground_fakemon_line_10",
+"stage": "base"
+},
+"excadrill": {
+"type": "ground",
+"line": "ground_fakemon_line_10",
+"stage": "stage_1"
+},
+"flygon": {
+"type": "ground",
+"line": "ground_fakemon_line_10",
+"stage": "stage_2"
+},
+"gliscor": {
+"type": "ground",
+"line": "ground_fakemon_line_100",
+"stage": "base"
+},
+"golurk": {
+"type": "ground",
+"line": "ground_fakemon_line_100",
+"stage": "stage_1"
+},
+"greattusk": {
+"type": "ground",
+"line": "ground_fakemon_line_100",
+"stage": "stage_2"
+},
+"groudon": {
+"type": "ground",
+"line": "ground_fakemon_line_11",
+"stage": "base"
+},
+"hippowdon": {
+"type": "ground",
+"line": "ground_fakemon_line_11",
+"stage": "stage_1"
+},
+"irontreads": {
+"type": "ground",
+"line": "ground_fakemon_line_11",
+"stage": "stage_2"
+},
+"krookodile": {
+"type": "ground",
+"line": "ground_fakemon_line_12",
+"stage": "base"
+},
+"landorus": {
+"type": "ground",
+"line": "ground_fakemon_line_12",
+"stage": "stage_1"
+},
+"landorustherian": {
+"type": "ground",
+"line": "ground_fakemon_line_12",
+"stage": "stage_2"
+},
+"mudsdale": {
+"type": "ground",
+"line": "ground_fakemon_line_13",
+"stage": "base"
+},
+"rhydon": {
+"type": "ground",
+"line": "ground_fakemon_line_13",
+"stage": "stage_1"
+},
+"rhyperior": {
+"type": "ground",
+"line": "ground_fakemon_line_13",
+"stage": "stage_2"
+},
+"sandaconda": {
+"type": "ground",
+"line": "ground_fakemon_line_14",
+"stage": "base"
+},
+"sandslash": {
+"type": "ground",
+"line": "ground_fakemon_line_14",
+"stage": "stage_1"
+},
+"toedscruel": {
+"type": "ground",
+"line": "ground_fakemon_line_14",
+"stage": "stage_2"
+},
+"ursaluna": {
+"type": "ground",
+"line": "ground_fakemon_line_15",
+"stage": "base"
+},
+"ursalunabloodmoon": {
+"type": "ground",
+"line": "ground_fakemon_line_15",
+"stage": "stage_1"
+},
+"arceusice": {
+"type": "ice",
+"line": "ice_fakemon_line_10",
+"stage": "base"
+},
+"articuno": {
+"type": "ice",
+"line": "ice_fakemon_line_10",
+"stage": "stage_1"
+},
+"avalugg": {
+"type": "ice",
+"line": "ice_fakemon_line_10",
+"stage": "stage_2"
+},
+"avalugghisui": {
+"type": "ice",
+"line": "ice_fakemon_line_11",
+"stage": "base"
+},
+"beartic": {
+"type": "ice",
+"line": "ice_fakemon_line_11",
+"stage": "stage_1"
+},
+"cetitan": {
+"type": "ice",
+"line": "ice_fakemon_line_11",
+"stage": "stage_2"
+},
+"cryogonal": {
+"type": "ice",
+"line": "ice_fakemon_line_12",
+"stage": "base"
+},
+"delibird": {
+"type": "ice",
+"line": "ice_fakemon_line_12",
+"stage": "stage_1"
+},
+"eiscue": {
+"type": "ice",
+"line": "ice_fakemon_line_12",
+"stage": "stage_2"
+},
+"froslass": {
+"type": "ice",
+"line": "ice_fakemon_line_13",
+"stage": "base"
+},
+"frosmoth": {
+"type": "ice",
+"line": "ice_fakemon_line_13",
+"stage": "stage_1"
+},
+"glaceon": {
+"type": "ice",
+"line": "ice_fakemon_line_13",
+"stage": "stage_2"
+},
+"glalie": {
+"type": "ice",
+"line": "ice_fakemon_line_14",
+"stage": "base"
+},
+"glastrier": {
+"type": "ice",
+"line": "ice_fakemon_line_14",
+"stage": "stage_1"
+},
+"ironbundle": {
+"type": "ice",
+"line": "ice_fakemon_line_14",
+"stage": "stage_2"
+},
+"mamoswine": {
+"type": "ice",
+"line": "ice_fakemon_line_15",
+"stage": "base"
+},
+"ninetalesalola": {
+"type": "ice",
+"line": "ice_fakemon_line_15",
+"stage": "stage_1"
+},
+"piloswine": {
+"type": "ice",
+"line": "ice_fakemon_line_15",
+"stage": "stage_2"
+},
+"regice": {
+"type": "ice",
+"line": "ice_fakemon_line_16",
+"stage": "base"
+},
+"sandslashalola": {
+"type": "ice",
+"line": "ice_fakemon_line_16",
+"stage": "stage_1"
+},
+"alcremie": {
+"type": "psychic",
+"line": "psychic_fakemon_line_1",
+"stage": "base"
+},
+"arceusfairy": {
+"type": "psychic",
+"line": "psychic_fakemon_line_1",
+"stage": "stage_1"
+},
+"arceuspsychic": {
+"type": "psychic",
+"line": "psychic_fakemon_line_1",
+"stage": "stage_2"
+},
+"articunogalar": {
+"type": "psychic",
+"line": "psychic_fakemon_line_10",
+"stage": "base"
+},
+"azelf": {
+"type": "psychic",
+"line": "psychic_fakemon_line_10",
+"stage": "stage_1"
+},
+"braviaryhisui": {
+"type": "psychic",
+"line": "psychic_fakemon_line_10",
+"stage": "stage_2"
+},
+"calyrex": {
+"type": "psychic",
+"line": "psychic_fakemon_line_11",
+"stage": "base"
+},
+"calyrexice": {
+"type": "psychic",
+"line": "psychic_fakemon_line_11",
+"stage": "stage_1"
+},
+"calyrexshadow": {
+"type": "psychic",
+"line": "psychic_fakemon_line_11",
+"stage": "stage_2"
+},
+"chimecho": {
+"type": "psychic",
+"line": "psychic_fakemon_line_12",
+"stage": "base"
+},
+"clefable": {
+"type": "psychic",
+"line": "psychic_fakemon_line_12",
+"stage": "stage_1"
+},
+"comfey": {
+"type": "psychic",
+"line": "psychic_fakemon_line_12",
+"stage": "stage_2"
+},
+"cresselia": {
+"type": "psychic",
+"line": "psychic_fakemon_line_13",
+"stage": "base"
+},
+"dachsbun": {
+"type": "psychic",
+"line": "psychic_fakemon_line_13",
+"stage": "stage_1"
+},
+"deoxys": {
+"type": "psychic",
+"line": "psychic_fakemon_line_13",
+"stage": "stage_2"
+},
+"deoxysattack": {
+"type": "psychic",
+"line": "psychic_fakemon_line_14",
+"stage": "base"
+},
+"deoxysdefense": {
+"type": "psychic",
+"line": "psychic_fakemon_line_14",
+"stage": "stage_1"
+},
+"deoxysspeed": {
+"type": "psychic",
+"line": "psychic_fakemon_line_14",
+"stage": "stage_2"
+},
+"enamorus": {
+"type": "psychic",
+"line": "psychic_fakemon_line_15",
+"stage": "base"
+},
+"enamorustherian": {
+"type": "psychic",
+"line": "psychic_fakemon_line_15",
+"stage": "stage_1"
+},
+"espathra": {
+"type": "psychic",
+"line": "psychic_fakemon_line_15",
+"stage": "stage_2"
+},
+"espeon": {
+"type": "psychic",
+"line": "psychic_fakemon_line_16",
+"stage": "base"
+},
+"florges": {
+"type": "psychic",
+"line": "psychic_fakemon_line_16",
+"stage": "stage_1"
+},
+"gallade": {
+"type": "psychic",
+"line": "psychic_fakemon_line_16",
+"stage": "stage_2"
+},
+"gardevoir": {
+"type": "psychic",
+"line": "psychic_fakemon_line_17",
+"stage": "base"
+},
+"gothitelle": {
+"type": "psychic",
+"line": "psychic_fakemon_line_17",
+"stage": "stage_1"
+},
+"granbull": {
+"type": "psychic",
+"line": "psychic_fakemon_line_17",
+"stage": "stage_2"
+},
+"grumpig": {
+"type": "psychic",
+"line": "psychic_fakemon_line_18",
+"stage": "base"
+},
+"hatterene": {
+"type": "psychic",
+"line": "psychic_fakemon_line_18",
+"stage": "stage_1"
+},
+"hoopa": {
+"type": "psychic",
+"line": "psychic_fakemon_line_18",
+"stage": "stage_2"
+},
+"hoopaunbound": {
+"type": "psychic",
+"line": "psychic_fakemon_line_19",
+"stage": "base"
+},
+"hypno": {
+"type": "psychic",
+"line": "psychic_fakemon_line_19",
+"stage": "stage_1"
+},
+"indeedee": {
+"type": "psychic",
+"line": "psychic_fakemon_line_19",
+"stage": "stage_2"
+},
+"indeedeef": {
+"type": "psychic",
+"line": "psychic_fakemon_line_2",
+"stage": "base"
+},
+"ironvaliant": {
+"type": "psychic",
+"line": "psychic_fakemon_line_2",
+"stage": "stage_1"
+},
+"lugia": {
+"type": "psychic",
+"line": "psychic_fakemon_line_2",
+"stage": "stage_2"
+},
+"lunala": {
+"type": "psychic",
+"line": "psychic_fakemon_line_20",
+"stage": "base"
+},
+"meowstic": {
+"type": "psychic",
+"line": "psychic_fakemon_line_20",
+"stage": "stage_1"
+},
+"meowsticf": {
+"type": "psychic",
+"line": "psychic_fakemon_line_20",
+"stage": "stage_2"
+},
+"mesprit": {
+"type": "psychic",
+"line": "psychic_fakemon_line_21",
+"stage": "base"
+},
+"mew": {
+"type": "psychic",
+"line": "psychic_fakemon_line_21",
+"stage": "stage_1"
+},
+"mewtwo": {
+"type": "psychic",
+"line": "psychic_fakemon_line_21",
+"stage": "stage_2"
+},
+"necrozma": {
+"type": "psychic",
+"line": "psychic_fakemon_line_22",
+"stage": "base"
+},
+"necrozmadawnwings": {
+"type": "psychic",
+"line": "psychic_fakemon_line_22",
+"stage": "stage_1"
+},
+"necrozmaduskmane": {
+"type": "psychic",
+"line": "psychic_fakemon_line_22",
+"stage": "stage_2"
+},
+"oricoriopau": {
+"type": "psychic",
+"line": "psychic_fakemon_line_23",
+"stage": "base"
+},
+"reuniclus": {
+"type": "psychic",
+"line": "psychic_fakemon_line_23",
+"stage": "stage_1"
+},
+"screamtail": {
+"type": "psychic",
+"line": "psychic_fakemon_line_23",
+"stage": "stage_2"
+},
+"solgaleo": {
+"type": "psychic",
+"line": "psychic_fakemon_line_24",
+"stage": "base"
+},
+"sylveon": {
+"type": "psychic",
+"line": "psychic_fakemon_line_24",
+"stage": "stage_1"
+},
+"tinkaton": {
+"type": "psychic",
+"line": "psychic_fakemon_line_24",
+"stage": "stage_2"
+},
+"uxie": {
+"type": "psychic",
+"line": "psychic_fakemon_line_25",
+"stage": "base"
+},
+"zacian": {
+"type": "psychic",
+"line": "psychic_fakemon_line_25",
+"stage": "stage_1"
+},
+"zaciancrowned": {
+"type": "psychic",
+"line": "psychic_fakemon_line_25",
+"stage": "stage_2"
+},
+"ambipom": {
+"type": "normal",
+"line": "normal_fakemon_line_1",
+"stage": "base"
+},
+"arceus": {
+"type": "normal",
+"line": "normal_fakemon_line_1",
+"stage": "stage_1"
+},
+"blissey": {
+"type": "normal",
+"line": "normal_fakemon_line_1",
+"stage": "stage_2"
+},
+"braviary": {
+"type": "normal",
+"line": "normal_fakemon_line_10",
+"stage": "base"
+},
+"chansey": {
+"type": "normal",
+"line": "normal_fakemon_line_10",
+"stage": "stage_1"
+},
+"cinccino": {
+"type": "normal",
+"line": "normal_fakemon_line_10",
+"stage": "stage_2"
+},
+"ditto": {
+"type": "normal",
+"line": "normal_fakemon_line_100",
+"stage": "base"
+},
+"dodrio": {
+"type": "normal",
+"line": "normal_fakemon_line_100",
+"stage": "stage_1"
+},
+"dudunsparce": {
+"type": "normal",
+"line": "normal_fakemon_line_100",
+"stage": "stage_2"
+},
+"dunsparce": {
+"type": "normal",
+"line": "normal_fakemon_line_101",
+"stage": "base"
+},
+"farigiraf": {
+"type": "normal",
+"line": "normal_fakemon_line_101",
+"stage": "stage_1"
+},
+"furret": {
+"type": "normal",
+"line": "normal_fakemon_line_101",
+"stage": "stage_2"
+},
+"girafarig": {
+"type": "normal",
+"line": "normal_fakemon_line_102",
+"stage": "base"
+},
+"greedent": {
+"type": "normal",
+"line": "normal_fakemon_line_102",
+"stage": "stage_1"
+},
+"gumshoos": {
+"type": "normal",
+"line": "normal_fakemon_line_102",
+"stage": "stage_2"
+},
+"komala": {
+"type": "normal",
+"line": "normal_fakemon_line_103",
+"stage": "base"
+},
+"maushold": {
+"type": "normal",
+"line": "normal_fakemon_line_103",
+"stage": "stage_1"
+},
+"meloetta": {
+"type": "normal",
+"line": "normal_fakemon_line_103",
+"stage": "stage_2"
+},
+"noctowl": {
+"type": "normal",
+"line": "normal_fakemon_line_104",
+"stage": "base"
+},
+"oinkologne": {
+"type": "normal",
+"line": "normal_fakemon_line_104",
+"stage": "stage_1"
+},
+"oinkolognef": {
+"type": "normal",
+"line": "normal_fakemon_line_104",
+"stage": "stage_2"
+},
+"oranguru": {
+"type": "normal",
+"line": "normal_fakemon_line_105",
+"stage": "base"
+},
+"persian": {
+"type": "normal",
+"line": "normal_fakemon_line_105",
+"stage": "stage_1"
+},
+"porygon2": {
+"type": "normal",
+"line": "normal_fakemon_line_105",
+"stage": "stage_2"
+},
+"porygonz": {
+"type": "normal",
+"line": "normal_fakemon_line_106",
+"stage": "base"
+},
+"regigigas": {
+"type": "normal",
+"line": "normal_fakemon_line_106",
+"stage": "stage_1"
+},
+"sawsbuck": {
+"type": "normal",
+"line": "normal_fakemon_line_106",
+"stage": "stage_2"
+},
+"slaking": {
+"type": "normal",
+"line": "normal_fakemon_line_107",
+"stage": "base"
+},
+"smeargle": {
+"type": "normal",
+"line": "normal_fakemon_line_107",
+"stage": "stage_1"
+},
+"snorlax": {
+"type": "normal",
+"line": "normal_fakemon_line_107",
+"stage": "stage_2"
+},
+"squawkabilly": {
+"type": "normal",
+"line": "normal_fakemon_line_108",
+"stage": "base"
+},
+"squawkabillyblue": {
+"type": "normal",
+"line": "normal_fakemon_line_108",
+"stage": "stage_1"
+},
+"squawkabillywhite": {
+"type": "normal",
+"line": "normal_fakemon_line_108",
+"stage": "stage_2"
+},
+"squawkabillyyellow": {
+"type": "normal",
+"line": "normal_fakemon_line_109",
+"stage": "base"
+},
+"staraptor": {
+"type": "normal",
+"line": "normal_fakemon_line_109",
+"stage": "stage_1"
+},
+"tauros": {
+"type": "normal",
+"line": "normal_fakemon_line_109",
+"stage": "stage_2"
+},
+"terapagos": {
+"type": "normal",
+"line": "normal_fakemon_line_11",
+"stage": "base"
+},
+"toucannon": {
+"type": "normal",
+"line": "normal_fakemon_line_11",
+"stage": "stage_1"
+},
+"ursaring": {
+"type": "normal",
+"line": "normal_fakemon_line_11",
+"stage": "stage_2"
+},
+"vigoroth": {
+"type": "normal",
+"line": "normal_fakemon_line_110",
+"stage": "base"
+},
+"wigglytuff": {
+"type": "normal",
+"line": "normal_fakemon_line_110",
+"stage": "stage_1"
+},
+"wyrdeer": {
+"type": "normal",
+"line": "normal_fakemon_line_110",
+"stage": "stage_2"
+},
+"zangoose": {
+"type": "normal",
+"line": "normal_fakemon_line_111",
+"stage": "base"
+},
+"zoroarkhisui": {
+"type": "normal",
+"line": "normal_fakemon_line_111",
+"stage": "stage_1"
+},
+"arceusbug": {
+"type": "bug",
+"line": "bug_fakemon_line_1",
+"stage": "base"
+},
+"ariados": {
+"type": "bug",
+"line": "bug_fakemon_line_1",
+"stage": "stage_1"
+},
+"forretress": {
+"type": "bug",
+"line": "bug_fakemon_line_1",
+"stage": "stage_2"
+},
+"galvantula": {
+"type": "bug",
+"line": "bug_fakemon_line_10",
+"stage": "base"
+},
+"heracross": {
+"type": "bug",
+"line": "bug_fakemon_line_10",
+"stage": "stage_1"
+},
+"illumise": {
+"type": "bug",
+"line": "bug_fakemon_line_10",
+"stage": "stage_2"
+},
+"kleavor": {
+"type": "bug",
+"line": "bug_fakemon_line_12",
+"stage": "base"
+},
+"kricketune": {
+"type": "bug",
+"line": "bug_fakemon_line_12",
+"stage": "stage_1"
+},
+"leavanny": {
+"type": "bug",
+"line": "bug_fakemon_line_12",
+"stage": "stage_2"
+},
+"lokix": {
+"type": "bug",
+"line": "bug_fakemon_line_13",
+"stage": "base"
+},
+"masquerain": {
+"type": "bug",
+"line": "bug_fakemon_line_13",
+"stage": "stage_1"
+},
+"rabsca": {
+"type": "bug",
+"line": "bug_fakemon_line_13",
+"stage": "stage_2"
+},
+"ribombee": {
+"type": "bug",
+"line": "bug_fakemon_line_14",
+"stage": "base"
+},
+"scizor": {
+"type": "bug",
+"line": "bug_fakemon_line_14",
+"stage": "stage_1"
+},
+"scyther": {
+"type": "bug",
+"line": "bug_fakemon_line_14",
+"stage": "stage_2"
+},
+"slitherwing": {
+"type": "bug",
+"line": "bug_fakemon_line_15",
+"stage": "base"
+},
+"spidops": {
+"type": "bug",
+"line": "bug_fakemon_line_15",
+"stage": "stage_1"
+},
+"venomoth": {
+"type": "bug",
+"line": "bug_fakemon_line_15",
+"stage": "stage_2"
+},
+"vespiquen": {
+"type": "bug",
+"line": "bug_fakemon_line_16",
+"stage": "base"
+},
+"vikavolt": {
+"type": "bug",
+"line": "bug_fakemon_line_16",
+"stage": "stage_1"
+},
+"vivillon": {
+"type": "bug",
+"line": "bug_fakemon_line_16",
+"stage": "stage_2"
+},
+"volbeat": {
+"type": "bug",
+"line": "bug_fakemon_line_17",
+"stage": "base"
+},
+"volcarona": {
+"type": "bug",
+"line": "bug_fakemon_line_17",
+"stage": "stage_1"
+},
+"yanmega": {
+"type": "bug",
+"line": "bug_fakemon_line_17",
+"stage": "stage_2"
+},
+"arceusdark": {
+"type": "dark",
+"line": "dark_fakemon_line_1",
+"stage": "base"
+},
+"bisharp": {
+"type": "dark",
+"line": "dark_fakemon_line_1",
+"stage": "stage_1"
+},
+"chienpao": {
+"type": "dark",
+"line": "dark_fakemon_line_1",
+"stage": "stage_2"
+},
+"chiyu": {
+"type": "dark",
+"line": "dark_fakemon_line_10",
+"stage": "base"
+},
+"darkrai": {
+"type": "dark",
+"line": "dark_fakemon_line_10",
+"stage": "stage_1"
+},
+"grimmsnarl": {
+"type": "dark",
+"line": "dark_fakemon_line_10",
+"stage": "stage_2"
+},
+"honchkrow": {
+"type": "dark",
+"line": "dark_fakemon_line_11",
+"stage": "base"
+},
+"houndoom": {
+"type": "dark",
+"line": "dark_fakemon_line_11",
+"stage": "stage_1"
+},
+"hydreigon": {
+"type": "dark",
+"line": "dark_fakemon_line_11",
+"stage": "stage_2"
+},
+"ironjugulis": {
+"type": "dark",
+"line": "dark_fakemon_line_13",
+"stage": "base"
+},
+"kingambit": {
+"type": "dark",
+"line": "dark_fakemon_line_13",
+"stage": "stage_1"
+},
+"mabosstiff": {
+"type": "dark",
+"line": "dark_fakemon_line_13",
+"stage": "stage_2"
+},
+"malamar": {
+"type": "dark",
+"line": "dark_fakemon_line_14",
+"stage": "base"
+},
+"mandibuzz": {
+"type": "dark",
+"line": "dark_fakemon_line_14",
+"stage": "stage_1"
+},
+"mightyena": {
+"type": "dark",
+"line": "dark_fakemon_line_14",
+"stage": "stage_2"
+},
+"moltresgalar": {
+"type": "dark",
+"line": "dark_fakemon_line_15",
+"stage": "base"
+},
+"overqwil": {
+"type": "dark",
+"line": "dark_fakemon_line_15",
+"stage": "stage_1"
+},
+"persianalola": {
+"type": "dark",
+"line": "dark_fakemon_line_15",
+"stage": "stage_2"
+},
+"qwilfishhisui": {
+"type": "dark",
+"line": "dark_fakemon_line_16",
+"stage": "base"
+},
+"sableye": {
+"type": "dark",
+"line": "dark_fakemon_line_16",
+"stage": "stage_1"
+},
+"scrafty": {
+"type": "dark",
+"line": "dark_fakemon_line_16",
+"stage": "stage_2"
+},
+"tinglu": {
+"type": "dark",
+"line": "dark_fakemon_line_17",
+"stage": "base"
+},
+"umbreon": {
+"type": "dark",
+"line": "dark_fakemon_line_17",
+"stage": "stage_1"
+},
+"weavile": {
+"type": "dark",
+"line": "dark_fakemon_line_17",
+"stage": "stage_2"
+},
+"wochien": {
+"type": "dark",
+"line": "dark_fakemon_line_18",
+"stage": "base"
+},
+"zarude": {
+"type": "dark",
+"line": "dark_fakemon_line_18",
+"stage": "stage_1"
+},
+"zoroark": {
+"type": "dark",
+"line": "dark_fakemon_line_18",
+"stage": "stage_2"
+},
+"annihilape": {
+"type": "fighting",
+"line": "fighting_fakemon_line_1",
+"stage": "base"
+},
+"arceusfighting": {
+"type": "fighting",
+"line": "fighting_fakemon_line_1",
+"stage": "stage_1"
+},
+"conkeldurr": {
+"type": "fighting",
+"line": "fighting_fakemon_line_1",
+"stage": "stage_2"
+},
+"crabominable": {
+"type": "fighting",
+"line": "fighting_fakemon_line_10",
+"stage": "base"
+},
+"falinks": {
+"type": "fighting",
+"line": "fighting_fakemon_line_10",
+"stage": "stage_1"
+},
+"gurdurr": {
+"type": "fighting",
+"line": "fighting_fakemon_line_10",
+"stage": "stage_2"
+},
+"hariyama": {
+"type": "fighting",
+"line": "fighting_fakemon_line_100",
+"stage": "base"
+},
+"hawlucha": {
+"type": "fighting",
+"line": "fighting_fakemon_line_100",
+"stage": "stage_1"
+},
+"hitmonchan": {
+"type": "fighting",
+"line": "fighting_fakemon_line_100",
+"stage": "stage_2"
+},
+"hitmonlee": {
+"type": "fighting",
+"line": "fighting_fakemon_line_101",
+"stage": "base"
+},
+"hitmontop": {
+"type": "fighting",
+"line": "fighting_fakemon_line_101",
+"stage": "stage_1"
+},
+"ironhands": {
+"type": "fighting",
+"line": "fighting_fakemon_line_101",
+"stage": "stage_2"
+},
+"koraidon": {
+"type": "fighting",
+"line": "fighting_fakemon_line_11",
+"stage": "base"
+},
+"lucario": {
+"type": "fighting",
+"line": "fighting_fakemon_line_11",
+"stage": "stage_1"
+},
+"medicham": {
+"type": "fighting",
+"line": "fighting_fakemon_line_11",
+"stage": "stage_2"
+},
+"mienshao": {
+"type": "fighting",
+"line": "fighting_fakemon_line_12",
+"stage": "base"
+},
+"passimian": {
+"type": "fighting",
+"line": "fighting_fakemon_line_12",
+"stage": "stage_1"
+},
+"sneasler": {
+"type": "fighting",
+"line": "fighting_fakemon_line_12",
+"stage": "stage_2"
+},
+"taurospaldeaaqua": {
+"type": "fighting",
+"line": "fighting_fakemon_line_13",
+"stage": "base"
+},
+"taurospaldeablaze": {
+"type": "fighting",
+"line": "fighting_fakemon_line_13",
+"stage": "stage_1"
+},
+"taurospaldeacombat": {
+"type": "fighting",
+"line": "fighting_fakemon_line_13",
+"stage": "stage_2"
+},
+"urshifu": {
+"type": "fighting",
+"line": "fighting_fakemon_line_14",
+"stage": "base"
+},
+"urshifurapidstrike": {
+"type": "fighting",
+"line": "fighting_fakemon_line_14",
+"stage": "stage_1"
+},
+"zamazenta": {
+"type": "fighting",
+"line": "fighting_fakemon_line_14",
+"stage": "stage_2"
+},
+"zamazentacrowned": {
+"type": "fighting",
+"line": "fighting_fakemon_line_15",
+"stage": "base"
+},
+"zapdosgalar": {
+"type": "fighting",
+"line": "fighting_fakemon_line_15",
+"stage": "stage_1"
+},
+"arceusrock": {
+"type": "rock",
+"line": "rock_fakemon_line_1",
+"stage": "base"
+},
+"bastiodon": {
+"type": "rock",
+"line": "rock_fakemon_line_1",
+"stage": "stage_1"
+},
+"carbink": {
+"type": "rock",
+"line": "rock_fakemon_line_1",
+"stage": "stage_2"
+},
+"coalossal": {
+"type": "rock",
+"line": "rock_fakemon_line_10",
+"stage": "base"
+},
+"diancie": {
+"type": "rock",
+"line": "rock_fakemon_line_10",
+"stage": "stage_1"
+},
+"garganacl": {
+"type": "rock",
+"line": "rock_fakemon_line_10",
+"stage": "stage_2"
+},
+"glimmora": {
+"type": "rock",
+"line": "rock_fakemon_line_11",
+"stage": "base"
+},
+"golem": {
+"type": "rock",
+"line": "rock_fakemon_line_11",
+"stage": "stage_1"
+},
+"golemalola": {
+"type": "rock",
+"line": "rock_fakemon_line_11",
+"stage": "stage_2"
+},
+"ironboulder": {
+"type": "rock",
+"line": "rock_fakemon_line_12",
+"stage": "base"
+},
+"ironthorns": {
+"type": "rock",
+"line": "rock_fakemon_line_12",
+"stage": "stage_1"
+},
+"klawf": {
+"type": "rock",
+"line": "rock_fakemon_line_12",
+"stage": "stage_2"
+},
+"lycanroc": {
+"type": "rock",
+"line": "rock_fakemon_line_13",
+"stage": "base"
+},
+"lycanrocdusk": {
+"type": "rock",
+"line": "rock_fakemon_line_13",
+"stage": "stage_1"
+},
+"lycanrocmidnight": {
+"type": "rock",
+"line": "rock_fakemon_line_13",
+"stage": "stage_2"
+},
+"minior": {
+"type": "rock",
+"line": "rock_fakemon_line_14",
+"stage": "base"
+},
+"probopass": {
+"type": "rock",
+"line": "rock_fakemon_line_14",
+"stage": "stage_1"
+},
+"rampardos": {
+"type": "rock",
+"line": "rock_fakemon_line_14",
+"stage": "stage_2"
+},
+"regirock": {
+"type": "rock",
+"line": "rock_fakemon_line_15",
+"stage": "base"
+},
+"stonjourner": {
+"type": "rock",
+"line": "rock_fakemon_line_15",
+"stage": "stage_1"
+},
+"sudowoodo": {
+"type": "rock",
+"line": "rock_fakemon_line_15",
+"stage": "stage_2"
+},
+"terrakion": {
+"type": "rock",
+"line": "rock_fakemon_line_16",
+"stage": "base"
+},
+"tyranitar": {
+"type": "rock",
+"line": "rock_fakemon_line_16",
+"stage": "stage_1"
+},
+"arceusghost": {
+"type": "ghost",
+"line": "ghost_fakemon_line_1",
+"stage": "base"
+},
+"banette": {
+"type": "ghost",
+"line": "ghost_fakemon_line_1",
+"stage": "stage_1"
+},
+"chandelure": {
+"type": "ghost",
+"line": "ghost_fakemon_line_1",
+"stage": "stage_2"
+},
+"drifblim": {
+"type": "ghost",
+"line": "ghost_fakemon_line_10",
+"stage": "base"
+},
+"dusknoir": {
+"type": "ghost",
+"line": "ghost_fakemon_line_10",
+"stage": "stage_1"
+},
+"fluttermane": {
+"type": "ghost",
+"line": "ghost_fakemon_line_10",
+"stage": "stage_2"
+},
+"gengar": {
+"type": "ghost",
+"line": "ghost_fakemon_line_11",
+"stage": "base"
+},
+"giratina": {
+"type": "ghost",
+"line": "ghost_fakemon_line_11",
+"stage": "stage_1"
+},
+"giratinaorigin": {
+"type": "ghost",
+"line": "ghost_fakemon_line_11",
+"stage": "stage_2"
+},
+"houndstone": {
+"type": "ghost",
+"line": "ghost_fakemon_line_12",
+"stage": "base"
+},
+"mimikyu": {
+"type": "ghost",
+"line": "ghost_fakemon_line_12",
+"stage": "stage_1"
+},
+"misdreavus": {
+"type": "ghost",
+"line": "ghost_fakemon_line_12",
+"stage": "stage_2"
+},
+"mismagius": {
+"type": "ghost",
+"line": "ghost_fakemon_line_14",
+"stage": "base"
+},
+"oricoriosensu": {
+"type": "ghost",
+"line": "ghost_fakemon_line_14",
+"stage": "stage_1"
+},
+"palossand": {
+"type": "ghost",
+"line": "ghost_fakemon_line_14",
+"stage": "stage_2"
+},
+"polteageist": {
+"type": "ghost",
+"line": "ghost_fakemon_line_15",
+"stage": "base"
+},
+"spectrier": {
+"type": "ghost",
+"line": "ghost_fakemon_line_15",
+"stage": "stage_1"
+},
+"spiritomb": {
+"type": "ghost",
+"line": "ghost_fakemon_line_15",
+"stage": "stage_2"
+},
+"trevenant": {
+"type": "ghost",
+"line": "ghost_fakemon_line_16",
+"stage": "base"
+},
+"altaria": {
+"type": "dragon",
+"line": "dragon_fakemon_line_1",
+"stage": "base"
+},
+"arceusdragon": {
+"type": "dragon",
+"line": "dragon_fakemon_line_1",
+"stage": "stage_1"
+},
+"baxcalibur": {
+"type": "dragon",
+"line": "dragon_fakemon_line_1",
+"stage": "stage_2"
+},
+"cyclizar": {
+"type": "dragon",
+"line": "dragon_fakemon_line_10",
+"stage": "base"
+},
+"dragapult": {
+"type": "dragon",
+"line": "dragon_fakemon_line_10",
+"stage": "stage_1"
+},
+"dragonite": {
+"type": "dragon",
+"line": "dragon_fakemon_line_10",
+"stage": "stage_2"
+},
+"garchomp": {
+"type": "dragon",
+"line": "dragon_fakemon_line_11",
+"stage": "base"
+},
+"goodra": {
+"type": "dragon",
+"line": "dragon_fakemon_line_11",
+"stage": "stage_1"
+},
+"haxorus": {
+"type": "dragon",
+"line": "dragon_fakemon_line_11",
+"stage": "stage_2"
+},
+"kommoo": {
+"type": "dragon",
+"line": "dragon_fakemon_line_12",
+"stage": "base"
+},
+"kyurem": {
+"type": "dragon",
+"line": "dragon_fakemon_line_12",
+"stage": "stage_1"
+},
+"kyuremblack": {
+"type": "dragon",
+"line": "dragon_fakemon_line_12",
+"stage": "stage_2"
+},
+"kyuremwhite": {
+"type": "dragon",
+"line": "dragon_fakemon_line_13",
+"stage": "base"
+},
+"latias": {
+"type": "dragon",
+"line": "dragon_fakemon_line_13",
+"stage": "stage_1"
+},
+"latios": {
+"type": "dragon",
+"line": "dragon_fakemon_line_13",
+"stage": "stage_2"
+},
+"rayquaza": {
+"type": "dragon",
+"line": "dragon_fakemon_line_14",
+"stage": "base"
+},
+"regidrago": {
+"type": "dragon",
+"line": "dragon_fakemon_line_14",
+"stage": "stage_1"
+},
+"reshiram": {
+"type": "dragon",
+"line": "dragon_fakemon_line_14",
+"stage": "stage_2"
+},
+"roaringmoon": {
+"type": "dragon",
+"line": "dragon_fakemon_line_15",
+"stage": "base"
+},
+"salamence": {
+"type": "dragon",
+"line": "dragon_fakemon_line_15",
+"stage": "stage_1"
+},
+"tatsugiri": {
+"type": "dragon",
+"line": "dragon_fakemon_line_15",
+"stage": "stage_2"
+},
+"zekrom": {
+"type": "dragon",
+"line": "dragon_fakemon_line_16",
+"stage": "base"
+},
+"arceussteel": {
+"type": "steel",
+"line": "steel_fakemon_line_1",
+"stage": "base"
+},
+"archaludon": {
+"type": "steel",
+"line": "steel_fakemon_line_1",
+"stage": "stage_1"
+},
+"bronzong": {
+"type": "steel",
+"line": "steel_fakemon_line_1",
+"stage": "stage_2"
+},
+"cobalion": {
+"type": "steel",
+"line": "steel_fakemon_line_10",
+"stage": "base"
+},
+"copperajah": {
+"type": "steel",
+"line": "steel_fakemon_line_10",
+"stage": "stage_1"
+},
+"dialga": {
+"type": "steel",
+"line": "steel_fakemon_line_10",
+"stage": "stage_2"
+},
+"dialgaorigin": {
+"type": "steel",
+"line": "steel_fakemon_line_11",
+"stage": "base"
+},
+"duraludon": {
+"type": "steel",
+"line": "steel_fakemon_line_11",
+"stage": "stage_1"
+},
+"gholdengo": {
+"type": "steel",
+"line": "steel_fakemon_line_11",
+"stage": "stage_2"
+},
+"goodrahisui": {
+"type": "steel",
+"line": "steel_fakemon_line_12",
+"stage": "base"
+},
+"ironcrown": {
+"type": "steel",
+"line": "steel_fakemon_line_12",
+"stage": "stage_1"
+},
+"jirachi": {
+"type": "steel",
+"line": "steel_fakemon_line_12",
+"stage": "stage_2"
+},
+"klefki": {
+"type": "steel",
+"line": "steel_fakemon_line_13",
+"stage": "base"
+},
+"magearna": {
+"type": "steel",
+"line": "steel_fakemon_line_13",
+"stage": "stage_1"
+},
+"metagross": {
+"type": "steel",
+"line": "steel_fakemon_line_13",
+"stage": "stage_2"
+},
+"orthworm": {
+"type": "steel",
+"line": "steel_fakemon_line_14",
+"stage": "base"
+},
+"perrserker": {
+"type": "steel",
+"line": "steel_fakemon_line_14",
+"stage": "stage_1"
+},
+"registeel": {
+"type": "steel",
+"line": "steel_fakemon_line_14",
+"stage": "stage_2"
+},
+"revavroom": {
+"type": "steel",
+"line": "steel_fakemon_line_15",
+"stage": "base"
+},
+"skarmory": {
+"type": "steel",
+"line": "steel_fakemon_line_15",
+"stage": "stage_1"
+},
+"arceusflying": {
+"type": "flying",
+"line": "flying_fakemon_line_1",
+"stage": "base"
+},
+"bombirdier": {
+"type": "flying",
+"line": "flying_fakemon_line_1",
+"stage": "stage_1"
+},
+"corviknight": {
+"type": "flying",
+"line": "flying_fakemon_line_1",
+"stage": "stage_2"
+},
+"cramorant": {
+"type": "flying",
+"line": "flying_fakemon_line_10",
+"stage": "base"
+},
+"flamigo": {
+"type": "flying",
+"line": "flying_fakemon_line_10",
+"stage": "stage_1"
+},
+"noivern": {
+"type": "flying",
+"line": "flying_fakemon_line_10",
+"stage": "stage_2"
+},
+"tornadus": {
+"type": "flying",
+"line": "flying_fakemon_line_11",
+"stage": "base"
+},
+"tornadustherian": {
+"type": "flying",
+"line": "flying_fakemon_line_11",
+"stage": "stage_1"
+}
+}
