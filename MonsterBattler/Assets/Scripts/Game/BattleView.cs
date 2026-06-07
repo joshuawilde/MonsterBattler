@@ -59,20 +59,13 @@ namespace MonsterBattler.Game
         [SerializeField] MoveButton _move2;
         [SerializeField] MoveButton _move3;
 
-        [Header("Switch row (6 buttons, scene-authored)")]
-        [SerializeField] SwitchButton _switch0;
-        [SerializeField] SwitchButton _switch1;
-        [SerializeField] SwitchButton _switch2;
-        [SerializeField] SwitchButton _switch3;
-        [SerializeField] SwitchButton _switch4;
-        [SerializeField] SwitchButton _switch5;
-
         [Header("Terastallize (scene-authored)")]
         [SerializeField] Button _teraButton;
         [SerializeField] TextMeshProUGUI _teraLabel;
 
-        [Header("Opponent roster (scene-authored: parent of 6 RosterIcon chips)")]
-        [SerializeField] Transform _opponentRosterParent;
+        [Header("Team rosters (scene-authored: each a parent of 6 TeamIcon, same prefab both sides)")]
+        [SerializeField] Transform _playerRosterParent;   // your bench (bottom)
+        [SerializeField] Transform _opponentRosterParent; // opponent (top)
 
         [Header("Battle log feed (scene-authored Text)")]
         [SerializeField] TextMeshProUGUI _logText;       // persistent debug feed (usually hidden)
@@ -112,8 +105,8 @@ namespace MonsterBattler.Game
 
         Battle _battle;
         MoveButton[] _moves;
-        SwitchButton[] _switches;
-        UI.RosterIcon[] _oppRoster = System.Array.Empty<UI.RosterIcon>();
+        UI.TeamIcon[] _playerRoster = System.Array.Empty<UI.TeamIcon>();
+        UI.TeamIcon[] _oppRoster = System.Array.Empty<UI.TeamIcon>();
         readonly List<string> _logFeed = new();
         const int MaxLogLines = 14;
         Choice? _pendingChoice;
@@ -182,13 +175,20 @@ namespace MonsterBattler.Game
                 : new RandomPlayerAI(_opponentMoveBias);
 
             _moves = new[] { _move0, _move1, _move2, _move3 };
-            _switches = new[] { _switch0, _switch1, _switch2, _switch3, _switch4, _switch5 };
             _hpFills = new[] { _hp0Fill, _hp1Fill };
             _hpTexts = new[] { _hp0Text, _hp1Text };
             _nameTexts = new[] { _name0, _name1 };
+            _playerRoster = _playerRosterParent != null
+                ? _playerRosterParent.GetComponentsInChildren<UI.TeamIcon>(includeInactive: true)
+                : System.Array.Empty<UI.TeamIcon>();
             _oppRoster = _opponentRosterParent != null
-                ? _opponentRosterParent.GetComponentsInChildren<UI.RosterIcon>(includeInactive: true)
-                : System.Array.Empty<UI.RosterIcon>();
+                ? _opponentRosterParent.GetComponentsInChildren<UI.TeamIcon>(includeInactive: true)
+                : System.Array.Empty<UI.TeamIcon>();
+            for (int i = 0; i < _playerRoster.Length; i++)
+            {
+                int idx = i;
+                if (_playerRoster[i] != null) _playerRoster[i].Clicked += () => OnSwitchClicked(idx);
+            }
             for (int i = 0; i < _oppRoster.Length; i++)
             {
                 int idx = i;
@@ -199,11 +199,6 @@ namespace MonsterBattler.Game
             {
                 int idx = i;
                 if (_moves[i] != null) _moves[i].Clicked += () => OnMoveClicked(idx);
-            }
-            for (int i = 0; i < _switches.Length; i++)
-            {
-                int idx = i;
-                if (_switches[i] != null) _switches[i].Clicked += () => OnSwitchClicked(idx);
             }
             if (_teraButton != null) _teraButton.onClick.AddListener(OnTeraClicked);
             if (_infoPanel != null)
@@ -466,10 +461,10 @@ namespace MonsterBattler.Game
                 _moves[i].Show(i < p0.Moves.Count ? p0.Moves[i] : null);
             }
             var team = _battle.Sides[0].Team;
-            for (int i = 0; i < _switches.Length; i++)
+            for (int i = 0; i < _playerRoster.Length; i++)
             {
-                if (_switches[i] == null) continue;
-                _switches[i].Show(i < team.Count ? team[i] : null, isActive: i < team.Count && team[i] == p0);
+                if (_playerRoster[i] == null) continue;
+                _playerRoster[i].Show(i < team.Count ? team[i] : null, isActive: i < team.Count && team[i] == p0);
             }
 
             var oppTeam = _battle.Sides[1].Team;
