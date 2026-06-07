@@ -5,6 +5,7 @@ using MonsterBattler.Game.UI;
 using MonsterBattler.Sim;
 using MonsterBattler.Sim.Data;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
 
@@ -68,10 +69,21 @@ namespace MonsterBattler.Game
         [SerializeField] Transform _opponentRosterParent;
 
         [Header("Battle log feed (scene-authored Text)")]
-        [SerializeField] TextMeshProUGUI _logText;
+        [SerializeField] TextMeshProUGUI _logText;       // persistent debug feed (usually hidden)
+        [SerializeField] UI.MessageBar _messageBar;      // Showdown-style ephemeral message bar
 
         [Header("Info overlay (scene-authored)")]
         [SerializeField] UI.InfoPanel _infoPanel;
+
+        [Header("Floating combat text (scene-authored anchors + prefab)")]
+        [SerializeField] Transform _popupAnchor0;        // over the player's mon
+        [SerializeField] Transform _popupAnchor1;        // over the opponent's mon
+        [SerializeField] UI.FloatingText _floatingTextPrefab;
+
+        [Header("End screen (scene-authored)")]
+        [SerializeField] GameObject _endScreen;          // full-screen overlay shown when the battle ends
+        [SerializeField] TextMeshProUGUI _endResultText; // "Victory!" / "Defeat!" / "Draw"
+        [SerializeField] Button _rematchButton;          // reloads the scene for a new battle
 
         [Header("Demo")]
         [SerializeField] ulong _seed = 12345;
@@ -184,6 +196,8 @@ namespace MonsterBattler.Game
                 _infoPanel.SwapRequested += OnSwapRequested;
                 _infoPanel.SetVisible(false); // hidden until requested
             }
+            if (_rematchButton != null) _rematchButton.onClick.AddListener(OnRematch);
+            if (_endScreen != null) _endScreen.SetActive(false); // hidden until the battle ends
 
             _logFeed.Add("Battle started!");
             FlushLog(); // surface any lead switch-in / weather / ability activations from Setup
@@ -231,8 +245,26 @@ namespace MonsterBattler.Game
                 yield return new WaitForSeconds(0.3f);
             }
             SetInputEnabled(false);
-            Debug.Log($"[Battle] Winner: side {_battle.WinningSide}");
+            ShowEndScreen();
         }
+
+        void ShowEndScreen()
+        {
+            if (_endResultText != null)
+            {
+                (string label, Color color) = _battle.WinningSide switch
+                {
+                    0    => ("Victory!", new Color(0.30f, 0.78f, 0.33f)),
+                    1    => ("Defeat",   new Color(0.86f, 0.25f, 0.22f)),
+                    _    => ("Draw",     new Color(0.80f, 0.80f, 0.85f)),
+                };
+                _endResultText.text = label;
+                _endResultText.color = color;
+            }
+            if (_endScreen != null) _endScreen.SetActive(true);
+        }
+
+        void OnRematch() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
         IEnumerator PromptForcedSwitch()
         {
@@ -499,6 +531,8 @@ namespace MonsterBattler.Game
 
         void AppendLog(string line)
         {
+            // Persistent debug feed only (usually hidden). The Showdown-style message box is driven
+            // per-action by PlaybackTurn (BeginGroup/AppendLine/FadeOut).
             _logFeed.Add(line);
             while (_logFeed.Count > MaxLogLines) _logFeed.RemoveAt(0);
             if (_logText != null) _logText.text = string.Join("\n", _logFeed);
@@ -507,8 +541,34 @@ namespace MonsterBattler.Game
         // Replays one turn's protocol log entry-by-entry: reveals each readable line into the feed,
         // animates the HP bars to the value embedded in each damage/heal line, and re-labels a slot
         // when a mon switches in — pausing _turnStepDelay between beats so the turn plays in sequence.
+        static readonly Color HealBg = new Color(0.27f, 0.62f, 0.30f);
+        static readonly Color DmgBg = new Color(0.78f, 0.27f, 0.24f);
+        static readonly Color BoostBg = new Color(0.24f, 0.50f, 0.85f);
+        static readonly Color DropBg = new Color(0.80f, 0.50f, 0.18f);
+        static readonly Color StatusBg = new Color(0.55f, 0.30f, 0.62f);
+        static readonly Color MissBg = new Color(0.42f, 0.42f, 0.48f);
+        static readonly Color AbilityBg = new Color(0.28f, 0.45f, 0.72f);
+        static readonly Color FaintBg = new Color(0.32f, 0.20f, 0.22f);
+        static readonly Color SwitchBg = new Color(0.26f, 0.52f, 0.46f);
+
+        void SpawnPopup(int side, string text, Color bg)
+        {
+            var anchor = side == 0 ? _popupAnchor0 : _popupAnchor1;
+            if (anchor == null || _floatingTextPrefab == null) return;
+            var p = Instantiate(_floatingTextPrefab, anchor);
+            ((RectTransform)p.transform).anchoredPosition = Vector2.zero;
+            p.Show(text, bg);
+        }
+
+        static string StatAbbr(string s) => s switch
+        {
+            "atk" => "Atk", "def" => "Def", "spa" => "SpA", "spd" => "SpD",
+            "spe" => "Spe", "accuracy" => "Acc", "evasion" => "Eva", _ => s,
+        };
+
         IEnumerator PlaybackTurn(List<string> lines, string[] active)
         {
+            bool groupActive = false; // a message box is currently showing an action
             foreach (var raw in lines)
             {
                 var parts = raw.Split('|'); // ["", tag, arg1, arg2, ...]
@@ -518,10 +578,39 @@ namespace MonsterBattler.Game
                 var readable = BattleLogFormatter.Format(raw);
                 if (!string.IsNullOrEmpty(readable)) { AppendLog(readable); beat = true; }
 
+                // Message box: group lines by action. A "major" line (move/switch/faint/cant — no
+                // leading '-') starts a fresh box; minor '-' effect lines stack under it (box grows).
+                if (_messageBar != null)
+                {
+                    if (tag == "turn")
+                    {
+                        if (groupActive) { _messageBar.FadeOut(); groupActive = false; }
+                    }
+                    else if (!string.IsNullOrEmpty(readable))
+                    {
+                        if (!tag.StartsWith("-"))
+                        {
+                            if (groupActive) { _messageBar.FadeOut(); yield return new WaitForSeconds(0.28f); }
+                            _messageBar.BeginGroup(readable);
+                            groupActive = true;
+                        }
+                        else if (groupActive) _messageBar.AppendLine(readable);
+                        else { _messageBar.BeginGroup(readable); groupActive = true; }
+                    }
+                }
+
                 if ((tag == "-damage" || tag == "-heal" || tag == "-sethp") && parts.Length > 3)
                 {
                     int side = SideForName(parts[2], active);
-                    if (side >= 0) { ApplyHpFromLog(side, parts[3], snap: false); beat = true; }
+                    if (side >= 0)
+                    {
+                        float oldFrac = _hpTarget[side];
+                        ApplyHpFromLog(side, parts[3], snap: false);
+                        int d = Mathf.RoundToInt((_hpTarget[side] - oldFrac) * 100f);
+                        if (tag != "-sethp" && d != 0)
+                            SpawnPopup(side, (d > 0 ? "+" : "") + d + "%", d > 0 ? HealBg : DmgBg);
+                        beat = true;
+                    }
                 }
                 else if (tag == "switch" && parts.Length > 3)
                 {
@@ -533,12 +622,52 @@ namespace MonsterBattler.Game
                         if (mon != null && _nameTexts != null && _nameTexts[side] != null)
                             _nameTexts[side].text = $"{MonName(mon)} L{mon.Level}";
                         ApplyHpFromLog(side, parts[3], snap: true); // new mon — no drain animation
+                        SpawnPopup(side, $"Go! {MonName(mon) ?? parts[2]}", SwitchBg);
                         beat = true;
                     }
+                }
+                else if (tag == "faint" && parts.Length > 2)
+                {
+                    int side = SideForName(parts[2], active);
+                    if (side >= 0) { SpawnPopup(side, "Fainted", FaintBg); beat = true; }
+                }
+                else if ((tag == "-boost" || tag == "-unboost") && parts.Length > 4)
+                {
+                    int side = SideForName(parts[2], active);
+                    bool up = tag == "-boost";
+                    if (side >= 0) { SpawnPopup(side, $"{StatAbbr(parts[3])} {(up ? "+" : "−")}{parts[4]}", up ? BoostBg : DropBg); beat = true; }
+                }
+                else if (tag == "-status" && parts.Length > 3)
+                {
+                    int side = SideForName(parts[2], active);
+                    if (side >= 0) { SpawnPopup(side, parts[3].ToUpperInvariant(), StatusBg); beat = true; }
+                }
+                else if (tag == "-crit" && parts.Length > 2)
+                {
+                    int side = SideForName(parts[2], active);
+                    if (side >= 0) { SpawnPopup(side, "Crit!", DmgBg); beat = true; }
+                }
+                else if (tag == "-miss" && parts.Length > 3)
+                {
+                    int side = SideForName(parts[3], active);
+                    if (side >= 0) { SpawnPopup(side, "Miss", MissBg); beat = true; }
+                }
+                else if (tag == "-fail" && parts.Length > 2)
+                {
+                    int side = SideForName(parts[2], active);
+                    if (side >= 0) { SpawnPopup(side, "Failed", MissBg); beat = true; }
+                }
+                else if ((tag == "-activate" || tag == "-ability") && parts.Length > 3)
+                {
+                    int side = SideForName(parts[2], active);
+                    string name = parts[3].StartsWith("ability: ") ? parts[3].Substring(9) : parts[3];
+                    if (side >= 0 && tag == "-ability") { SpawnPopup(side, name, AbilityBg); beat = true; }
+                    else if (side >= 0 && parts[3].StartsWith("ability: ")) { SpawnPopup(side, name, AbilityBg); beat = true; }
                 }
 
                 if (beat && _turnStepDelay > 0f) yield return new WaitForSeconds(_turnStepDelay);
             }
+            if (_messageBar != null && groupActive) _messageBar.FadeOut(); // hide after the turn
         }
 
         // Parse "cur/max" and drive the side's HP bar + text. snap=true jumps instantly (switch-in).

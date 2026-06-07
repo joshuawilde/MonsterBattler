@@ -29,6 +29,13 @@ White panel, dark text, uses **colored type badges**, not plain text:
 - Flags: `✓ Contact (triggers Iron Barbs, Spiky Shield, etc)`
 - `◉ Super effective vs. Emboar (2×)` — contextual effectiveness vs the current foe.
 
+## showdown-floating-text.png — floating combat text
+When something happens to a mon, a small chip floats up from its sprite and fades out:
+- `+11%` (green) on heal, `-X%` (red) on damage, stat arrows on boosts/drops, status, "Miss"/"Failed".
+- Ability procs show the ability name in a chip ("Poison Heal", blue).
+Implement as a pooled/instantiated chip that lerps up ~80px and fades over ~0.9s, spawned over the
+active mon's slot during turn playback.
+
 ## showdown-full-battle.png — overall layout
 Field at top (sprites + HP bars + 6-ball team rosters per side), then the action area:
 "What will X do?" + Attack (4 move buttons) + Terastallize + Switch (6 portrait buttons).
