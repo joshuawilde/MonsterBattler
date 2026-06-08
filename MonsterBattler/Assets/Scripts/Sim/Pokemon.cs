@@ -72,6 +72,7 @@ namespace MonsterBattler.Sim
 
         public List<MoveSlot> Moves = new();
         public bool IsActive;
+        public bool HasBeenActive; // has this mon ever been sent out? (UI fog-of-war / "not yet played")
         public bool IsFainted => CurrentHp <= 0;
         /// <summary>Set once this mon's faint has been logged + its KO reactions fired (avoids re-firing).</summary>
         public bool FaintLogged;

@@ -127,7 +127,17 @@ namespace MonsterBattler.Game
         readonly float[] _hpTarget = { 1f, 1f };
         readonly Pokemon[] _hpLastMon = new Pokemon[2];
 
+        Meta.MenuController _meta;
+
         void Start()
+        {
+            // If a menu is present it drives when the battle begins; otherwise auto-run (dev mode).
+            _meta = FindObjectOfType<Meta.MenuController>();
+            if (_meta != null) { _meta.Boot(this); return; }
+            BeginBattle();
+        }
+
+        public void BeginBattle()
         {
             Application.runInBackground = true;
 
@@ -136,15 +146,28 @@ namespace MonsterBattler.Game
             var dex = DexLoader.LoadFromStreamingAssets();
             _battle = new Battle(dex, seed);
 
-            List<Pokemon> playerTeam, opponentTeam;
-            if (_useRandomTeams)
+            List<Pokemon> playerTeam = null, opponentTeam = null;
+
+            // Meta loop: if the player has a collection team, battle with it (opponent stays random).
+            var metaTeam = Meta.MetaGame.BattleTeam();
+            if (metaTeam != null && metaTeam.Count > 0)
+            {
+                var randbats = RandbatsLoader.LoadFromStreamingAssets();
+                playerTeam = new RandomTeamGenerator(dex, randbats, new Prng(seed)).BuildNamedTeam(metaTeam);
+                if (playerTeam.Count > 0)
+                    opponentTeam = new RandomTeamGenerator(dex, randbats, new Prng(seed ^ 0x9E3779B97F4A7C15UL))
+                        .GenerateTeam(System.Math.Max(1, playerTeam.Count));
+                else playerTeam = null;
+            }
+
+            if (playerTeam == null && _useRandomTeams)
             {
                 var randbats = RandbatsLoader.LoadFromStreamingAssets();
                 // Fork independent PRNGs off the seed so each side's team is reproducible.
                 playerTeam   = new RandomTeamGenerator(dex, randbats, new Prng(seed)).GenerateTeam();
                 opponentTeam = new RandomTeamGenerator(dex, randbats, new Prng(seed ^ 0x9E3779B97F4A7C15UL)).GenerateTeam();
             }
-            else
+            else if (playerTeam == null)
             {
                 playerTeam = BuildTeam(dex, new (string species, string ability, string[] moves, string item)[]
                 {
@@ -274,13 +297,19 @@ namespace MonsterBattler.Game
                     1    => ("Defeat",   new Color(0.86f, 0.25f, 0.22f)),
                     _    => ("Draw",     new Color(0.80f, 0.80f, 0.85f)),
                 };
-                _endResultText.text = label;
+                int reward = Meta.MetaGame.Reward(_battle.WinningSide == 0);
+                _endResultText.text = $"{label}\n<size=60%>+{reward} coins</size>";
                 _endResultText.color = color;
             }
             if (_endScreen != null) _endScreen.SetActive(true);
         }
 
-        void OnRematch() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // Return to the menu if it's in the build; otherwise just reload (dev mode).
+        void OnRematch()
+        {
+            if (Application.CanStreamedLevelBeLoaded("MenuScene")) SceneManager.LoadScene("MenuScene");
+            else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
 
         IEnumerator PromptForcedSwitch()
         {
@@ -464,13 +493,13 @@ namespace MonsterBattler.Game
             for (int i = 0; i < _moves.Length; i++)
             {
                 if (_moves[i] == null) continue;
-                _moves[i].Show(i < p0.Moves.Count ? p0.Moves[i] : null);
+                _moves[i].Show(i < p0.Moves.Count ? p0.Moves[i] : null, p1);
             }
             var team = _battle.Sides[0].Team;
             for (int i = 0; i < _playerRoster.Length; i++)
             {
                 if (_playerRoster[i] == null) continue;
-                _playerRoster[i].Show(i < team.Count ? team[i] : null, isActive: i < team.Count && team[i] == p0);
+                _playerRoster[i].Show(i < team.Count ? team[i] : null, isActive: i < team.Count && team[i] == p0, isEnemy: false);
             }
 
             var oppTeam = _battle.Sides[1].Team;
@@ -478,7 +507,7 @@ namespace MonsterBattler.Game
             {
                 if (_oppRoster[i] == null) continue;
                 _oppRoster[i].Show(i < oppTeam.Count ? oppTeam[i] : null,
-                                   isActive: i < oppTeam.Count && oppTeam[i] == p1);
+                                   isActive: i < oppTeam.Count && oppTeam[i] == p1, isEnemy: true);
             }
             // Keep the open panel current (the inspected mon's HP/status may have changed).
             if (_infoPanel != null && _infoPanel.IsVisible)

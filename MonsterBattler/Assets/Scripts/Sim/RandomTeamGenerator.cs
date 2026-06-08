@@ -54,6 +54,29 @@ namespace MonsterBattler.Sim
             return team;
         }
 
+        /// <summary>Build a team from specific species ids (the player's collection). Each species gets a
+        /// FIXED build (ability/moves/item/tera) — seeded by the species id so every copy is identical,
+        /// and stable across runs. Unknown ids are skipped.</summary>
+        public List<Pokemon> BuildNamedTeam(System.Collections.Generic.IEnumerable<string> speciesIds)
+        {
+            var team = new List<Pokemon>();
+            foreach (var id in speciesIds)
+                if (id != null && _dex.Species.ContainsKey(id) && _rb.Species.ContainsKey(id))
+                {
+                    var g = new RandomTeamGenerator(_dex, _rb, new Prng(StableSeed(id)));
+                    team.Add(g.BuildSet(id));
+                }
+            return team;
+        }
+
+        /// <summary>Deterministic 64-bit FNV-1a hash of a species id → a stable per-species seed.</summary>
+        public static ulong StableSeed(string s)
+        {
+            ulong h = 1469598103934665603UL;
+            foreach (char c in s) { h ^= c; h *= 1099511628211UL; }
+            return h;
+        }
+
         // --- species selection ----------------------------------------------------------------
         // Simplified vs PS: distinct random species, no base-species de-dup or weakness balancing.
         List<string> PickSpecies(int size)

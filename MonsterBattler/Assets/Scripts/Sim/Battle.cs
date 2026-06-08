@@ -49,7 +49,10 @@ namespace MonsterBattler.Sim
                     ResolveBaseEffects(mon);
             foreach (var side in Sides)
                 if (side.ActiveSlots.Count > 0)
+                {
+                    side.ActiveSlots[0].HasBeenActive = true;
                     RunSwitchIn(new SwitchInEvent { Battle = this, Pokemon = side.ActiveSlots[0] });
+                }
         }
 
         public void Step(Choice s0, Choice s1)
@@ -234,6 +237,7 @@ namespace MonsterBattler.Sim
             if (side.ActiveSlots.Count > 0) side.ActiveSlots[0] = incoming;
             else side.ActiveSlots.Add(incoming);
             incoming.IsActive = true;
+            incoming.HasBeenActive = true;
             Log.Raw($"|switch|{Ident(incoming)}|{incoming.Species?.Name}|{incoming.CurrentHp}/{incoming.MaxStats[(int)Stat.HP]}");
             RunSwitchIn(new SwitchInEvent { Battle = this, Pokemon = incoming });
         }
