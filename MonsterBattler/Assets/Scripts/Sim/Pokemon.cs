@@ -19,6 +19,7 @@ namespace MonsterBattler.Sim
         // Data (immutable shape) — set at team load.
         public AbilityData Ability;
         public ItemData Item;
+        public ItemData LostItem; // the last item consumed/lost (Harvest / Recycle / Cud Chew)
 
         // Resolved effect logic — kept in sync with the data fields above.
         public Effect AbilityEffect;

@@ -80,7 +80,7 @@ namespace MonsterBattler.Sim
             var moves = BuildMoves(sp, set, teraType);
             var abilityId = set.AbilityIds.Count > 0 ? Sample(set.AbilityIds)
                           : (sp.AbilityIds.Count > 0 ? sp.AbilityIds[0] : null);
-            var itemId = PickItem(set, abilityId, moves);
+            var itemId = PickItem(sp, set, abilityId, moves);
             int level = entry.Level > 0 ? entry.Level : 80;
 
             var mon = new Pokemon
@@ -163,23 +163,34 @@ namespace MonsterBattler.Sim
             return m.BasePower > 0 && m.Type == type;
         }
 
-        // --- item (compact stand-in for PS getItem) -------------------------------------------
-        string PickItem(RandbatsSet set, string abilityId, List<string> moves)
+        // --- item (broadened stand-in for PS getItem; not byte-identical, see README) -----------
+        string PickItem(SpeciesData sp, RandbatsSet set, string abilityId, List<string> moves)
         {
             if (abilityId == "protosynthesis" || abilityId == "quarkdrive") return "boosterenergy";
             if (set.Role == "AV Pivot") return "assaultvest";
-            if (set.Role == "Fast Support") return "heavydutyboots";
 
             bool hasSetup = SetupRoles.Contains(set.Role);
+            var dmg = moves.Select(_dex.GetMove).Where(m => m.BasePower > 0).ToList();
+            bool allPhys = dmg.Count > 0 && dmg.All(m => m.Category == MoveCategory.Physical);
+            bool allSpec = dmg.Count > 0 && dmg.All(m => m.Category == MoveCategory.Special);
+            bool grounded = sp.Type1 != MonType.Flying && sp.Type2 != MonType.Flying && abilityId != "levitate";
+            bool rockWeak = TypeChart.Effectiveness(MonType.Rock, sp.Type1, sp.Type2) > 1f;
+
+            // Heavy-Duty Boots: support pivots, and grounded mons that fear Stealth Rock.
+            if (set.Role == "Fast Support" || set.Role == "Bulky Support") return "heavydutyboots";
+            if (rockWeak && grounded && _prng.Range(0, 2) == 0) return "heavydutyboots";
+
             if (set.Role == "Fast Attacker" || set.Role == "Wallbreaker")
             {
-                var dmg = moves.Select(_dex.GetMove).Where(m => m.BasePower > 0).ToList();
-                if (dmg.Count > 0 && dmg.All(m => m.Category == MoveCategory.Physical)) return "choiceband";
-                if (dmg.Count > 0 && dmg.All(m => m.Category == MoveCategory.Special)) return "choicespecs";
+                if (!hasSetup && allPhys) return _prng.Range(0, 3) == 0 ? "choicescarf" : "choiceband";
+                if (!hasSetup && allSpec) return _prng.Range(0, 3) == 0 ? "choicescarf" : "choicespecs";
+                // Frail fast attackers often run Focus Sash.
+                int bulk = sp.BaseStats.HP + sp.BaseStats.Def + sp.BaseStats.SpD;
+                if (!hasSetup && bulk < 230 && _prng.Range(0, 2) == 0) return "focussash";
                 return "lifeorb";
             }
-            if (hasSetup) return "lifeorb";
-            return "leftovers"; // Bulky Support / Bulky Attacker / fallback
+            if (hasSetup) return _prng.Range(0, 3) == 0 ? "sitrusberry" : "lifeorb";
+            return "leftovers"; // Bulky Attacker / fallback
         }
 
         // --- stats (PS formula, neutral nature, EV-aware) -------------------------------------

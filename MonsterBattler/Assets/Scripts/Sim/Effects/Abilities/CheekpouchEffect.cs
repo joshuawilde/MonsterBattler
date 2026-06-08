@@ -1,9 +1,9 @@
 namespace MonsterBattler.Sim.Effects.Abilities
 {
-    /// <summary>Cheek Pouch: would heal on eating a Berry — the Berry item system is not modeled, so this is inert.</summary>
-    public sealed class CheekpouchEffect : Effect
+    /// <summary>Cheek Pouch: heals 1/3 max HP whenever the holder eats a Berry (logic in Battle.ConsumeItem).</summary>
+    public sealed class CheekPouchEffect : Effect
     {
         public override string EffectId => "cheekpouch";
-        public override string DisplayName => "Cheekpouch";
+        public override string DisplayName => "Cheek Pouch";
     }
 }

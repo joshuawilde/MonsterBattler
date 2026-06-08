@@ -598,6 +598,41 @@ namespace MonsterBattler.Sim
             return slot;
         }
 
+        /// <summary>Consume/remove a mon's held item (Berry eaten, Sash spent, Knock Off, …).
+        /// Records it in LostItem, sets ItemLost, logs |-enditem|, and fires Cheek Pouch.</summary>
+        public void ConsumeItem(Pokemon mon, string reason = null)
+        {
+            if (mon?.Item == null) return;
+            var item = mon.Item;
+            mon.LostItem = item;
+            mon.Item = null; mon.ItemEffect = null; mon.ItemLost = true;
+            Log.Raw($"|-enditem|{Ident(mon)}|{item.Name}{(reason != null ? $"|[from] {reason}" : "")}");
+            // Cheek Pouch: eating a Berry also heals 1/3 max HP.
+            if (item.IsBerry && mon.AbilityEffect is Effects.Abilities.CheekPouchEffect && !mon.IsFainted)
+            {
+                int max = mon.MaxStats[(int)Stat.HP];
+                int heal = System.Math.Min(max / 3, max - mon.CurrentHp);
+                if (heal > 0)
+                {
+                    mon.CurrentHp += heal;
+                    Log.Raw($"|-heal|{Ident(mon)}|{mon.CurrentHp}/{max}|[from] ability: Cheek Pouch");
+                }
+            }
+        }
+
+        /// <summary>True if an opposing Unnerve (or As One) stops this mon from eating its Berry.</summary>
+        public bool BerriesSuppressed(Pokemon mon)
+        {
+            var opp = OpposingSideOf(mon);
+            if (opp == null) return false;
+            foreach (var foe in opp.ActiveSlots)
+                if (foe != null && !foe.IsFainted && (foe.AbilityEffect is Effects.Abilities.UnnerveEffect
+                    || foe.AbilityEffect is Effects.Abilities.AsOneGlastrierEffect
+                    || foe.AbilityEffect is Effects.Abilities.AsOneSpectrierEffect))
+                    return true;
+            return false;
+        }
+
         /// <summary>A mon's battle weight in kg, after Heavy Metal (×2) / Light Metal (÷2) / Float Stone.</summary>
         public float EffectiveWeight(Pokemon mon)
         {
