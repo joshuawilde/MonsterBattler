@@ -86,6 +86,8 @@ namespace MonsterBattler.Game
 
         [Header("Demo")]
         [SerializeField] ulong _seed = 12345;
+        [Tooltip("Use a fresh random seed each match instead of the fixed Seed above.")]
+        [SerializeField] bool _randomizeSeed = false;
         [Tooltip("PS RandomPlayerAI 'move' bias (only used when Opponent Elo < 0). 1.0 = always attack.")]
         [Range(0f, 1f)]
         [SerializeField] float _opponentMoveBias = 1.0f;
@@ -129,16 +131,18 @@ namespace MonsterBattler.Game
         {
             Application.runInBackground = true;
 
+            ulong seed = _randomizeSeed ? (ulong)System.DateTime.UtcNow.Ticks : _seed;
+
             var dex = DexLoader.LoadFromStreamingAssets();
-            _battle = new Battle(dex, _seed);
+            _battle = new Battle(dex, seed);
 
             List<Pokemon> playerTeam, opponentTeam;
             if (_useRandomTeams)
             {
                 var randbats = RandbatsLoader.LoadFromStreamingAssets();
                 // Fork independent PRNGs off the seed so each side's team is reproducible.
-                playerTeam   = new RandomTeamGenerator(dex, randbats, new Prng(_seed)).GenerateTeam();
-                opponentTeam = new RandomTeamGenerator(dex, randbats, new Prng(_seed ^ 0x9E3779B97F4A7C15UL)).GenerateTeam();
+                playerTeam   = new RandomTeamGenerator(dex, randbats, new Prng(seed)).GenerateTeam();
+                opponentTeam = new RandomTeamGenerator(dex, randbats, new Prng(seed ^ 0x9E3779B97F4A7C15UL)).GenerateTeam();
             }
             else
             {
@@ -171,7 +175,7 @@ namespace MonsterBattler.Game
             _battle.Setup(side0, side1);
 
             _opponentAI = _opponentElo >= 0
-                ? AI.BattleAIFactory.ForElo(_opponentElo, _seed ^ 0x9E3779B97F4A7C15)
+                ? AI.BattleAIFactory.ForElo(_opponentElo, seed ^ 0x9E3779B97F4A7C15)
                 : new RandomPlayerAI(_opponentMoveBias);
 
             _moves = new[] { _move0, _move1, _move2, _move3 };
@@ -340,6 +344,8 @@ namespace MonsterBattler.Game
             var side = _battle.Sides[0];
             if (!side.Team.Contains(mon)) return false;          // must be your mon
             if (mon.IsFainted || mon == side.ActiveSlots[0]) return false; // not fainted / not already out
+            // A trapping ability blocks voluntary switches (but not forced post-faint replacements).
+            if (!_isInForcedSwitch && _battle.IsTrapped(side.ActiveSlots[0])) return false;
             return _isInForcedSwitch || _acceptingInput;          // a state that accepts a switch
         }
 

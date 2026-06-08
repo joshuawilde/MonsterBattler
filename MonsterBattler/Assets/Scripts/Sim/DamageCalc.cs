@@ -49,6 +49,9 @@ namespace MonsterBattler.Sim
                 if (atkStage < 0) atkStage = 0;
                 if (defStage > 0) defStage = 0;
             }
+            // Unaware: the attacker ignores the defender's defensive stages; the defender ignores the attacker's offensive stages.
+            if (user.AbilityEffect is Effects.Abilities.UnawareEffect) defStage = 0;
+            if (target.AbilityEffect is Effects.Abilities.UnawareEffect) atkStage = 0;
             int atkStat = Math.Max(1, (int)(user.MaxStats[(int)atkStatKind] * Stats.StageMult(atkStage)));
             int defStat = Math.Max(1, (int)(target.MaxStats[(int)defStatKind] * Stats.StageMult(defStage)));
 
@@ -59,6 +62,13 @@ namespace MonsterBattler.Sim
             var defEv = new StatModifyEvent { Battle = battle, Owner = target, Stat = defStatKind, Value = defStat, ContextMove = move };
             if (defStatKind == Stat.Def) battle.RunModifyDef(defEv); else battle.RunModifySpD(defEv);
             defStat = Math.Max(1, defEv.Value);
+
+            // Ruin abilities: a holder lowers the matching stat of ALL other active mons by 25%.
+            if (atkStatKind == Stat.Atk && OtherActiveHas<Effects.Abilities.TabletsOfRuinEffect>(battle, user)) atkStat = atkStat * 3 / 4;
+            if (atkStatKind == Stat.SpA && OtherActiveHas<Effects.Abilities.VesselOfRuinEffect>(battle, user)) atkStat = atkStat * 3 / 4;
+            if (defStatKind == Stat.Def && OtherActiveHas<Effects.Abilities.SwordOfRuinEffect>(battle, target)) defStat = defStat * 3 / 4;
+            if (defStatKind == Stat.SpD && OtherActiveHas<Effects.Abilities.BeadsOfRuinEffect>(battle, target)) defStat = defStat * 3 / 4;
+            atkStat = Math.Max(1, atkStat); defStat = Math.Max(1, defStat);
 
             // Weather-based defensive boosts (Cloud Nine / Air Lock suppresses).
             var weather = battle.ActiveWeather();
@@ -78,16 +88,24 @@ namespace MonsterBattler.Sim
             //   • match original type only             → ×1.5
             //   • match Tera type only (post-tera)     → ×1.5
             //   • match both (post-tera)               → ×2.0
-            bool originalStab = user.Species != null &&
-                (effectiveType == user.Species.Type1 || effectiveType == user.Species.Type2);
+            var (uType1, uType2) = user.CurrentTypes();
+            bool originalStab = effectiveType != MonType.None && (effectiveType == uType1 || effectiveType == uType2);
             bool teraStab = user.IsTerastallized && effectiveType == user.TeraType;
             if (originalStab && teraStab) dmg = dmg * 2;
             else if (originalStab || teraStab) dmg = dmg * 3 / 2;
 
-            // Defensive types: Terastallization replaces the defender's types with TeraType.
-            MonType defType1 = target.IsTerastallized ? target.TeraType : (target.Species?.Type1 ?? MonType.None);
-            MonType defType2 = target.IsTerastallized ? MonType.None : (target.Species?.Type2 ?? MonType.None);
+            // Defensive types (Tera / Protean override / species).
+            var (defType1, defType2) = target.CurrentTypes();
             float eff = TypeChart.Effectiveness(effectiveType, defType1, defType2);
+            // Scrappy / Mind's Eye: Normal & Fighting moves ignore the Ghost-type immunity.
+            if (eff == 0f && (effectiveType == MonType.Normal || effectiveType == MonType.Fighting) &&
+                (defType1 == MonType.Ghost || defType2 == MonType.Ghost) &&
+                (user.AbilityEffect is Effects.Abilities.ScrappyEffect || user.AbilityEffect is Effects.Abilities.MindsEyeEffect))
+            {
+                MonType d1 = defType1 == MonType.Ghost ? MonType.None : defType1;
+                MonType d2 = defType2 == MonType.Ghost ? MonType.None : defType2;
+                eff = TypeChart.Effectiveness(effectiveType, d1, d2);
+            }
             dmg = (int)(dmg * eff);
 
             // Weather damage multipliers (after STAB/type, before crit). Cloud Nine / Air Lock
@@ -112,7 +130,11 @@ namespace MonsterBattler.Sim
                     break;
             }
 
-            if (isCrit) dmg = dmg * 3 / 2;
+            if (isCrit)
+            {
+                dmg = dmg * 3 / 2;
+                if (user.AbilityEffect is Effects.Abilities.SniperEffect) dmg = dmg * 3 / 2; // 1.5×1.5 = 2.25
+            }
 
             var modEv = new ModifyDamageEvent { Battle = battle, User = user, Target = target, Move = move, Damage = dmg, IsCrit = isCrit };
             battle.RunModifyDamage(modEv);
@@ -123,6 +145,15 @@ namespace MonsterBattler.Sim
         {
             if (mon?.Species == null) return false;
             return mon.Species.Type1 == t || mon.Species.Type2 == t;
+        }
+
+        // True if any active mon other than `exclude` has ability effect T (for the Ruin auras).
+        static bool OtherActiveHas<T>(Battle b, Pokemon exclude) where T : Effects.Effect
+        {
+            foreach (var side in b.Sides)
+                foreach (var m in side.ActiveSlots)
+                    if (m != null && m != exclude && !m.IsFainted && m.AbilityEffect is T) return true;
+            return false;
         }
     }
 }

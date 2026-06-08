@@ -63,6 +63,7 @@ namespace MonsterBattler.Game
                         Spe = (int?)stats["spe"] ?? 0,
                     },
                     AbilityIds = (o["abilities"] as JArray)?.ToObject<List<string>>() ?? new List<string>(),
+                    WeightKg = (float?)o["weightkg"] ?? 0f,
                 };
                 dex.Species[id] = sp;
             }

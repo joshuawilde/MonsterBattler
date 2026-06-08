@@ -60,6 +60,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's Defense by 2.",
     "target": "Self"
   },
@@ -160,6 +166,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 30,
+    "selfBoosts": [
+      {
+        "stat": "Spe",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's Speed by 2.",
     "target": "Self"
   },
@@ -226,6 +238,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "SpD",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's Sp. Def by 2.",
     "target": "Self"
   },
@@ -1198,6 +1216,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "Def",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Attack and Defense by 1.",
     "target": "Self",
     "effectId": "bulkup"
@@ -1289,6 +1317,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": 1
+      },
+      {
+        "stat": "SpD",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Sp. Atk and Sp. Def by 1.",
     "target": "Self",
     "effectId": "calmmind"
@@ -1325,6 +1363,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "SpD",
+        "delta": 1
+      }
+    ],
     "desc": "+1 SpD, user's next Electric move 2x power.",
     "target": "Self"
   },
@@ -1398,7 +1442,8 @@
     "pp": 10,
     "pivotsOut": true,
     "desc": "Starts Snow. User switches out.",
-    "target": "All"
+    "target": "All",
+    "effectId": "chillyreceptionmove"
   },
   "chloroblast": {
     "name": "Chloroblast",
@@ -1449,6 +1494,28 @@
     "basePower": 0,
     "accuracy": 100,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "Def",
+        "delta": 1
+      },
+      {
+        "stat": "SpA",
+        "delta": 1
+      },
+      {
+        "stat": "SpD",
+        "delta": 1
+      },
+      {
+        "stat": "Spe",
+        "delta": 1
+      }
+    ],
     "desc": "User loses 33% of its max HP. +1 to all stats.",
     "target": "Self",
     "flags": {
@@ -1509,6 +1576,20 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "Def",
+        "delta": 1
+      },
+      {
+        "stat": "Acc",
+        "delta": 1
+      }
+    ],
     "desc": "Raises user's Attack, Defense, accuracy by 1.",
     "target": "Self"
   },
@@ -1623,6 +1704,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 1
+      },
+      {
+        "stat": "SpD",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Defense and Sp. Def by 1.",
     "target": "Self"
   },
@@ -1633,6 +1724,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 3
+      }
+    ],
     "desc": "Raises the user's Defense by 3.",
     "target": "Self"
   },
@@ -1673,7 +1770,8 @@
     "accuracy": 100,
     "pp": 10,
     "desc": "Swaps user's field effects with the opposing side.",
-    "target": "All"
+    "target": "All",
+    "effectId": "courtchangemove"
   },
   "covet": {
     "name": "Covet",
@@ -1814,7 +1912,8 @@
     "accuracy": 0,
     "pp": 10,
     "desc": "Curses if Ghost, else -1 Spe, +1 Atk, +1 Def.",
-    "target": "Normal"
+    "target": "Normal",
+    "effectId": "cursemove"
   },
   "darkestlariat": {
     "name": "Darkest Lariat",
@@ -1887,6 +1986,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 1
+      },
+      {
+        "stat": "SpD",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Defense and Sp. Def by 1.",
     "target": "Self"
   },
@@ -1897,6 +2006,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 40,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Defense by 1.",
     "target": "Self"
   },
@@ -1922,7 +2037,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "If an opponent knocks out the user, it also faints.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "destinybondmove"
   },
   "detect": {
     "name": "Detect",
@@ -2134,6 +2250,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 15,
+    "selfBoosts": [
+      {
+        "stat": "Eva",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's evasiveness by 1.",
     "target": "Self"
   },
@@ -2230,6 +2352,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "Spe",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Attack and Speed by 1.",
     "target": "Self",
     "effectId": "dragondance"
@@ -3008,6 +3140,20 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 2
+      },
+      {
+        "stat": "SpA",
+        "delta": 2
+      },
+      {
+        "stat": "Spe",
+        "delta": 2
+      }
+    ],
     "desc": "+2 Attack, Sp. Atk, Speed for 1/2 user's max HP.",
     "target": "Self"
   },
@@ -3802,7 +3948,8 @@
     "target": "Normal",
     "flags": {
       "protect": 1
-    }
+    },
+    "effectId": "paralyzemove"
   },
   "grassknot": {
     "name": "Grass Knot",
@@ -3816,7 +3963,8 @@
     "flags": {
       "contact": 1,
       "protect": 1
-    }
+    },
+    "effectId": "grassknotmove"
   },
   "grasspledge": {
     "name": "Grass Pledge",
@@ -3910,6 +4058,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "SpA",
+        "delta": 1
+      }
+    ],
     "desc": "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
     "target": "Self"
   },
@@ -4039,6 +4197,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 30,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Defense by 1.",
     "target": "Self"
   },
@@ -4064,7 +4228,8 @@
     "accuracy": 0,
     "pp": 30,
     "desc": "Eliminates all stat changes.",
-    "target": "All"
+    "target": "All",
+    "effectId": "hazemove"
   },
   "headbutt": {
     "name": "Headbutt",
@@ -4133,7 +4298,8 @@
     "target": "AllySide",
     "flags": {
       "sound": 1
-    }
+    },
+    "effectId": "healbellmove"
   },
   "healingwish": {
     "name": "Healing Wish",
@@ -4185,7 +4351,8 @@
     "flags": {
       "contact": 1,
       "protect": 1
-    }
+    },
+    "effectId": "heatcrashmove"
   },
   "heatwave": {
     "name": "Heat Wave",
@@ -4219,7 +4386,8 @@
     "flags": {
       "contact": 1,
       "protect": 1
-    }
+    },
+    "effectId": "heavyslammove"
   },
   "helpinghand": {
     "name": "Helping Hand",
@@ -4280,6 +4448,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 15,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "Acc",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Attack and accuracy by 1.",
     "target": "Self"
   },
@@ -4476,7 +4654,8 @@
     "target": "Normal",
     "flags": {
       "protect": 1
-    }
+    },
+    "effectId": "sleepmove"
   },
   "icebeam": {
     "name": "Ice Beam",
@@ -4768,6 +4947,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 15,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's Defense by 2.",
     "target": "Self"
   },
@@ -5151,7 +5336,8 @@
     "flags": {
       "contact": 1,
       "protect": 1
-    }
+    },
+    "effectId": "lowkickmove"
   },
   "lowsweep": {
     "name": "Low Sweep",
@@ -5355,7 +5541,8 @@
     "accuracy": 0,
     "pp": 10,
     "desc": "For 5 turns, the user has immunity to Ground.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "magnetrisemove"
   },
   "makeitrain": {
     "name": "Make It Rain",
@@ -5624,7 +5811,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "Heals the user by 50% of its max HP.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "recovermove"
   },
   "mimic": {
     "name": "Mimic",
@@ -5646,6 +5834,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Eva",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's evasiveness by 2.",
     "target": "Self"
   },
@@ -5769,7 +5963,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "Heals the user by a weather-dependent amount.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "synthesismove"
   },
   "morningsun": {
     "name": "Morning Sun",
@@ -5779,7 +5974,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "Heals the user by a weather-dependent amount.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "synthesismove"
   },
   "mortalspin": {
     "name": "Mortal Spin",
@@ -5942,6 +6138,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's Sp. Atk by 2.",
     "target": "Self",
     "effectId": "nastyplot"
@@ -6021,6 +6223,28 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 5,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "Def",
+        "delta": 1
+      },
+      {
+        "stat": "SpA",
+        "delta": 1
+      },
+      {
+        "stat": "SpD",
+        "delta": 1
+      },
+      {
+        "stat": "Spe",
+        "delta": 1
+      }
+    ],
     "desc": "Raises all stats by 1 (not acc/eva). Traps user.",
     "target": "Self"
   },
@@ -6159,7 +6383,8 @@
     "flags": {
       "protect": 1,
       "sound": 1
-    }
+    },
+    "effectId": "partingshotmove"
   },
   "payback": {
     "name": "Payback",
@@ -6936,6 +7161,20 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": 1
+      },
+      {
+        "stat": "SpD",
+        "delta": 1
+      },
+      {
+        "stat": "Spe",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Sp. Atk, Sp. Def, Speed by 1.",
     "target": "Self"
   },
@@ -7000,7 +7239,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "For 5 turns, heavy rain powers Water moves.",
-    "target": "All"
+    "target": "All",
+    "effectId": "raindancemove"
   },
   "rapidspin": {
     "name": "Rapid Spin",
@@ -7142,7 +7382,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "User sleeps 2 turns and restores HP and status.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "restmove"
   },
   "retaliate": {
     "name": "Retaliate",
@@ -7260,6 +7501,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "Spe",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's Speed by 2.",
     "target": "Self"
   },
@@ -7385,7 +7632,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "Heals 50% HP. Flying-type removed 'til turn ends.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "recovermove"
   },
   "round": {
     "name": "Round",
@@ -7846,6 +8094,28 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 15,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": -1
+      },
+      {
+        "stat": "SpD",
+        "delta": -1
+      },
+      {
+        "stat": "Atk",
+        "delta": 2
+      },
+      {
+        "stat": "SpA",
+        "delta": 2
+      },
+      {
+        "stat": "Spe",
+        "delta": 2
+      }
+    ],
     "desc": "Lowers Def, SpD by 1; raises Atk, SpA, Spe by 2.",
     "target": "Self"
   },
@@ -7856,6 +8126,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's Defense by 2.",
     "target": "Self"
   },
@@ -7866,6 +8142,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Spe",
+        "delta": 2
+      },
+      {
+        "stat": "Atk",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Speed by 2 and Attack by 1.",
     "target": "Self"
   },
@@ -7890,7 +8176,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "User restores 1/2 its max HP; 2/3 in Sandstorm.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "recovermove"
   },
   "silktrap": {
     "name": "Silk Trap",
@@ -7928,7 +8215,8 @@
     "flags": {
       "protect": 1,
       "sound": 1
-    }
+    },
+    "effectId": "sleepmove"
   },
   "sketch": {
     "name": "Sketch",
@@ -8003,7 +8291,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "Heals the user by 50% of its max HP.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "recovermove"
   },
   "slam": {
     "name": "Slam",
@@ -8047,7 +8336,7 @@
     "flags": {
       "protect": 1
     },
-    "effectId": "sleeppowdermove"
+    "effectId": "sleepmove"
   },
   "sleeptalk": {
     "name": "Sleep Talk",
@@ -8057,7 +8346,8 @@
     "accuracy": 0,
     "pp": 10,
     "desc": "User must be asleep. Uses another known move.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "sleeptalkmove"
   },
   "sludge": {
     "name": "Sludge",
@@ -8238,7 +8528,8 @@
     "accuracy": 0,
     "pp": 10,
     "desc": "For 5 turns, snow falls. Ice: 1.5x Def.",
-    "target": "All"
+    "target": "All",
+    "effectId": "snowscapemove"
   },
   "soak": {
     "name": "Soak",
@@ -8261,7 +8552,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "Heals the user by 50% of its max HP.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "recovermove"
   },
   "solarbeam": {
     "name": "Solar Beam",
@@ -8501,7 +8793,7 @@
     "flags": {
       "protect": 1
     },
-    "effectId": "sleeppowdermove"
+    "effectId": "sleepmove"
   },
   "springtidestorm": {
     "name": "Springtide Storm",
@@ -8746,7 +9038,8 @@
     "target": "Normal",
     "flags": {
       "protect": 1
-    }
+    },
+    "effectId": "strengthsapmove"
   },
   "stringshot": {
     "name": "String Shot",
@@ -8820,7 +9113,8 @@
     "target": "Normal",
     "flags": {
       "protect": 1
-    }
+    },
+    "effectId": "paralyzemove"
   },
   "substitute": {
     "name": "Substitute",
@@ -8856,7 +9150,8 @@
     "accuracy": 0,
     "pp": 5,
     "desc": "For 5 turns, intense sunlight powers Fire moves.",
-    "target": "All"
+    "target": "All",
+    "effectId": "sunnydaymove"
   },
   "sunsteelstrike": {
     "name": "Sunsteel Strike",
@@ -9053,6 +9348,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 2
+      }
+    ],
     "desc": "Raises the user's Attack by 2.",
     "target": "Self",
     "effectId": "swordsdance"
@@ -9125,6 +9426,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 20,
+    "selfBoosts": [
+      {
+        "stat": "SpA",
+        "delta": 3
+      }
+    ],
     "desc": "Raises the user's Sp. Atk by 3.",
     "target": "Self"
   },
@@ -9195,7 +9502,8 @@
     "accuracy": 0,
     "pp": 15,
     "desc": "Cures user's status, raises Sp. Atk, Sp. Def by 1.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "takeheartmove"
   },
   "tarshot": {
     "name": "Tar Shot",
@@ -9221,7 +9529,8 @@
     "target": "Normal",
     "flags": {
       "protect": 1
-    }
+    },
+    "effectId": "tauntmove"
   },
   "tearfullook": {
     "name": "Tearful Look",
@@ -9550,7 +9859,8 @@
     "accuracy": 0,
     "pp": 10,
     "desc": "User +1 Atk, Spe. Clears all substitutes/hazards.",
-    "target": "Self"
+    "target": "Self",
+    "effectId": "tidyupmove"
   },
   "topsyturvy": {
     "name": "Topsy-Turvy",
@@ -9674,7 +9984,8 @@
     "accuracy": 0,
     "pp": 10,
     "desc": "Copies target's stats, moves, types, and Ability.",
-    "target": "Normal"
+    "target": "Normal",
+    "effectId": "transformmove"
   },
   "triattack": {
     "name": "Tri Attack",
@@ -9923,6 +10234,20 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 10,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "Def",
+        "delta": 1
+      },
+      {
+        "stat": "Spe",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Attack, Defense, Speed by 1.",
     "target": "Self"
   },
@@ -10247,6 +10572,12 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 40,
+    "selfBoosts": [
+      {
+        "stat": "Def",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Defense by 1.",
     "target": "Self"
   },
@@ -10283,6 +10614,16 @@
     "basePower": 0,
     "accuracy": 0,
     "pp": 30,
+    "selfBoosts": [
+      {
+        "stat": "Atk",
+        "delta": 1
+      },
+      {
+        "stat": "SpA",
+        "delta": 1
+      }
+    ],
     "desc": "Raises the user's Attack and Sp. Atk by 1.",
     "target": "Self"
   },
@@ -10340,7 +10681,8 @@
     "target": "Normal",
     "flags": {
       "protect": 1
-    }
+    },
+    "effectId": "yawnmove"
   },
   "zapcannon": {
     "name": "Zap Cannon",

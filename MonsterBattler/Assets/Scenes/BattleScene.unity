@@ -430,6 +430,7 @@ MonoBehaviour:
   _endResultText: {fileID: 1851861813}
   _rematchButton: {fileID: 1140258893}
   _seed: 12345
+  _randomizeSeed: 0
   _opponentMoveBias: 1
   _opponentElo: 1200
   _useRandomTeams: 1

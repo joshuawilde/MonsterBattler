@@ -15,6 +15,7 @@ namespace MonsterBattler.Sim.Effects.Statuses
         public override void OnBeforeMove(BeforeMoveEvent ev, Pokemon owner)
         {
             if (owner != ev.User) return;
+            if (ev.Battle.CallingMove) return; // a move invoked by Sleep Talk bypasses the sleep gate
             if (owner.SleepTurnsLeft <= 0)
             {
                 owner.Status = StatusCondition.None;
@@ -22,7 +23,17 @@ namespace MonsterBattler.Sim.Effects.Statuses
                 ev.Battle.Log.Raw($"|-curestatus|{owner.Species?.Name ?? owner.Nickname}|slp");
                 return;
             }
-            owner.SleepTurnsLeft--;
+            // Early Bird wakes up twice as fast.
+            owner.SleepTurnsLeft -= owner.AbilityEffect is Abilities.EarlyBirdEffect ? 2 : 1;
+            if (owner.SleepTurnsLeft <= 0)
+            {
+                owner.Status = StatusCondition.None;
+                owner.StatusEffect = null;
+                ev.Battle.Log.Raw($"|-curestatus|{owner.Species?.Name ?? owner.Nickname}|slp");
+                return;
+            }
+            // Sleep Talk and Snore are usable while asleep.
+            if (ev.Move != null && (ev.Move.Id == "sleeptalk" || ev.Move.Id == "snore")) return;
             ev.Battle.Log.Raw($"|cant|{owner.Species?.Name ?? owner.Nickname}|slp");
             ev.Cancelled = true;
         }

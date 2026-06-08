@@ -25,7 +25,9 @@ for (const id of mv) {
   if (!ps) continue;
   const hasEffectId = ours && ours.effectId;
   if (ps.category === 'Status') {
-    if (hasEffectId) statusDone++; else statusMissing.push(id);
+    // Done if it has a custom effect OR is fully captured by data (self-boost setup moves are
+    // applied generically by the engine from selfBoosts).
+    if (hasEffectId || (ours && (ours.selfBoosts || ours.pivotsOut))) statusDone++; else statusMissing.push(id);
   } else {
     // damaging: needs custom code only if it has a meaningful secondary that the data-driven
     // secondary system doesn't already cover (status/boosts/self/non-flinch volatile).

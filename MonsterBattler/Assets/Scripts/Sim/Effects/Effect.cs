@@ -33,11 +33,14 @@ namespace MonsterBattler.Sim.Effects
         public virtual void OnModifySpe(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnModifyDamage(ModifyDamageEvent ev, Pokemon owner) { }
         public virtual void OnModifyAccuracy(ModifyAccuracyEvent ev, Pokemon owner) { }
+        public virtual void OnModifyPriority(ModifyPriorityEvent ev, Pokemon owner) { }
 
         // -------- Lifecycle --------
         public virtual void OnSwitchIn(SwitchInEvent ev, Pokemon owner) { }
         public virtual void OnSwitchOut(SwitchOutEvent ev, Pokemon owner) { }
         public virtual void OnFaint(FaintEvent ev, Pokemon owner) { }
+        /// <summary>Fires when one of the owner's stats was lowered by an opposing Pokemon (Defiant, Competitive).</summary>
+        public virtual void OnAfterStatLowered(StatModifyEvent ev, Pokemon owner) { }
         public virtual void OnTryStatus(TryStatusEvent ev, Pokemon owner) { }
 
         // -------- End-of-turn --------

@@ -49,13 +49,31 @@ namespace MonsterBattler.Sim
         public MoveCategory LastDamageCategory;
         public Pokemon LastDamageSource;
         public int LastDamageTurn = -1;
+        public bool LastDamageWasContact;
+        public bool ActedThisTurn;        // Analytic: has this mon already moved this turn?
+        public bool SwitchedInThisTurn;   // Stakeout: did this mon switch in this turn?
+        public bool ItemLost;             // Unburden: has this mon lost/consumed its held item?
 
         public MonType TeraType;
         public bool IsTerastallized;
 
+        // Protean / Libero / Color Change override the mon's types until it switches out.
+        public bool TypeOverridden;
+        public MonType OType1, OType2;
+
+        /// <summary>The mon's current battle types (Tera > Protean override > species).</summary>
+        public (MonType, MonType) CurrentTypes()
+        {
+            if (IsTerastallized) return (TeraType, MonType.None);
+            if (TypeOverridden) return (OType1, OType2);
+            return (Species != null ? Species.Type1 : MonType.None, Species != null ? Species.Type2 : MonType.None);
+        }
+
         public List<MoveSlot> Moves = new();
         public bool IsActive;
         public bool IsFainted => CurrentHp <= 0;
+        /// <summary>Set once this mon's faint has been logged + its KO reactions fired (avoids re-firing).</summary>
+        public bool FaintLogged;
 
         /// <summary>True if this Pokemon is currently holding the item with the given id.</summary>
         public bool HasItem(string itemId) => Item != null && Item.Id == itemId;

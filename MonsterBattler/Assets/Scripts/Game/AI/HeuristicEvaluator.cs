@@ -47,12 +47,13 @@ namespace MonsterBattler.Game.AI
                 list.Add(new ActionScore { Choice = Choice.UseMove(slot.Move.Id), Value = ScoreMove(battle, me, foe, slot.Move, meFaster) });
             }
 
-            for (int i = 0; i < own.Team.Count; i++)
-            {
-                var p = own.Team[i];
-                if (p == null || p == me || p.IsFainted) continue;
-                list.Add(new ActionScore { Choice = Choice.SwitchTo(i), Value = ScoreSwitch(me, p, foe) });
-            }
+            if (!battle.IsTrapped(me)) // a trapping ability removes switch options
+                for (int i = 0; i < own.Team.Count; i++)
+                {
+                    var p = own.Team[i];
+                    if (p == null || p == me || p.IsFainted) continue;
+                    list.Add(new ActionScore { Choice = Choice.SwitchTo(i), Value = ScoreSwitch(me, p, foe) });
+                }
 
             if (list.Count == 0 && me.Moves.Count > 0)
                 list.Add(new ActionScore { Choice = Choice.UseMove(me.Moves[0].Move.Id), Value = 0f });

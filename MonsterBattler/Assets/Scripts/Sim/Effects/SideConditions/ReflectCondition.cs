@@ -11,6 +11,7 @@ namespace MonsterBattler.Sim.Effects.SideConditions
         public override void OnModifyDamage(ModifyDamageEvent ev, Pokemon owner)
         {
             if (owner != ev.Target || ev.IsCrit || ev.Move == null) return;
+            if (ev.User?.AbilityEffect is Abilities.InfiltratorEffect) return; // Infiltrator ignores screens
             if (ev.Move.Category != MoveCategory.Physical) return;
             ev.Damage /= 2;
         }

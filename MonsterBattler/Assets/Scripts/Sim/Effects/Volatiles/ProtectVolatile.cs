@@ -16,6 +16,8 @@ namespace MonsterBattler.Sim.Effects.Volatiles
         {
             if (owner != ev.Target) return;
             if (ev.Move == null || !ev.Move.Protect) return;
+            // Unseen Fist: contact moves slip past Protect.
+            if (ev.Move.Contact && ev.User?.AbilityEffect is Abilities.UnseenFistEffect) return;
             ev.Blocked = true;
             ev.BlockReason = "Protect";
         }

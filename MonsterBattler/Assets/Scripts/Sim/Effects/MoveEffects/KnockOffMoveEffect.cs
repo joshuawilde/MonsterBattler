@@ -21,7 +21,7 @@ namespace MonsterBattler.Sim.Effects.MoveEffects
             var t = ev.Target;
             if (t == null || t.IsFainted || t.Item == null) return;
             ev.Battle.Log.Raw($"|-enditem|{t.Species?.Name ?? t.Nickname}|{t.Item.Name}|[from] move: Knock Off");
-            t.Item = null;
+            t.Item = null; t.ItemLost = true;
             t.ItemEffect = null;
         }
     }

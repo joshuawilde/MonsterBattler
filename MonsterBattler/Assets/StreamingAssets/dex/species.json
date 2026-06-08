@@ -16,7 +16,8 @@
     "abilities": [
       "overgrow",
       "chlorophyll"
-    ]
+    ],
+    "weightkg": 6.9
   },
   "ivysaur": {
     "name": "Ivysaur",
@@ -35,7 +36,8 @@
     "abilities": [
       "overgrow",
       "chlorophyll"
-    ]
+    ],
+    "weightkg": 13
   },
   "venusaur": {
     "name": "Venusaur",
@@ -54,7 +56,8 @@
     "abilities": [
       "overgrow",
       "chlorophyll"
-    ]
+    ],
+    "weightkg": 100
   },
   "charmander": {
     "name": "Charmander",
@@ -72,7 +75,8 @@
     "abilities": [
       "blaze",
       "solarpower"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "charmeleon": {
     "name": "Charmeleon",
@@ -90,7 +94,8 @@
     "abilities": [
       "blaze",
       "solarpower"
-    ]
+    ],
+    "weightkg": 19
   },
   "charizard": {
     "name": "Charizard",
@@ -109,7 +114,8 @@
     "abilities": [
       "blaze",
       "solarpower"
-    ]
+    ],
+    "weightkg": 90.5
   },
   "squirtle": {
     "name": "Squirtle",
@@ -127,7 +133,8 @@
     "abilities": [
       "torrent",
       "raindish"
-    ]
+    ],
+    "weightkg": 9
   },
   "wartortle": {
     "name": "Wartortle",
@@ -145,7 +152,8 @@
     "abilities": [
       "torrent",
       "raindish"
-    ]
+    ],
+    "weightkg": 22.5
   },
   "blastoise": {
     "name": "Blastoise",
@@ -163,7 +171,8 @@
     "abilities": [
       "torrent",
       "raindish"
-    ]
+    ],
+    "weightkg": 85.5
   },
   "ekans": {
     "name": "Ekans",
@@ -182,7 +191,8 @@
       "intimidate",
       "shedskin",
       "unnerve"
-    ]
+    ],
+    "weightkg": 6.9
   },
   "arbok": {
     "name": "Arbok",
@@ -201,7 +211,8 @@
       "intimidate",
       "shedskin",
       "unnerve"
-    ]
+    ],
+    "weightkg": 65
   },
   "pikachu": {
     "name": "Pikachu",
@@ -219,7 +230,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "pikachuoriginal": {
     "name": "Pikachu-Original",
@@ -237,7 +249,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "pikachuhoenn": {
     "name": "Pikachu-Hoenn",
@@ -255,7 +268,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "pikachusinnoh": {
     "name": "Pikachu-Sinnoh",
@@ -273,7 +287,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "pikachuunova": {
     "name": "Pikachu-Unova",
@@ -291,7 +306,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "pikachukalos": {
     "name": "Pikachu-Kalos",
@@ -309,7 +325,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "pikachualola": {
     "name": "Pikachu-Alola",
@@ -327,7 +344,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "pikachupartner": {
     "name": "Pikachu-Partner",
@@ -345,7 +363,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "pikachuworld": {
     "name": "Pikachu-World",
@@ -363,7 +382,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 6
   },
   "raichu": {
     "name": "Raichu",
@@ -381,7 +401,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 30
   },
   "raichualola": {
     "name": "Raichu-Alola",
@@ -399,7 +420,8 @@
     },
     "abilities": [
       "surgesurfer"
-    ]
+    ],
+    "weightkg": 21
   },
   "sandshrew": {
     "name": "Sandshrew",
@@ -417,7 +439,8 @@
     "abilities": [
       "sandveil",
       "sandrush"
-    ]
+    ],
+    "weightkg": 12
   },
   "sandshrewalola": {
     "name": "Sandshrew-Alola",
@@ -436,7 +459,8 @@
     "abilities": [
       "snowcloak",
       "slushrush"
-    ]
+    ],
+    "weightkg": 40
   },
   "sandslash": {
     "name": "Sandslash",
@@ -454,7 +478,8 @@
     "abilities": [
       "sandveil",
       "sandrush"
-    ]
+    ],
+    "weightkg": 29.5
   },
   "sandslashalola": {
     "name": "Sandslash-Alola",
@@ -473,7 +498,8 @@
     "abilities": [
       "snowcloak",
       "slushrush"
-    ]
+    ],
+    "weightkg": 55
   },
   "clefairy": {
     "name": "Clefairy",
@@ -492,7 +518,8 @@
       "cutecharm",
       "magicguard",
       "friendguard"
-    ]
+    ],
+    "weightkg": 7.5
   },
   "clefable": {
     "name": "Clefable",
@@ -511,7 +538,8 @@
       "cutecharm",
       "magicguard",
       "unaware"
-    ]
+    ],
+    "weightkg": 40
   },
   "vulpix": {
     "name": "Vulpix",
@@ -529,7 +557,8 @@
     "abilities": [
       "flashfire",
       "drought"
-    ]
+    ],
+    "weightkg": 9.9
   },
   "vulpixalola": {
     "name": "Vulpix-Alola",
@@ -547,7 +576,8 @@
     "abilities": [
       "snowcloak",
       "snowwarning"
-    ]
+    ],
+    "weightkg": 9.9
   },
   "ninetales": {
     "name": "Ninetales",
@@ -565,7 +595,8 @@
     "abilities": [
       "flashfire",
       "drought"
-    ]
+    ],
+    "weightkg": 19.9
   },
   "ninetalesalola": {
     "name": "Ninetales-Alola",
@@ -584,7 +615,8 @@
     "abilities": [
       "snowcloak",
       "snowwarning"
-    ]
+    ],
+    "weightkg": 19.9
   },
   "jigglypuff": {
     "name": "Jigglypuff",
@@ -604,7 +636,8 @@
       "cutecharm",
       "competitive",
       "friendguard"
-    ]
+    ],
+    "weightkg": 5.5
   },
   "wigglytuff": {
     "name": "Wigglytuff",
@@ -624,7 +657,8 @@
       "cutecharm",
       "competitive",
       "frisk"
-    ]
+    ],
+    "weightkg": 12
   },
   "oddish": {
     "name": "Oddish",
@@ -643,7 +677,8 @@
     "abilities": [
       "chlorophyll",
       "runaway"
-    ]
+    ],
+    "weightkg": 5.4
   },
   "gloom": {
     "name": "Gloom",
@@ -662,7 +697,8 @@
     "abilities": [
       "chlorophyll",
       "stench"
-    ]
+    ],
+    "weightkg": 8.6
   },
   "vileplume": {
     "name": "Vileplume",
@@ -681,7 +717,8 @@
     "abilities": [
       "chlorophyll",
       "effectspore"
-    ]
+    ],
+    "weightkg": 18.6
   },
   "venonat": {
     "name": "Venonat",
@@ -701,7 +738,8 @@
       "compoundeyes",
       "tintedlens",
       "runaway"
-    ]
+    ],
+    "weightkg": 30
   },
   "venomoth": {
     "name": "Venomoth",
@@ -721,7 +759,8 @@
       "shielddust",
       "tintedlens",
       "wonderskin"
-    ]
+    ],
+    "weightkg": 12.5
   },
   "diglett": {
     "name": "Diglett",
@@ -740,7 +779,8 @@
       "sandveil",
       "arenatrap",
       "sandforce"
-    ]
+    ],
+    "weightkg": 0.8
   },
   "diglettalola": {
     "name": "Diglett-Alola",
@@ -760,7 +800,8 @@
       "sandveil",
       "tanglinghair",
       "sandforce"
-    ]
+    ],
+    "weightkg": 1
   },
   "dugtrio": {
     "name": "Dugtrio",
@@ -779,7 +820,8 @@
       "sandveil",
       "arenatrap",
       "sandforce"
-    ]
+    ],
+    "weightkg": 33.3
   },
   "dugtrioalola": {
     "name": "Dugtrio-Alola",
@@ -799,7 +841,8 @@
       "sandveil",
       "tanglinghair",
       "sandforce"
-    ]
+    ],
+    "weightkg": 66.6
   },
   "meowth": {
     "name": "Meowth",
@@ -818,7 +861,8 @@
       "pickup",
       "technician",
       "unnerve"
-    ]
+    ],
+    "weightkg": 4.2
   },
   "meowthalola": {
     "name": "Meowth-Alola",
@@ -837,7 +881,8 @@
       "pickup",
       "technician",
       "rattled"
-    ]
+    ],
+    "weightkg": 4.2
   },
   "meowthgalar": {
     "name": "Meowth-Galar",
@@ -856,7 +901,8 @@
       "pickup",
       "toughclaws",
       "unnerve"
-    ]
+    ],
+    "weightkg": 7.5
   },
   "persian": {
     "name": "Persian",
@@ -875,7 +921,8 @@
       "limber",
       "technician",
       "unnerve"
-    ]
+    ],
+    "weightkg": 32
   },
   "persianalola": {
     "name": "Persian-Alola",
@@ -894,7 +941,8 @@
       "furcoat",
       "technician",
       "rattled"
-    ]
+    ],
+    "weightkg": 33
   },
   "psyduck": {
     "name": "Psyduck",
@@ -913,7 +961,8 @@
       "damp",
       "cloudnine",
       "swiftswim"
-    ]
+    ],
+    "weightkg": 19.6
   },
   "golduck": {
     "name": "Golduck",
@@ -932,7 +981,8 @@
       "damp",
       "cloudnine",
       "swiftswim"
-    ]
+    ],
+    "weightkg": 76.6
   },
   "mankey": {
     "name": "Mankey",
@@ -951,7 +1001,8 @@
       "vitalspirit",
       "angerpoint",
       "defiant"
-    ]
+    ],
+    "weightkg": 28
   },
   "primeape": {
     "name": "Primeape",
@@ -970,7 +1021,8 @@
       "vitalspirit",
       "angerpoint",
       "defiant"
-    ]
+    ],
+    "weightkg": 32
   },
   "growlithe": {
     "name": "Growlithe",
@@ -989,7 +1041,8 @@
       "intimidate",
       "flashfire",
       "justified"
-    ]
+    ],
+    "weightkg": 19
   },
   "growlithehisui": {
     "name": "Growlithe-Hisui",
@@ -1009,7 +1062,8 @@
       "intimidate",
       "flashfire",
       "rockhead"
-    ]
+    ],
+    "weightkg": 22.7
   },
   "arcanine": {
     "name": "Arcanine",
@@ -1028,7 +1082,8 @@
       "intimidate",
       "flashfire",
       "justified"
-    ]
+    ],
+    "weightkg": 155
   },
   "arcaninehisui": {
     "name": "Arcanine-Hisui",
@@ -1048,7 +1103,8 @@
       "intimidate",
       "flashfire",
       "rockhead"
-    ]
+    ],
+    "weightkg": 168
   },
   "poliwag": {
     "name": "Poliwag",
@@ -1067,7 +1123,8 @@
       "waterabsorb",
       "damp",
       "swiftswim"
-    ]
+    ],
+    "weightkg": 12.4
   },
   "poliwhirl": {
     "name": "Poliwhirl",
@@ -1086,7 +1143,8 @@
       "waterabsorb",
       "damp",
       "swiftswim"
-    ]
+    ],
+    "weightkg": 20
   },
   "poliwrath": {
     "name": "Poliwrath",
@@ -1106,7 +1164,8 @@
       "waterabsorb",
       "damp",
       "swiftswim"
-    ]
+    ],
+    "weightkg": 54
   },
   "bellsprout": {
     "name": "Bellsprout",
@@ -1125,7 +1184,8 @@
     "abilities": [
       "chlorophyll",
       "gluttony"
-    ]
+    ],
+    "weightkg": 4
   },
   "weepinbell": {
     "name": "Weepinbell",
@@ -1144,7 +1204,8 @@
     "abilities": [
       "chlorophyll",
       "gluttony"
-    ]
+    ],
+    "weightkg": 6.4
   },
   "victreebel": {
     "name": "Victreebel",
@@ -1163,7 +1224,8 @@
     "abilities": [
       "chlorophyll",
       "gluttony"
-    ]
+    ],
+    "weightkg": 15.5
   },
   "tentacool": {
     "name": "Tentacool",
@@ -1183,7 +1245,8 @@
       "clearbody",
       "liquidooze",
       "raindish"
-    ]
+    ],
+    "weightkg": 45.5
   },
   "tentacruel": {
     "name": "Tentacruel",
@@ -1203,7 +1266,8 @@
       "clearbody",
       "liquidooze",
       "raindish"
-    ]
+    ],
+    "weightkg": 55
   },
   "geodude": {
     "name": "Geodude",
@@ -1223,7 +1287,8 @@
       "rockhead",
       "sturdy",
       "sandveil"
-    ]
+    ],
+    "weightkg": 20
   },
   "geodudealola": {
     "name": "Geodude-Alola",
@@ -1243,7 +1308,8 @@
       "magnetpull",
       "sturdy",
       "galvanize"
-    ]
+    ],
+    "weightkg": 20.3
   },
   "graveler": {
     "name": "Graveler",
@@ -1263,7 +1329,8 @@
       "rockhead",
       "sturdy",
       "sandveil"
-    ]
+    ],
+    "weightkg": 105
   },
   "graveleralola": {
     "name": "Graveler-Alola",
@@ -1283,7 +1350,8 @@
       "magnetpull",
       "sturdy",
       "galvanize"
-    ]
+    ],
+    "weightkg": 110
   },
   "golem": {
     "name": "Golem",
@@ -1303,7 +1371,8 @@
       "rockhead",
       "sturdy",
       "sandveil"
-    ]
+    ],
+    "weightkg": 300
   },
   "golemalola": {
     "name": "Golem-Alola",
@@ -1323,7 +1392,8 @@
       "magnetpull",
       "sturdy",
       "galvanize"
-    ]
+    ],
+    "weightkg": 316
   },
   "slowpoke": {
     "name": "Slowpoke",
@@ -1343,7 +1413,8 @@
       "oblivious",
       "owntempo",
       "regenerator"
-    ]
+    ],
+    "weightkg": 36
   },
   "slowpokegalar": {
     "name": "Slowpoke-Galar",
@@ -1362,7 +1433,8 @@
       "gluttony",
       "owntempo",
       "regenerator"
-    ]
+    ],
+    "weightkg": 36
   },
   "slowbro": {
     "name": "Slowbro",
@@ -1382,7 +1454,8 @@
       "oblivious",
       "owntempo",
       "regenerator"
-    ]
+    ],
+    "weightkg": 78.5
   },
   "slowbrogalar": {
     "name": "Slowbro-Galar",
@@ -1402,7 +1475,8 @@
       "quickdraw",
       "owntempo",
       "regenerator"
-    ]
+    ],
+    "weightkg": 70.5
   },
   "magnemite": {
     "name": "Magnemite",
@@ -1422,7 +1496,8 @@
       "magnetpull",
       "sturdy",
       "analytic"
-    ]
+    ],
+    "weightkg": 6
   },
   "magneton": {
     "name": "Magneton",
@@ -1442,7 +1517,8 @@
       "magnetpull",
       "sturdy",
       "analytic"
-    ]
+    ],
+    "weightkg": 60
   },
   "doduo": {
     "name": "Doduo",
@@ -1462,7 +1538,8 @@
       "runaway",
       "earlybird",
       "tangledfeet"
-    ]
+    ],
+    "weightkg": 39.2
   },
   "dodrio": {
     "name": "Dodrio",
@@ -1482,7 +1559,8 @@
       "runaway",
       "earlybird",
       "tangledfeet"
-    ]
+    ],
+    "weightkg": 85.2
   },
   "seel": {
     "name": "Seel",
@@ -1501,7 +1579,8 @@
       "thickfat",
       "hydration",
       "icebody"
-    ]
+    ],
+    "weightkg": 90
   },
   "dewgong": {
     "name": "Dewgong",
@@ -1521,7 +1600,8 @@
       "thickfat",
       "hydration",
       "icebody"
-    ]
+    ],
+    "weightkg": 120
   },
   "grimer": {
     "name": "Grimer",
@@ -1540,7 +1620,8 @@
       "stench",
       "stickyhold",
       "poisontouch"
-    ]
+    ],
+    "weightkg": 30
   },
   "grimeralola": {
     "name": "Grimer-Alola",
@@ -1560,7 +1641,8 @@
       "poisontouch",
       "gluttony",
       "powerofalchemy"
-    ]
+    ],
+    "weightkg": 42
   },
   "muk": {
     "name": "Muk",
@@ -1579,7 +1661,8 @@
       "stench",
       "stickyhold",
       "poisontouch"
-    ]
+    ],
+    "weightkg": 30
   },
   "mukalola": {
     "name": "Muk-Alola",
@@ -1599,7 +1682,8 @@
       "poisontouch",
       "gluttony",
       "powerofalchemy"
-    ]
+    ],
+    "weightkg": 52
   },
   "shellder": {
     "name": "Shellder",
@@ -1618,7 +1702,8 @@
       "shellarmor",
       "skilllink",
       "overcoat"
-    ]
+    ],
+    "weightkg": 4
   },
   "cloyster": {
     "name": "Cloyster",
@@ -1638,7 +1723,8 @@
       "shellarmor",
       "skilllink",
       "overcoat"
-    ]
+    ],
+    "weightkg": 132.5
   },
   "gastly": {
     "name": "Gastly",
@@ -1656,7 +1742,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.1
   },
   "haunter": {
     "name": "Haunter",
@@ -1674,7 +1761,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.1
   },
   "gengar": {
     "name": "Gengar",
@@ -1692,7 +1780,8 @@
     },
     "abilities": [
       "cursedbody"
-    ]
+    ],
+    "weightkg": 40.5
   },
   "drowzee": {
     "name": "Drowzee",
@@ -1711,7 +1800,8 @@
       "insomnia",
       "forewarn",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 32.4
   },
   "hypno": {
     "name": "Hypno",
@@ -1730,7 +1820,8 @@
       "insomnia",
       "forewarn",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 75.6
   },
   "voltorb": {
     "name": "Voltorb",
@@ -1749,7 +1840,8 @@
       "soundproof",
       "static",
       "aftermath"
-    ]
+    ],
+    "weightkg": 10.4
   },
   "voltorbhisui": {
     "name": "Voltorb-Hisui",
@@ -1769,7 +1861,8 @@
       "soundproof",
       "static",
       "aftermath"
-    ]
+    ],
+    "weightkg": 13
   },
   "electrode": {
     "name": "Electrode",
@@ -1788,7 +1881,8 @@
       "soundproof",
       "static",
       "aftermath"
-    ]
+    ],
+    "weightkg": 66.6
   },
   "electrodehisui": {
     "name": "Electrode-Hisui",
@@ -1808,7 +1902,8 @@
       "soundproof",
       "static",
       "aftermath"
-    ]
+    ],
+    "weightkg": 71
   },
   "exeggcute": {
     "name": "Exeggcute",
@@ -1827,7 +1922,8 @@
     "abilities": [
       "chlorophyll",
       "harvest"
-    ]
+    ],
+    "weightkg": 2.5
   },
   "exeggutor": {
     "name": "Exeggutor",
@@ -1846,7 +1942,8 @@
     "abilities": [
       "chlorophyll",
       "harvest"
-    ]
+    ],
+    "weightkg": 120
   },
   "exeggutoralola": {
     "name": "Exeggutor-Alola",
@@ -1865,7 +1962,8 @@
     "abilities": [
       "frisk",
       "harvest"
-    ]
+    ],
+    "weightkg": 415.6
   },
   "hitmonlee": {
     "name": "Hitmonlee",
@@ -1884,7 +1982,8 @@
       "limber",
       "reckless",
       "unburden"
-    ]
+    ],
+    "weightkg": 49.8
   },
   "hitmonchan": {
     "name": "Hitmonchan",
@@ -1903,7 +2002,8 @@
       "keeneye",
       "ironfist",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 50.2
   },
   "koffing": {
     "name": "Koffing",
@@ -1922,7 +2022,8 @@
       "levitate",
       "neutralizinggas",
       "stench"
-    ]
+    ],
+    "weightkg": 1
   },
   "weezing": {
     "name": "Weezing",
@@ -1941,7 +2042,8 @@
       "levitate",
       "neutralizinggas",
       "stench"
-    ]
+    ],
+    "weightkg": 9.5
   },
   "weezinggalar": {
     "name": "Weezing-Galar",
@@ -1961,7 +2063,8 @@
       "levitate",
       "neutralizinggas",
       "mistysurge"
-    ]
+    ],
+    "weightkg": 16
   },
   "rhyhorn": {
     "name": "Rhyhorn",
@@ -1981,7 +2084,8 @@
       "lightningrod",
       "rockhead",
       "reckless"
-    ]
+    ],
+    "weightkg": 115
   },
   "rhydon": {
     "name": "Rhydon",
@@ -2001,7 +2105,8 @@
       "lightningrod",
       "rockhead",
       "reckless"
-    ]
+    ],
+    "weightkg": 120
   },
   "chansey": {
     "name": "Chansey",
@@ -2020,7 +2125,8 @@
       "naturalcure",
       "serenegrace",
       "healer"
-    ]
+    ],
+    "weightkg": 34.6
   },
   "horsea": {
     "name": "Horsea",
@@ -2039,7 +2145,8 @@
       "swiftswim",
       "sniper",
       "damp"
-    ]
+    ],
+    "weightkg": 8
   },
   "seadra": {
     "name": "Seadra",
@@ -2058,7 +2165,8 @@
       "poisonpoint",
       "sniper",
       "damp"
-    ]
+    ],
+    "weightkg": 25
   },
   "scyther": {
     "name": "Scyther",
@@ -2078,7 +2186,8 @@
       "swarm",
       "technician",
       "steadfast"
-    ]
+    ],
+    "weightkg": 56
   },
   "electabuzz": {
     "name": "Electabuzz",
@@ -2096,7 +2205,8 @@
     "abilities": [
       "static",
       "vitalspirit"
-    ]
+    ],
+    "weightkg": 30
   },
   "magmar": {
     "name": "Magmar",
@@ -2114,7 +2224,8 @@
     "abilities": [
       "flamebody",
       "vitalspirit"
-    ]
+    ],
+    "weightkg": 44.5
   },
   "tauros": {
     "name": "Tauros",
@@ -2133,7 +2244,8 @@
       "intimidate",
       "angerpoint",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 88.4
   },
   "taurospaldeacombat": {
     "name": "Tauros-Paldea-Combat",
@@ -2152,7 +2264,8 @@
       "intimidate",
       "angerpoint",
       "cudchew"
-    ]
+    ],
+    "weightkg": 115
   },
   "taurospaldeablaze": {
     "name": "Tauros-Paldea-Blaze",
@@ -2172,7 +2285,8 @@
       "intimidate",
       "angerpoint",
       "cudchew"
-    ]
+    ],
+    "weightkg": 85
   },
   "taurospaldeaaqua": {
     "name": "Tauros-Paldea-Aqua",
@@ -2192,7 +2306,8 @@
       "intimidate",
       "angerpoint",
       "cudchew"
-    ]
+    ],
+    "weightkg": 110
   },
   "magikarp": {
     "name": "Magikarp",
@@ -2210,7 +2325,8 @@
     "abilities": [
       "swiftswim",
       "rattled"
-    ]
+    ],
+    "weightkg": 10
   },
   "gyarados": {
     "name": "Gyarados",
@@ -2229,7 +2345,8 @@
     "abilities": [
       "intimidate",
       "moxie"
-    ]
+    ],
+    "weightkg": 235
   },
   "lapras": {
     "name": "Lapras",
@@ -2249,7 +2366,8 @@
       "waterabsorb",
       "shellarmor",
       "hydration"
-    ]
+    ],
+    "weightkg": 220
   },
   "ditto": {
     "name": "Ditto",
@@ -2267,7 +2385,8 @@
     "abilities": [
       "limber",
       "imposter"
-    ]
+    ],
+    "weightkg": 4
   },
   "eevee": {
     "name": "Eevee",
@@ -2286,7 +2405,8 @@
       "runaway",
       "adaptability",
       "anticipation"
-    ]
+    ],
+    "weightkg": 6.5
   },
   "vaporeon": {
     "name": "Vaporeon",
@@ -2304,7 +2424,8 @@
     "abilities": [
       "waterabsorb",
       "hydration"
-    ]
+    ],
+    "weightkg": 29
   },
   "jolteon": {
     "name": "Jolteon",
@@ -2322,7 +2443,8 @@
     "abilities": [
       "voltabsorb",
       "quickfeet"
-    ]
+    ],
+    "weightkg": 24.5
   },
   "flareon": {
     "name": "Flareon",
@@ -2340,7 +2462,8 @@
     "abilities": [
       "flashfire",
       "guts"
-    ]
+    ],
+    "weightkg": 25
   },
   "porygon": {
     "name": "Porygon",
@@ -2359,7 +2482,8 @@
       "trace",
       "download",
       "analytic"
-    ]
+    ],
+    "weightkg": 36.5
   },
   "snorlax": {
     "name": "Snorlax",
@@ -2378,7 +2502,8 @@
       "immunity",
       "thickfat",
       "gluttony"
-    ]
+    ],
+    "weightkg": 460
   },
   "articuno": {
     "name": "Articuno",
@@ -2397,7 +2522,8 @@
     "abilities": [
       "pressure",
       "snowcloak"
-    ]
+    ],
+    "weightkg": 55.4
   },
   "articunogalar": {
     "name": "Articuno-Galar",
@@ -2415,7 +2541,8 @@
     },
     "abilities": [
       "competitive"
-    ]
+    ],
+    "weightkg": 50.9
   },
   "zapdos": {
     "name": "Zapdos",
@@ -2434,7 +2561,8 @@
     "abilities": [
       "pressure",
       "static"
-    ]
+    ],
+    "weightkg": 52.6
   },
   "zapdosgalar": {
     "name": "Zapdos-Galar",
@@ -2452,7 +2580,8 @@
     },
     "abilities": [
       "defiant"
-    ]
+    ],
+    "weightkg": 58.2
   },
   "moltres": {
     "name": "Moltres",
@@ -2471,7 +2600,8 @@
     "abilities": [
       "pressure",
       "flamebody"
-    ]
+    ],
+    "weightkg": 60
   },
   "moltresgalar": {
     "name": "Moltres-Galar",
@@ -2489,7 +2619,8 @@
     },
     "abilities": [
       "berserk"
-    ]
+    ],
+    "weightkg": 66
   },
   "dratini": {
     "name": "Dratini",
@@ -2507,7 +2638,8 @@
     "abilities": [
       "shedskin",
       "marvelscale"
-    ]
+    ],
+    "weightkg": 3.3
   },
   "dragonair": {
     "name": "Dragonair",
@@ -2525,7 +2657,8 @@
     "abilities": [
       "shedskin",
       "marvelscale"
-    ]
+    ],
+    "weightkg": 16.5
   },
   "dragonite": {
     "name": "Dragonite",
@@ -2544,7 +2677,8 @@
     "abilities": [
       "innerfocus",
       "multiscale"
-    ]
+    ],
+    "weightkg": 210
   },
   "mewtwo": {
     "name": "Mewtwo",
@@ -2562,7 +2696,8 @@
     "abilities": [
       "pressure",
       "unnerve"
-    ]
+    ],
+    "weightkg": 122
   },
   "mew": {
     "name": "Mew",
@@ -2579,7 +2714,8 @@
     },
     "abilities": [
       "synchronize"
-    ]
+    ],
+    "weightkg": 4
   },
   "chikorita": {
     "name": "Chikorita",
@@ -2597,7 +2733,8 @@
     "abilities": [
       "overgrow",
       "leafguard"
-    ]
+    ],
+    "weightkg": 6.4
   },
   "bayleef": {
     "name": "Bayleef",
@@ -2615,7 +2752,8 @@
     "abilities": [
       "overgrow",
       "leafguard"
-    ]
+    ],
+    "weightkg": 15.8
   },
   "meganium": {
     "name": "Meganium",
@@ -2633,7 +2771,8 @@
     "abilities": [
       "overgrow",
       "leafguard"
-    ]
+    ],
+    "weightkg": 100.5
   },
   "cyndaquil": {
     "name": "Cyndaquil",
@@ -2651,7 +2790,8 @@
     "abilities": [
       "blaze",
       "flashfire"
-    ]
+    ],
+    "weightkg": 7.9
   },
   "quilava": {
     "name": "Quilava",
@@ -2669,7 +2809,8 @@
     "abilities": [
       "blaze",
       "flashfire"
-    ]
+    ],
+    "weightkg": 19
   },
   "typhlosion": {
     "name": "Typhlosion",
@@ -2687,7 +2828,8 @@
     "abilities": [
       "blaze",
       "flashfire"
-    ]
+    ],
+    "weightkg": 79.5
   },
   "typhlosionhisui": {
     "name": "Typhlosion-Hisui",
@@ -2706,7 +2848,8 @@
     "abilities": [
       "blaze",
       "frisk"
-    ]
+    ],
+    "weightkg": 69.8
   },
   "totodile": {
     "name": "Totodile",
@@ -2724,7 +2867,8 @@
     "abilities": [
       "torrent",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 9.5
   },
   "croconaw": {
     "name": "Croconaw",
@@ -2742,7 +2886,8 @@
     "abilities": [
       "torrent",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 25
   },
   "feraligatr": {
     "name": "Feraligatr",
@@ -2760,7 +2905,8 @@
     "abilities": [
       "torrent",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 88.8
   },
   "sentret": {
     "name": "Sentret",
@@ -2779,7 +2925,8 @@
       "runaway",
       "keeneye",
       "frisk"
-    ]
+    ],
+    "weightkg": 6
   },
   "furret": {
     "name": "Furret",
@@ -2798,7 +2945,8 @@
       "runaway",
       "keeneye",
       "frisk"
-    ]
+    ],
+    "weightkg": 32.5
   },
   "hoothoot": {
     "name": "Hoothoot",
@@ -2818,7 +2966,8 @@
       "insomnia",
       "keeneye",
       "tintedlens"
-    ]
+    ],
+    "weightkg": 21.2
   },
   "noctowl": {
     "name": "Noctowl",
@@ -2838,7 +2987,8 @@
       "insomnia",
       "keeneye",
       "tintedlens"
-    ]
+    ],
+    "weightkg": 40.8
   },
   "spinarak": {
     "name": "Spinarak",
@@ -2858,7 +3008,8 @@
       "swarm",
       "insomnia",
       "sniper"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "ariados": {
     "name": "Ariados",
@@ -2878,7 +3029,8 @@
       "swarm",
       "insomnia",
       "sniper"
-    ]
+    ],
+    "weightkg": 33.5
   },
   "chinchou": {
     "name": "Chinchou",
@@ -2898,7 +3050,8 @@
       "voltabsorb",
       "illuminate",
       "waterabsorb"
-    ]
+    ],
+    "weightkg": 12
   },
   "lanturn": {
     "name": "Lanturn",
@@ -2918,7 +3071,8 @@
       "voltabsorb",
       "illuminate",
       "waterabsorb"
-    ]
+    ],
+    "weightkg": 22.5
   },
   "pichu": {
     "name": "Pichu",
@@ -2936,7 +3090,8 @@
     "abilities": [
       "static",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 2
   },
   "cleffa": {
     "name": "Cleffa",
@@ -2955,7 +3110,8 @@
       "cutecharm",
       "magicguard",
       "friendguard"
-    ]
+    ],
+    "weightkg": 3
   },
   "igglybuff": {
     "name": "Igglybuff",
@@ -2975,7 +3131,8 @@
       "cutecharm",
       "competitive",
       "friendguard"
-    ]
+    ],
+    "weightkg": 1
   },
   "mareep": {
     "name": "Mareep",
@@ -2993,7 +3150,8 @@
     "abilities": [
       "static",
       "plus"
-    ]
+    ],
+    "weightkg": 7.8
   },
   "flaaffy": {
     "name": "Flaaffy",
@@ -3011,7 +3169,8 @@
     "abilities": [
       "static",
       "plus"
-    ]
+    ],
+    "weightkg": 13.3
   },
   "ampharos": {
     "name": "Ampharos",
@@ -3029,7 +3188,8 @@
     "abilities": [
       "static",
       "plus"
-    ]
+    ],
+    "weightkg": 61.5
   },
   "bellossom": {
     "name": "Bellossom",
@@ -3047,7 +3207,8 @@
     "abilities": [
       "chlorophyll",
       "healer"
-    ]
+    ],
+    "weightkg": 5.8
   },
   "marill": {
     "name": "Marill",
@@ -3067,7 +3228,8 @@
       "thickfat",
       "hugepower",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "azumarill": {
     "name": "Azumarill",
@@ -3087,7 +3249,8 @@
       "thickfat",
       "hugepower",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 28.5
   },
   "sudowoodo": {
     "name": "Sudowoodo",
@@ -3106,7 +3269,8 @@
       "sturdy",
       "rockhead",
       "rattled"
-    ]
+    ],
+    "weightkg": 38
   },
   "politoed": {
     "name": "Politoed",
@@ -3125,7 +3289,8 @@
       "waterabsorb",
       "damp",
       "drizzle"
-    ]
+    ],
+    "weightkg": 33.9
   },
   "hoppip": {
     "name": "Hoppip",
@@ -3145,7 +3310,8 @@
       "chlorophyll",
       "leafguard",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 0.5
   },
   "skiploom": {
     "name": "Skiploom",
@@ -3165,7 +3331,8 @@
       "chlorophyll",
       "leafguard",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 1
   },
   "jumpluff": {
     "name": "Jumpluff",
@@ -3185,7 +3352,8 @@
       "chlorophyll",
       "leafguard",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 3
   },
   "aipom": {
     "name": "Aipom",
@@ -3204,7 +3372,8 @@
       "runaway",
       "pickup",
       "skilllink"
-    ]
+    ],
+    "weightkg": 11.5
   },
   "sunkern": {
     "name": "Sunkern",
@@ -3223,7 +3392,8 @@
       "chlorophyll",
       "solarpower",
       "earlybird"
-    ]
+    ],
+    "weightkg": 1.8
   },
   "sunflora": {
     "name": "Sunflora",
@@ -3242,7 +3412,8 @@
       "chlorophyll",
       "solarpower",
       "earlybird"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "yanma": {
     "name": "Yanma",
@@ -3262,7 +3433,8 @@
       "speedboost",
       "compoundeyes",
       "frisk"
-    ]
+    ],
+    "weightkg": 38
   },
   "wooper": {
     "name": "Wooper",
@@ -3282,7 +3454,8 @@
       "damp",
       "waterabsorb",
       "unaware"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "wooperpaldea": {
     "name": "Wooper-Paldea",
@@ -3302,7 +3475,8 @@
       "poisonpoint",
       "waterabsorb",
       "unaware"
-    ]
+    ],
+    "weightkg": 11
   },
   "quagsire": {
     "name": "Quagsire",
@@ -3322,7 +3496,8 @@
       "damp",
       "waterabsorb",
       "unaware"
-    ]
+    ],
+    "weightkg": 75
   },
   "espeon": {
     "name": "Espeon",
@@ -3340,7 +3515,8 @@
     "abilities": [
       "synchronize",
       "magicbounce"
-    ]
+    ],
+    "weightkg": 26.5
   },
   "umbreon": {
     "name": "Umbreon",
@@ -3358,7 +3534,8 @@
     "abilities": [
       "synchronize",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 27
   },
   "murkrow": {
     "name": "Murkrow",
@@ -3378,7 +3555,8 @@
       "insomnia",
       "superluck",
       "prankster"
-    ]
+    ],
+    "weightkg": 2.1
   },
   "slowking": {
     "name": "Slowking",
@@ -3398,7 +3576,8 @@
       "oblivious",
       "owntempo",
       "regenerator"
-    ]
+    ],
+    "weightkg": 79.5
   },
   "slowkinggalar": {
     "name": "Slowking-Galar",
@@ -3418,7 +3597,8 @@
       "curiousmedicine",
       "owntempo",
       "regenerator"
-    ]
+    ],
+    "weightkg": 79.5
   },
   "misdreavus": {
     "name": "Misdreavus",
@@ -3435,7 +3615,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 1
   },
   "girafarig": {
     "name": "Girafarig",
@@ -3455,7 +3636,8 @@
       "innerfocus",
       "earlybird",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 41.5
   },
   "pineco": {
     "name": "Pineco",
@@ -3473,7 +3655,8 @@
     "abilities": [
       "sturdy",
       "overcoat"
-    ]
+    ],
+    "weightkg": 7.2
   },
   "forretress": {
     "name": "Forretress",
@@ -3492,7 +3675,8 @@
     "abilities": [
       "sturdy",
       "overcoat"
-    ]
+    ],
+    "weightkg": 125.8
   },
   "dunsparce": {
     "name": "Dunsparce",
@@ -3511,7 +3695,8 @@
       "serenegrace",
       "runaway",
       "rattled"
-    ]
+    ],
+    "weightkg": 14
   },
   "gligar": {
     "name": "Gligar",
@@ -3531,7 +3716,8 @@
       "hypercutter",
       "sandveil",
       "immunity"
-    ]
+    ],
+    "weightkg": 64.8
   },
   "snubbull": {
     "name": "Snubbull",
@@ -3550,7 +3736,8 @@
       "intimidate",
       "runaway",
       "rattled"
-    ]
+    ],
+    "weightkg": 7.8
   },
   "granbull": {
     "name": "Granbull",
@@ -3569,7 +3756,8 @@
       "intimidate",
       "quickfeet",
       "rattled"
-    ]
+    ],
+    "weightkg": 48.7
   },
   "qwilfish": {
     "name": "Qwilfish",
@@ -3589,7 +3777,8 @@
       "poisonpoint",
       "swiftswim",
       "intimidate"
-    ]
+    ],
+    "weightkg": 3.9
   },
   "qwilfishhisui": {
     "name": "Qwilfish-Hisui",
@@ -3609,7 +3798,8 @@
       "poisonpoint",
       "swiftswim",
       "intimidate"
-    ]
+    ],
+    "weightkg": 3.9
   },
   "scizor": {
     "name": "Scizor",
@@ -3629,7 +3819,8 @@
       "swarm",
       "technician",
       "lightmetal"
-    ]
+    ],
+    "weightkg": 118
   },
   "heracross": {
     "name": "Heracross",
@@ -3649,7 +3840,8 @@
       "swarm",
       "guts",
       "moxie"
-    ]
+    ],
+    "weightkg": 54
   },
   "sneasel": {
     "name": "Sneasel",
@@ -3669,7 +3861,8 @@
       "innerfocus",
       "keeneye",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 28
   },
   "sneaselhisui": {
     "name": "Sneasel-Hisui",
@@ -3689,7 +3882,8 @@
       "innerfocus",
       "keeneye",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 27
   },
   "teddiursa": {
     "name": "Teddiursa",
@@ -3708,7 +3902,8 @@
       "pickup",
       "quickfeet",
       "honeygather"
-    ]
+    ],
+    "weightkg": 8.8
   },
   "ursaring": {
     "name": "Ursaring",
@@ -3727,7 +3922,8 @@
       "guts",
       "quickfeet",
       "unnerve"
-    ]
+    ],
+    "weightkg": 125.8
   },
   "slugma": {
     "name": "Slugma",
@@ -3746,7 +3942,8 @@
       "magmaarmor",
       "flamebody",
       "weakarmor"
-    ]
+    ],
+    "weightkg": 35
   },
   "magcargo": {
     "name": "Magcargo",
@@ -3766,7 +3963,8 @@
       "magmaarmor",
       "flamebody",
       "weakarmor"
-    ]
+    ],
+    "weightkg": 55
   },
   "swinub": {
     "name": "Swinub",
@@ -3786,7 +3984,8 @@
       "oblivious",
       "snowcloak",
       "thickfat"
-    ]
+    ],
+    "weightkg": 6.5
   },
   "piloswine": {
     "name": "Piloswine",
@@ -3806,7 +4005,8 @@
       "oblivious",
       "snowcloak",
       "thickfat"
-    ]
+    ],
+    "weightkg": 55.8
   },
   "delibird": {
     "name": "Delibird",
@@ -3826,7 +4026,8 @@
       "vitalspirit",
       "hustle",
       "insomnia"
-    ]
+    ],
+    "weightkg": 16
   },
   "skarmory": {
     "name": "Skarmory",
@@ -3846,7 +4047,8 @@
       "keeneye",
       "sturdy",
       "weakarmor"
-    ]
+    ],
+    "weightkg": 50.5
   },
   "houndour": {
     "name": "Houndour",
@@ -3866,7 +4068,8 @@
       "earlybird",
       "flashfire",
       "unnerve"
-    ]
+    ],
+    "weightkg": 10.8
   },
   "houndoom": {
     "name": "Houndoom",
@@ -3886,7 +4089,8 @@
       "earlybird",
       "flashfire",
       "unnerve"
-    ]
+    ],
+    "weightkg": 35
   },
   "kingdra": {
     "name": "Kingdra",
@@ -3906,7 +4110,8 @@
       "swiftswim",
       "sniper",
       "damp"
-    ]
+    ],
+    "weightkg": 152
   },
   "phanpy": {
     "name": "Phanpy",
@@ -3924,7 +4129,8 @@
     "abilities": [
       "pickup",
       "sandveil"
-    ]
+    ],
+    "weightkg": 33.5
   },
   "donphan": {
     "name": "Donphan",
@@ -3942,7 +4148,8 @@
     "abilities": [
       "sturdy",
       "sandveil"
-    ]
+    ],
+    "weightkg": 120
   },
   "porygon2": {
     "name": "Porygon2",
@@ -3961,7 +4168,8 @@
       "trace",
       "download",
       "analytic"
-    ]
+    ],
+    "weightkg": 32.5
   },
   "stantler": {
     "name": "Stantler",
@@ -3980,7 +4188,8 @@
       "intimidate",
       "frisk",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 71.2
   },
   "smeargle": {
     "name": "Smeargle",
@@ -3999,7 +4208,8 @@
       "owntempo",
       "technician",
       "moody"
-    ]
+    ],
+    "weightkg": 58
   },
   "tyrogue": {
     "name": "Tyrogue",
@@ -4018,7 +4228,8 @@
       "guts",
       "steadfast",
       "vitalspirit"
-    ]
+    ],
+    "weightkg": 21
   },
   "hitmontop": {
     "name": "Hitmontop",
@@ -4037,7 +4248,8 @@
       "intimidate",
       "technician",
       "steadfast"
-    ]
+    ],
+    "weightkg": 48
   },
   "elekid": {
     "name": "Elekid",
@@ -4055,7 +4267,8 @@
     "abilities": [
       "static",
       "vitalspirit"
-    ]
+    ],
+    "weightkg": 23.5
   },
   "magby": {
     "name": "Magby",
@@ -4073,7 +4286,8 @@
     "abilities": [
       "flamebody",
       "vitalspirit"
-    ]
+    ],
+    "weightkg": 21.4
   },
   "blissey": {
     "name": "Blissey",
@@ -4092,7 +4306,8 @@
       "naturalcure",
       "serenegrace",
       "healer"
-    ]
+    ],
+    "weightkg": 46.8
   },
   "raikou": {
     "name": "Raikou",
@@ -4110,7 +4325,8 @@
     "abilities": [
       "pressure",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 178
   },
   "entei": {
     "name": "Entei",
@@ -4128,7 +4344,8 @@
     "abilities": [
       "pressure",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 198
   },
   "suicune": {
     "name": "Suicune",
@@ -4146,7 +4363,8 @@
     "abilities": [
       "pressure",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 187
   },
   "larvitar": {
     "name": "Larvitar",
@@ -4165,7 +4383,8 @@
     "abilities": [
       "guts",
       "sandveil"
-    ]
+    ],
+    "weightkg": 72
   },
   "pupitar": {
     "name": "Pupitar",
@@ -4183,7 +4402,8 @@
     },
     "abilities": [
       "shedskin"
-    ]
+    ],
+    "weightkg": 152
   },
   "tyranitar": {
     "name": "Tyranitar",
@@ -4202,7 +4422,8 @@
     "abilities": [
       "sandstream",
       "unnerve"
-    ]
+    ],
+    "weightkg": 202
   },
   "lugia": {
     "name": "Lugia",
@@ -4221,7 +4442,8 @@
     "abilities": [
       "pressure",
       "multiscale"
-    ]
+    ],
+    "weightkg": 216
   },
   "hooh": {
     "name": "Ho-Oh",
@@ -4240,7 +4462,8 @@
     "abilities": [
       "pressure",
       "regenerator"
-    ]
+    ],
+    "weightkg": 199
   },
   "treecko": {
     "name": "Treecko",
@@ -4258,7 +4481,8 @@
     "abilities": [
       "overgrow",
       "unburden"
-    ]
+    ],
+    "weightkg": 5
   },
   "grovyle": {
     "name": "Grovyle",
@@ -4276,7 +4500,8 @@
     "abilities": [
       "overgrow",
       "unburden"
-    ]
+    ],
+    "weightkg": 21.6
   },
   "sceptile": {
     "name": "Sceptile",
@@ -4294,7 +4519,8 @@
     "abilities": [
       "overgrow",
       "unburden"
-    ]
+    ],
+    "weightkg": 52.2
   },
   "torchic": {
     "name": "Torchic",
@@ -4312,7 +4538,8 @@
     "abilities": [
       "blaze",
       "speedboost"
-    ]
+    ],
+    "weightkg": 2.5
   },
   "combusken": {
     "name": "Combusken",
@@ -4331,7 +4558,8 @@
     "abilities": [
       "blaze",
       "speedboost"
-    ]
+    ],
+    "weightkg": 19.5
   },
   "blaziken": {
     "name": "Blaziken",
@@ -4350,7 +4578,8 @@
     "abilities": [
       "blaze",
       "speedboost"
-    ]
+    ],
+    "weightkg": 52
   },
   "mudkip": {
     "name": "Mudkip",
@@ -4368,7 +4597,8 @@
     "abilities": [
       "torrent",
       "damp"
-    ]
+    ],
+    "weightkg": 7.6
   },
   "marshtomp": {
     "name": "Marshtomp",
@@ -4387,7 +4617,8 @@
     "abilities": [
       "torrent",
       "damp"
-    ]
+    ],
+    "weightkg": 28
   },
   "swampert": {
     "name": "Swampert",
@@ -4406,7 +4637,8 @@
     "abilities": [
       "torrent",
       "damp"
-    ]
+    ],
+    "weightkg": 81.9
   },
   "poochyena": {
     "name": "Poochyena",
@@ -4425,7 +4657,8 @@
       "runaway",
       "quickfeet",
       "rattled"
-    ]
+    ],
+    "weightkg": 13.6
   },
   "mightyena": {
     "name": "Mightyena",
@@ -4444,7 +4677,8 @@
       "intimidate",
       "quickfeet",
       "moxie"
-    ]
+    ],
+    "weightkg": 37
   },
   "lotad": {
     "name": "Lotad",
@@ -4464,7 +4698,8 @@
       "swiftswim",
       "raindish",
       "owntempo"
-    ]
+    ],
+    "weightkg": 2.6
   },
   "lombre": {
     "name": "Lombre",
@@ -4484,7 +4719,8 @@
       "swiftswim",
       "raindish",
       "owntempo"
-    ]
+    ],
+    "weightkg": 32.5
   },
   "ludicolo": {
     "name": "Ludicolo",
@@ -4504,7 +4740,8 @@
       "swiftswim",
       "raindish",
       "owntempo"
-    ]
+    ],
+    "weightkg": 55
   },
   "seedot": {
     "name": "Seedot",
@@ -4523,7 +4760,8 @@
       "chlorophyll",
       "earlybird",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 4
   },
   "nuzleaf": {
     "name": "Nuzleaf",
@@ -4543,7 +4781,8 @@
       "chlorophyll",
       "earlybird",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 28
   },
   "shiftry": {
     "name": "Shiftry",
@@ -4563,7 +4802,8 @@
       "chlorophyll",
       "windrider",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 59.6
   },
   "wingull": {
     "name": "Wingull",
@@ -4583,7 +4823,8 @@
       "keeneye",
       "hydration",
       "raindish"
-    ]
+    ],
+    "weightkg": 9.5
   },
   "pelipper": {
     "name": "Pelipper",
@@ -4603,7 +4844,8 @@
       "keeneye",
       "drizzle",
       "raindish"
-    ]
+    ],
+    "weightkg": 28
   },
   "ralts": {
     "name": "Ralts",
@@ -4623,7 +4865,8 @@
       "synchronize",
       "trace",
       "telepathy"
-    ]
+    ],
+    "weightkg": 6.6
   },
   "kirlia": {
     "name": "Kirlia",
@@ -4643,7 +4886,8 @@
       "synchronize",
       "trace",
       "telepathy"
-    ]
+    ],
+    "weightkg": 20.2
   },
   "gardevoir": {
     "name": "Gardevoir",
@@ -4663,7 +4907,8 @@
       "synchronize",
       "trace",
       "telepathy"
-    ]
+    ],
+    "weightkg": 48.4
   },
   "surskit": {
     "name": "Surskit",
@@ -4682,7 +4927,8 @@
     "abilities": [
       "swiftswim",
       "raindish"
-    ]
+    ],
+    "weightkg": 1.7
   },
   "masquerain": {
     "name": "Masquerain",
@@ -4701,7 +4947,8 @@
     "abilities": [
       "intimidate",
       "unnerve"
-    ]
+    ],
+    "weightkg": 3.6
   },
   "shroomish": {
     "name": "Shroomish",
@@ -4720,7 +4967,8 @@
       "effectspore",
       "poisonheal",
       "quickfeet"
-    ]
+    ],
+    "weightkg": 4.5
   },
   "breloom": {
     "name": "Breloom",
@@ -4740,7 +4988,8 @@
       "effectspore",
       "poisonheal",
       "technician"
-    ]
+    ],
+    "weightkg": 39.2
   },
   "slakoth": {
     "name": "Slakoth",
@@ -4757,7 +5006,8 @@
     },
     "abilities": [
       "truant"
-    ]
+    ],
+    "weightkg": 24
   },
   "vigoroth": {
     "name": "Vigoroth",
@@ -4774,7 +5024,8 @@
     },
     "abilities": [
       "vitalspirit"
-    ]
+    ],
+    "weightkg": 46.5
   },
   "slaking": {
     "name": "Slaking",
@@ -4791,7 +5042,8 @@
     },
     "abilities": [
       "truant"
-    ]
+    ],
+    "weightkg": 130.5
   },
   "makuhita": {
     "name": "Makuhita",
@@ -4810,7 +5062,8 @@
       "thickfat",
       "guts",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 86.4
   },
   "hariyama": {
     "name": "Hariyama",
@@ -4829,7 +5082,8 @@
       "thickfat",
       "guts",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 253.8
   },
   "azurill": {
     "name": "Azurill",
@@ -4849,7 +5103,8 @@
       "thickfat",
       "hugepower",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 2
   },
   "nosepass": {
     "name": "Nosepass",
@@ -4868,7 +5123,8 @@
       "sturdy",
       "magnetpull",
       "sandforce"
-    ]
+    ],
+    "weightkg": 97
   },
   "sableye": {
     "name": "Sableye",
@@ -4888,7 +5144,8 @@
       "keeneye",
       "stall",
       "prankster"
-    ]
+    ],
+    "weightkg": 11
   },
   "meditite": {
     "name": "Meditite",
@@ -4907,7 +5164,8 @@
     "abilities": [
       "purepower",
       "telepathy"
-    ]
+    ],
+    "weightkg": 11.2
   },
   "medicham": {
     "name": "Medicham",
@@ -4926,7 +5184,8 @@
     "abilities": [
       "purepower",
       "telepathy"
-    ]
+    ],
+    "weightkg": 31.5
   },
   "plusle": {
     "name": "Plusle",
@@ -4944,7 +5203,8 @@
     "abilities": [
       "plus",
       "lightningrod"
-    ]
+    ],
+    "weightkg": 4.2
   },
   "minun": {
     "name": "Minun",
@@ -4962,7 +5222,8 @@
     "abilities": [
       "minus",
       "voltabsorb"
-    ]
+    ],
+    "weightkg": 4.2
   },
   "volbeat": {
     "name": "Volbeat",
@@ -4981,7 +5242,8 @@
       "illuminate",
       "swarm",
       "prankster"
-    ]
+    ],
+    "weightkg": 17.7
   },
   "illumise": {
     "name": "Illumise",
@@ -5000,7 +5262,8 @@
       "oblivious",
       "tintedlens",
       "prankster"
-    ]
+    ],
+    "weightkg": 17.7
   },
   "gulpin": {
     "name": "Gulpin",
@@ -5019,7 +5282,8 @@
       "liquidooze",
       "stickyhold",
       "gluttony"
-    ]
+    ],
+    "weightkg": 10.3
   },
   "swalot": {
     "name": "Swalot",
@@ -5038,7 +5302,8 @@
       "liquidooze",
       "stickyhold",
       "gluttony"
-    ]
+    ],
+    "weightkg": 80
   },
   "numel": {
     "name": "Numel",
@@ -5058,7 +5323,8 @@
       "oblivious",
       "simple",
       "owntempo"
-    ]
+    ],
+    "weightkg": 24
   },
   "camerupt": {
     "name": "Camerupt",
@@ -5078,7 +5344,8 @@
       "magmaarmor",
       "solidrock",
       "angerpoint"
-    ]
+    ],
+    "weightkg": 220
   },
   "torkoal": {
     "name": "Torkoal",
@@ -5097,7 +5364,8 @@
       "whitesmoke",
       "drought",
       "shellarmor"
-    ]
+    ],
+    "weightkg": 80.4
   },
   "spoink": {
     "name": "Spoink",
@@ -5116,7 +5384,8 @@
       "thickfat",
       "owntempo",
       "gluttony"
-    ]
+    ],
+    "weightkg": 30.6
   },
   "grumpig": {
     "name": "Grumpig",
@@ -5135,7 +5404,8 @@
       "thickfat",
       "owntempo",
       "gluttony"
-    ]
+    ],
+    "weightkg": 71.5
   },
   "trapinch": {
     "name": "Trapinch",
@@ -5154,7 +5424,8 @@
       "hypercutter",
       "arenatrap",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 15
   },
   "vibrava": {
     "name": "Vibrava",
@@ -5172,7 +5443,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 15.3
   },
   "flygon": {
     "name": "Flygon",
@@ -5190,7 +5462,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 82
   },
   "cacnea": {
     "name": "Cacnea",
@@ -5208,7 +5481,8 @@
     "abilities": [
       "sandveil",
       "waterabsorb"
-    ]
+    ],
+    "weightkg": 51.3
   },
   "cacturne": {
     "name": "Cacturne",
@@ -5227,7 +5501,8 @@
     "abilities": [
       "sandveil",
       "waterabsorb"
-    ]
+    ],
+    "weightkg": 77.4
   },
   "swablu": {
     "name": "Swablu",
@@ -5246,7 +5521,8 @@
     "abilities": [
       "naturalcure",
       "cloudnine"
-    ]
+    ],
+    "weightkg": 1.2
   },
   "altaria": {
     "name": "Altaria",
@@ -5265,7 +5541,8 @@
     "abilities": [
       "naturalcure",
       "cloudnine"
-    ]
+    ],
+    "weightkg": 20.6
   },
   "zangoose": {
     "name": "Zangoose",
@@ -5283,7 +5560,8 @@
     "abilities": [
       "immunity",
       "toxicboost"
-    ]
+    ],
+    "weightkg": 40.3
   },
   "seviper": {
     "name": "Seviper",
@@ -5301,7 +5579,8 @@
     "abilities": [
       "shedskin",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 52.5
   },
   "barboach": {
     "name": "Barboach",
@@ -5321,7 +5600,8 @@
       "oblivious",
       "anticipation",
       "hydration"
-    ]
+    ],
+    "weightkg": 1.9
   },
   "whiscash": {
     "name": "Whiscash",
@@ -5341,7 +5621,8 @@
       "oblivious",
       "anticipation",
       "hydration"
-    ]
+    ],
+    "weightkg": 23.6
   },
   "corphish": {
     "name": "Corphish",
@@ -5360,7 +5641,8 @@
       "hypercutter",
       "shellarmor",
       "adaptability"
-    ]
+    ],
+    "weightkg": 11.5
   },
   "crawdaunt": {
     "name": "Crawdaunt",
@@ -5380,7 +5662,8 @@
       "hypercutter",
       "shellarmor",
       "adaptability"
-    ]
+    ],
+    "weightkg": 32.8
   },
   "feebas": {
     "name": "Feebas",
@@ -5399,7 +5682,8 @@
       "swiftswim",
       "oblivious",
       "adaptability"
-    ]
+    ],
+    "weightkg": 7.4
   },
   "milotic": {
     "name": "Milotic",
@@ -5418,7 +5702,8 @@
       "marvelscale",
       "competitive",
       "cutecharm"
-    ]
+    ],
+    "weightkg": 162
   },
   "shuppet": {
     "name": "Shuppet",
@@ -5437,7 +5722,8 @@
       "insomnia",
       "frisk",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 2.3
   },
   "banette": {
     "name": "Banette",
@@ -5456,7 +5742,8 @@
       "insomnia",
       "frisk",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 12.5
   },
   "duskull": {
     "name": "Duskull",
@@ -5474,7 +5761,8 @@
     "abilities": [
       "levitate",
       "frisk"
-    ]
+    ],
+    "weightkg": 15
   },
   "dusclops": {
     "name": "Dusclops",
@@ -5492,7 +5780,8 @@
     "abilities": [
       "pressure",
       "frisk"
-    ]
+    ],
+    "weightkg": 30.6
   },
   "tropius": {
     "name": "Tropius",
@@ -5512,7 +5801,8 @@
       "chlorophyll",
       "solarpower",
       "harvest"
-    ]
+    ],
+    "weightkg": 100
   },
   "chimecho": {
     "name": "Chimecho",
@@ -5529,7 +5819,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 1
   },
   "snorunt": {
     "name": "Snorunt",
@@ -5548,7 +5839,8 @@
       "innerfocus",
       "icebody",
       "moody"
-    ]
+    ],
+    "weightkg": 16.8
   },
   "glalie": {
     "name": "Glalie",
@@ -5567,7 +5859,8 @@
       "innerfocus",
       "icebody",
       "moody"
-    ]
+    ],
+    "weightkg": 256.5
   },
   "luvdisc": {
     "name": "Luvdisc",
@@ -5585,7 +5878,8 @@
     "abilities": [
       "swiftswim",
       "hydration"
-    ]
+    ],
+    "weightkg": 8.7
   },
   "bagon": {
     "name": "Bagon",
@@ -5603,7 +5897,8 @@
     "abilities": [
       "rockhead",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 42.1
   },
   "shelgon": {
     "name": "Shelgon",
@@ -5621,7 +5916,8 @@
     "abilities": [
       "rockhead",
       "overcoat"
-    ]
+    ],
+    "weightkg": 110.5
   },
   "salamence": {
     "name": "Salamence",
@@ -5640,7 +5936,8 @@
     "abilities": [
       "intimidate",
       "moxie"
-    ]
+    ],
+    "weightkg": 102.6
   },
   "beldum": {
     "name": "Beldum",
@@ -5659,7 +5956,8 @@
     "abilities": [
       "clearbody",
       "lightmetal"
-    ]
+    ],
+    "weightkg": 95.2
   },
   "metang": {
     "name": "Metang",
@@ -5678,7 +5976,8 @@
     "abilities": [
       "clearbody",
       "lightmetal"
-    ]
+    ],
+    "weightkg": 202.5
   },
   "metagross": {
     "name": "Metagross",
@@ -5697,7 +5996,8 @@
     "abilities": [
       "clearbody",
       "lightmetal"
-    ]
+    ],
+    "weightkg": 550
   },
   "regirock": {
     "name": "Regirock",
@@ -5715,7 +6015,8 @@
     "abilities": [
       "clearbody",
       "sturdy"
-    ]
+    ],
+    "weightkg": 230
   },
   "regice": {
     "name": "Regice",
@@ -5733,7 +6034,8 @@
     "abilities": [
       "clearbody",
       "icebody"
-    ]
+    ],
+    "weightkg": 175
   },
   "registeel": {
     "name": "Registeel",
@@ -5751,7 +6053,8 @@
     "abilities": [
       "clearbody",
       "lightmetal"
-    ]
+    ],
+    "weightkg": 205
   },
   "latias": {
     "name": "Latias",
@@ -5769,7 +6072,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 40
   },
   "latios": {
     "name": "Latios",
@@ -5787,7 +6091,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 60
   },
   "kyogre": {
     "name": "Kyogre",
@@ -5804,7 +6109,8 @@
     },
     "abilities": [
       "drizzle"
-    ]
+    ],
+    "weightkg": 352
   },
   "groudon": {
     "name": "Groudon",
@@ -5821,7 +6127,8 @@
     },
     "abilities": [
       "drought"
-    ]
+    ],
+    "weightkg": 950
   },
   "rayquaza": {
     "name": "Rayquaza",
@@ -5839,7 +6146,8 @@
     },
     "abilities": [
       "airlock"
-    ]
+    ],
+    "weightkg": 206.5
   },
   "jirachi": {
     "name": "Jirachi",
@@ -5857,7 +6165,8 @@
     },
     "abilities": [
       "serenegrace"
-    ]
+    ],
+    "weightkg": 1.1
   },
   "deoxys": {
     "name": "Deoxys",
@@ -5874,7 +6183,8 @@
     },
     "abilities": [
       "pressure"
-    ]
+    ],
+    "weightkg": 60.8
   },
   "deoxysattack": {
     "name": "Deoxys-Attack",
@@ -5891,7 +6201,8 @@
     },
     "abilities": [
       "pressure"
-    ]
+    ],
+    "weightkg": 60.8
   },
   "deoxysdefense": {
     "name": "Deoxys-Defense",
@@ -5908,7 +6219,8 @@
     },
     "abilities": [
       "pressure"
-    ]
+    ],
+    "weightkg": 60.8
   },
   "deoxysspeed": {
     "name": "Deoxys-Speed",
@@ -5925,7 +6237,8 @@
     },
     "abilities": [
       "pressure"
-    ]
+    ],
+    "weightkg": 60.8
   },
   "turtwig": {
     "name": "Turtwig",
@@ -5943,7 +6256,8 @@
     "abilities": [
       "overgrow",
       "shellarmor"
-    ]
+    ],
+    "weightkg": 10.2
   },
   "grotle": {
     "name": "Grotle",
@@ -5961,7 +6275,8 @@
     "abilities": [
       "overgrow",
       "shellarmor"
-    ]
+    ],
+    "weightkg": 97
   },
   "torterra": {
     "name": "Torterra",
@@ -5980,7 +6295,8 @@
     "abilities": [
       "overgrow",
       "shellarmor"
-    ]
+    ],
+    "weightkg": 310
   },
   "chimchar": {
     "name": "Chimchar",
@@ -5998,7 +6314,8 @@
     "abilities": [
       "blaze",
       "ironfist"
-    ]
+    ],
+    "weightkg": 6.2
   },
   "monferno": {
     "name": "Monferno",
@@ -6017,7 +6334,8 @@
     "abilities": [
       "blaze",
       "ironfist"
-    ]
+    ],
+    "weightkg": 22
   },
   "infernape": {
     "name": "Infernape",
@@ -6036,7 +6354,8 @@
     "abilities": [
       "blaze",
       "ironfist"
-    ]
+    ],
+    "weightkg": 55
   },
   "piplup": {
     "name": "Piplup",
@@ -6054,7 +6373,8 @@
     "abilities": [
       "torrent",
       "competitive"
-    ]
+    ],
+    "weightkg": 5.2
   },
   "prinplup": {
     "name": "Prinplup",
@@ -6072,7 +6392,8 @@
     "abilities": [
       "torrent",
       "competitive"
-    ]
+    ],
+    "weightkg": 23
   },
   "empoleon": {
     "name": "Empoleon",
@@ -6091,7 +6412,8 @@
     "abilities": [
       "torrent",
       "competitive"
-    ]
+    ],
+    "weightkg": 84.5
   },
   "starly": {
     "name": "Starly",
@@ -6110,7 +6432,8 @@
     "abilities": [
       "keeneye",
       "reckless"
-    ]
+    ],
+    "weightkg": 2
   },
   "staravia": {
     "name": "Staravia",
@@ -6129,7 +6452,8 @@
     "abilities": [
       "intimidate",
       "reckless"
-    ]
+    ],
+    "weightkg": 15.5
   },
   "staraptor": {
     "name": "Staraptor",
@@ -6148,7 +6472,8 @@
     "abilities": [
       "intimidate",
       "reckless"
-    ]
+    ],
+    "weightkg": 24.9
   },
   "kricketot": {
     "name": "Kricketot",
@@ -6166,7 +6491,8 @@
     "abilities": [
       "shedskin",
       "runaway"
-    ]
+    ],
+    "weightkg": 2.2
   },
   "kricketune": {
     "name": "Kricketune",
@@ -6184,7 +6510,8 @@
     "abilities": [
       "swarm",
       "technician"
-    ]
+    ],
+    "weightkg": 25.5
   },
   "shinx": {
     "name": "Shinx",
@@ -6203,7 +6530,8 @@
       "rivalry",
       "intimidate",
       "guts"
-    ]
+    ],
+    "weightkg": 9.5
   },
   "luxio": {
     "name": "Luxio",
@@ -6222,7 +6550,8 @@
       "rivalry",
       "intimidate",
       "guts"
-    ]
+    ],
+    "weightkg": 30.5
   },
   "luxray": {
     "name": "Luxray",
@@ -6241,7 +6570,8 @@
       "rivalry",
       "intimidate",
       "guts"
-    ]
+    ],
+    "weightkg": 42
   },
   "cranidos": {
     "name": "Cranidos",
@@ -6259,7 +6589,8 @@
     "abilities": [
       "moldbreaker",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 31.5
   },
   "rampardos": {
     "name": "Rampardos",
@@ -6277,7 +6608,8 @@
     "abilities": [
       "moldbreaker",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 102.5
   },
   "shieldon": {
     "name": "Shieldon",
@@ -6296,7 +6628,8 @@
     "abilities": [
       "sturdy",
       "soundproof"
-    ]
+    ],
+    "weightkg": 57
   },
   "bastiodon": {
     "name": "Bastiodon",
@@ -6315,7 +6648,8 @@
     "abilities": [
       "sturdy",
       "soundproof"
-    ]
+    ],
+    "weightkg": 149.5
   },
   "combee": {
     "name": "Combee",
@@ -6334,7 +6668,8 @@
     "abilities": [
       "honeygather",
       "hustle"
-    ]
+    ],
+    "weightkg": 5.5
   },
   "vespiquen": {
     "name": "Vespiquen",
@@ -6353,7 +6688,8 @@
     "abilities": [
       "pressure",
       "unnerve"
-    ]
+    ],
+    "weightkg": 38.5
   },
   "pachirisu": {
     "name": "Pachirisu",
@@ -6372,7 +6708,8 @@
       "runaway",
       "pickup",
       "voltabsorb"
-    ]
+    ],
+    "weightkg": 3.9
   },
   "buizel": {
     "name": "Buizel",
@@ -6390,7 +6727,8 @@
     "abilities": [
       "swiftswim",
       "waterveil"
-    ]
+    ],
+    "weightkg": 29.5
   },
   "floatzel": {
     "name": "Floatzel",
@@ -6408,7 +6746,8 @@
     "abilities": [
       "swiftswim",
       "waterveil"
-    ]
+    ],
+    "weightkg": 33.5
   },
   "shellos": {
     "name": "Shellos",
@@ -6427,7 +6766,8 @@
       "stickyhold",
       "stormdrain",
       "sandforce"
-    ]
+    ],
+    "weightkg": 6.3
   },
   "gastrodon": {
     "name": "Gastrodon",
@@ -6447,7 +6787,8 @@
       "stickyhold",
       "stormdrain",
       "sandforce"
-    ]
+    ],
+    "weightkg": 29.9
   },
   "ambipom": {
     "name": "Ambipom",
@@ -6466,7 +6807,8 @@
       "technician",
       "pickup",
       "skilllink"
-    ]
+    ],
+    "weightkg": 20.3
   },
   "drifloon": {
     "name": "Drifloon",
@@ -6486,7 +6828,8 @@
       "aftermath",
       "unburden",
       "flareboost"
-    ]
+    ],
+    "weightkg": 1.2
   },
   "drifblim": {
     "name": "Drifblim",
@@ -6506,7 +6849,8 @@
       "aftermath",
       "unburden",
       "flareboost"
-    ]
+    ],
+    "weightkg": 15
   },
   "mismagius": {
     "name": "Mismagius",
@@ -6523,7 +6867,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 4.4
   },
   "honchkrow": {
     "name": "Honchkrow",
@@ -6543,7 +6888,8 @@
       "insomnia",
       "superluck",
       "moxie"
-    ]
+    ],
+    "weightkg": 27.3
   },
   "chingling": {
     "name": "Chingling",
@@ -6560,7 +6906,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.6
   },
   "stunky": {
     "name": "Stunky",
@@ -6580,7 +6927,8 @@
       "stench",
       "aftermath",
       "keeneye"
-    ]
+    ],
+    "weightkg": 19.2
   },
   "skuntank": {
     "name": "Skuntank",
@@ -6600,7 +6948,8 @@
       "stench",
       "aftermath",
       "keeneye"
-    ]
+    ],
+    "weightkg": 38
   },
   "bronzor": {
     "name": "Bronzor",
@@ -6620,7 +6969,8 @@
       "levitate",
       "heatproof",
       "heavymetal"
-    ]
+    ],
+    "weightkg": 60.5
   },
   "bronzong": {
     "name": "Bronzong",
@@ -6640,7 +6990,8 @@
       "levitate",
       "heatproof",
       "heavymetal"
-    ]
+    ],
+    "weightkg": 187
   },
   "bonsly": {
     "name": "Bonsly",
@@ -6659,7 +7010,8 @@
       "sturdy",
       "rockhead",
       "rattled"
-    ]
+    ],
+    "weightkg": 15
   },
   "happiny": {
     "name": "Happiny",
@@ -6678,7 +7030,8 @@
       "naturalcure",
       "serenegrace",
       "friendguard"
-    ]
+    ],
+    "weightkg": 24.4
   },
   "spiritomb": {
     "name": "Spiritomb",
@@ -6697,7 +7050,8 @@
     "abilities": [
       "pressure",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 108
   },
   "gible": {
     "name": "Gible",
@@ -6716,7 +7070,8 @@
     "abilities": [
       "sandveil",
       "roughskin"
-    ]
+    ],
+    "weightkg": 20.5
   },
   "gabite": {
     "name": "Gabite",
@@ -6735,7 +7090,8 @@
     "abilities": [
       "sandveil",
       "roughskin"
-    ]
+    ],
+    "weightkg": 56
   },
   "garchomp": {
     "name": "Garchomp",
@@ -6754,7 +7110,8 @@
     "abilities": [
       "sandveil",
       "roughskin"
-    ]
+    ],
+    "weightkg": 95
   },
   "munchlax": {
     "name": "Munchlax",
@@ -6773,7 +7130,8 @@
       "pickup",
       "thickfat",
       "gluttony"
-    ]
+    ],
+    "weightkg": 105
   },
   "riolu": {
     "name": "Riolu",
@@ -6792,7 +7150,8 @@
       "steadfast",
       "innerfocus",
       "prankster"
-    ]
+    ],
+    "weightkg": 20.2
   },
   "lucario": {
     "name": "Lucario",
@@ -6812,7 +7171,8 @@
       "steadfast",
       "innerfocus",
       "justified"
-    ]
+    ],
+    "weightkg": 54
   },
   "hippopotas": {
     "name": "Hippopotas",
@@ -6830,7 +7190,8 @@
     "abilities": [
       "sandstream",
       "sandforce"
-    ]
+    ],
+    "weightkg": 49.5
   },
   "hippowdon": {
     "name": "Hippowdon",
@@ -6848,7 +7209,8 @@
     "abilities": [
       "sandstream",
       "sandforce"
-    ]
+    ],
+    "weightkg": 300
   },
   "croagunk": {
     "name": "Croagunk",
@@ -6868,7 +7230,8 @@
       "anticipation",
       "dryskin",
       "poisontouch"
-    ]
+    ],
+    "weightkg": 23
   },
   "toxicroak": {
     "name": "Toxicroak",
@@ -6888,7 +7251,8 @@
       "anticipation",
       "dryskin",
       "poisontouch"
-    ]
+    ],
+    "weightkg": 44.4
   },
   "finneon": {
     "name": "Finneon",
@@ -6907,7 +7271,8 @@
       "swiftswim",
       "stormdrain",
       "waterveil"
-    ]
+    ],
+    "weightkg": 7
   },
   "lumineon": {
     "name": "Lumineon",
@@ -6926,7 +7291,8 @@
       "swiftswim",
       "stormdrain",
       "waterveil"
-    ]
+    ],
+    "weightkg": 24
   },
   "snover": {
     "name": "Snover",
@@ -6945,7 +7311,8 @@
     "abilities": [
       "snowwarning",
       "soundproof"
-    ]
+    ],
+    "weightkg": 50.5
   },
   "abomasnow": {
     "name": "Abomasnow",
@@ -6964,7 +7331,8 @@
     "abilities": [
       "snowwarning",
       "soundproof"
-    ]
+    ],
+    "weightkg": 135.5
   },
   "weavile": {
     "name": "Weavile",
@@ -6983,7 +7351,8 @@
     "abilities": [
       "pressure",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 34
   },
   "magnezone": {
     "name": "Magnezone",
@@ -7003,7 +7372,8 @@
       "magnetpull",
       "sturdy",
       "analytic"
-    ]
+    ],
+    "weightkg": 180
   },
   "rhyperior": {
     "name": "Rhyperior",
@@ -7023,7 +7393,8 @@
       "lightningrod",
       "solidrock",
       "reckless"
-    ]
+    ],
+    "weightkg": 282.8
   },
   "electivire": {
     "name": "Electivire",
@@ -7041,7 +7412,8 @@
     "abilities": [
       "motordrive",
       "vitalspirit"
-    ]
+    ],
+    "weightkg": 138.6
   },
   "magmortar": {
     "name": "Magmortar",
@@ -7059,7 +7431,8 @@
     "abilities": [
       "flamebody",
       "vitalspirit"
-    ]
+    ],
+    "weightkg": 68
   },
   "yanmega": {
     "name": "Yanmega",
@@ -7079,7 +7452,8 @@
       "speedboost",
       "tintedlens",
       "frisk"
-    ]
+    ],
+    "weightkg": 51.5
   },
   "leafeon": {
     "name": "Leafeon",
@@ -7097,7 +7471,8 @@
     "abilities": [
       "leafguard",
       "chlorophyll"
-    ]
+    ],
+    "weightkg": 25.5
   },
   "glaceon": {
     "name": "Glaceon",
@@ -7115,7 +7490,8 @@
     "abilities": [
       "snowcloak",
       "icebody"
-    ]
+    ],
+    "weightkg": 25.9
   },
   "gliscor": {
     "name": "Gliscor",
@@ -7135,7 +7511,8 @@
       "hypercutter",
       "sandveil",
       "poisonheal"
-    ]
+    ],
+    "weightkg": 42.5
   },
   "mamoswine": {
     "name": "Mamoswine",
@@ -7155,7 +7532,8 @@
       "oblivious",
       "snowcloak",
       "thickfat"
-    ]
+    ],
+    "weightkg": 291
   },
   "porygonz": {
     "name": "Porygon-Z",
@@ -7174,7 +7552,8 @@
       "adaptability",
       "download",
       "analytic"
-    ]
+    ],
+    "weightkg": 34
   },
   "gallade": {
     "name": "Gallade",
@@ -7194,7 +7573,8 @@
       "steadfast",
       "sharpness",
       "justified"
-    ]
+    ],
+    "weightkg": 52
   },
   "probopass": {
     "name": "Probopass",
@@ -7214,7 +7594,8 @@
       "sturdy",
       "magnetpull",
       "sandforce"
-    ]
+    ],
+    "weightkg": 340
   },
   "dusknoir": {
     "name": "Dusknoir",
@@ -7232,7 +7613,8 @@
     "abilities": [
       "pressure",
       "frisk"
-    ]
+    ],
+    "weightkg": 106.6
   },
   "froslass": {
     "name": "Froslass",
@@ -7251,7 +7633,8 @@
     "abilities": [
       "snowcloak",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 26.6
   },
   "rotom": {
     "name": "Rotom",
@@ -7269,7 +7652,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "rotomheat": {
     "name": "Rotom-Heat",
@@ -7287,7 +7671,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "rotomwash": {
     "name": "Rotom-Wash",
@@ -7305,7 +7690,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "rotomfrost": {
     "name": "Rotom-Frost",
@@ -7323,7 +7709,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "rotomfan": {
     "name": "Rotom-Fan",
@@ -7341,7 +7728,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "rotommow": {
     "name": "Rotom-Mow",
@@ -7359,7 +7747,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "uxie": {
     "name": "Uxie",
@@ -7376,7 +7765,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "mesprit": {
     "name": "Mesprit",
@@ -7393,7 +7783,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "azelf": {
     "name": "Azelf",
@@ -7410,7 +7801,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "dialga": {
     "name": "Dialga",
@@ -7429,7 +7821,8 @@
     "abilities": [
       "pressure",
       "telepathy"
-    ]
+    ],
+    "weightkg": 683
   },
   "dialgaorigin": {
     "name": "Dialga-Origin",
@@ -7448,7 +7841,8 @@
     "abilities": [
       "pressure",
       "telepathy"
-    ]
+    ],
+    "weightkg": 850
   },
   "palkia": {
     "name": "Palkia",
@@ -7467,7 +7861,8 @@
     "abilities": [
       "pressure",
       "telepathy"
-    ]
+    ],
+    "weightkg": 336
   },
   "palkiaorigin": {
     "name": "Palkia-Origin",
@@ -7486,7 +7881,8 @@
     "abilities": [
       "pressure",
       "telepathy"
-    ]
+    ],
+    "weightkg": 660
   },
   "heatran": {
     "name": "Heatran",
@@ -7505,7 +7901,8 @@
     "abilities": [
       "flashfire",
       "flamebody"
-    ]
+    ],
+    "weightkg": 430
   },
   "regigigas": {
     "name": "Regigigas",
@@ -7522,7 +7919,8 @@
     },
     "abilities": [
       "slowstart"
-    ]
+    ],
+    "weightkg": 420
   },
   "giratina": {
     "name": "Giratina",
@@ -7541,7 +7939,8 @@
     "abilities": [
       "pressure",
       "telepathy"
-    ]
+    ],
+    "weightkg": 750
   },
   "giratinaorigin": {
     "name": "Giratina-Origin",
@@ -7559,7 +7958,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 650
   },
   "cresselia": {
     "name": "Cresselia",
@@ -7576,7 +7976,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 85.6
   },
   "phione": {
     "name": "Phione",
@@ -7593,7 +7994,8 @@
     },
     "abilities": [
       "hydration"
-    ]
+    ],
+    "weightkg": 3.1
   },
   "manaphy": {
     "name": "Manaphy",
@@ -7610,7 +8012,8 @@
     },
     "abilities": [
       "hydration"
-    ]
+    ],
+    "weightkg": 1.4
   },
   "darkrai": {
     "name": "Darkrai",
@@ -7627,7 +8030,8 @@
     },
     "abilities": [
       "baddreams"
-    ]
+    ],
+    "weightkg": 50.5
   },
   "shaymin": {
     "name": "Shaymin",
@@ -7644,7 +8048,8 @@
     },
     "abilities": [
       "naturalcure"
-    ]
+    ],
+    "weightkg": 2.1
   },
   "shayminsky": {
     "name": "Shaymin-Sky",
@@ -7662,7 +8067,8 @@
     },
     "abilities": [
       "serenegrace"
-    ]
+    ],
+    "weightkg": 5.2
   },
   "arceus": {
     "name": "Arceus",
@@ -7679,7 +8085,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusbug": {
     "name": "Arceus-Bug",
@@ -7696,7 +8103,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusdark": {
     "name": "Arceus-Dark",
@@ -7713,7 +8121,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusdragon": {
     "name": "Arceus-Dragon",
@@ -7730,7 +8139,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceuselectric": {
     "name": "Arceus-Electric",
@@ -7747,7 +8157,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusfairy": {
     "name": "Arceus-Fairy",
@@ -7764,7 +8175,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusfighting": {
     "name": "Arceus-Fighting",
@@ -7781,7 +8193,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusfire": {
     "name": "Arceus-Fire",
@@ -7798,7 +8211,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusflying": {
     "name": "Arceus-Flying",
@@ -7815,7 +8229,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusghost": {
     "name": "Arceus-Ghost",
@@ -7832,7 +8247,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusgrass": {
     "name": "Arceus-Grass",
@@ -7849,7 +8265,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusground": {
     "name": "Arceus-Ground",
@@ -7866,7 +8283,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusice": {
     "name": "Arceus-Ice",
@@ -7883,7 +8301,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceuspoison": {
     "name": "Arceus-Poison",
@@ -7900,7 +8319,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceuspsychic": {
     "name": "Arceus-Psychic",
@@ -7917,7 +8337,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceusrock": {
     "name": "Arceus-Rock",
@@ -7934,7 +8355,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceussteel": {
     "name": "Arceus-Steel",
@@ -7951,7 +8373,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "arceuswater": {
     "name": "Arceus-Water",
@@ -7968,7 +8391,8 @@
     },
     "abilities": [
       "multitype"
-    ]
+    ],
+    "weightkg": 320
   },
   "snivy": {
     "name": "Snivy",
@@ -7986,7 +8410,8 @@
     "abilities": [
       "overgrow",
       "contrary"
-    ]
+    ],
+    "weightkg": 8.1
   },
   "servine": {
     "name": "Servine",
@@ -8004,7 +8429,8 @@
     "abilities": [
       "overgrow",
       "contrary"
-    ]
+    ],
+    "weightkg": 16
   },
   "serperior": {
     "name": "Serperior",
@@ -8022,7 +8448,8 @@
     "abilities": [
       "overgrow",
       "contrary"
-    ]
+    ],
+    "weightkg": 63
   },
   "tepig": {
     "name": "Tepig",
@@ -8040,7 +8467,8 @@
     "abilities": [
       "blaze",
       "thickfat"
-    ]
+    ],
+    "weightkg": 9.9
   },
   "pignite": {
     "name": "Pignite",
@@ -8059,7 +8487,8 @@
     "abilities": [
       "blaze",
       "thickfat"
-    ]
+    ],
+    "weightkg": 55.5
   },
   "emboar": {
     "name": "Emboar",
@@ -8078,7 +8507,8 @@
     "abilities": [
       "blaze",
       "reckless"
-    ]
+    ],
+    "weightkg": 150
   },
   "oshawott": {
     "name": "Oshawott",
@@ -8096,7 +8526,8 @@
     "abilities": [
       "torrent",
       "shellarmor"
-    ]
+    ],
+    "weightkg": 5.9
   },
   "dewott": {
     "name": "Dewott",
@@ -8114,7 +8545,8 @@
     "abilities": [
       "torrent",
       "shellarmor"
-    ]
+    ],
+    "weightkg": 24.5
   },
   "samurott": {
     "name": "Samurott",
@@ -8132,7 +8564,8 @@
     "abilities": [
       "torrent",
       "shellarmor"
-    ]
+    ],
+    "weightkg": 94.6
   },
   "samurotthisui": {
     "name": "Samurott-Hisui",
@@ -8151,7 +8584,8 @@
     "abilities": [
       "torrent",
       "sharpness"
-    ]
+    ],
+    "weightkg": 58.2
   },
   "blitzle": {
     "name": "Blitzle",
@@ -8170,7 +8604,8 @@
       "lightningrod",
       "motordrive",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 29.8
   },
   "zebstrika": {
     "name": "Zebstrika",
@@ -8189,7 +8624,8 @@
       "lightningrod",
       "motordrive",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 79.5
   },
   "drilbur": {
     "name": "Drilbur",
@@ -8208,7 +8644,8 @@
       "sandrush",
       "sandforce",
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "excadrill": {
     "name": "Excadrill",
@@ -8228,7 +8665,8 @@
       "sandrush",
       "sandforce",
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 40.4
   },
   "timburr": {
     "name": "Timburr",
@@ -8247,7 +8685,8 @@
       "guts",
       "sheerforce",
       "ironfist"
-    ]
+    ],
+    "weightkg": 12.5
   },
   "gurdurr": {
     "name": "Gurdurr",
@@ -8266,7 +8705,8 @@
       "guts",
       "sheerforce",
       "ironfist"
-    ]
+    ],
+    "weightkg": 40
   },
   "conkeldurr": {
     "name": "Conkeldurr",
@@ -8285,7 +8725,8 @@
       "guts",
       "sheerforce",
       "ironfist"
-    ]
+    ],
+    "weightkg": 87
   },
   "sewaddle": {
     "name": "Sewaddle",
@@ -8305,7 +8746,8 @@
       "swarm",
       "chlorophyll",
       "overcoat"
-    ]
+    ],
+    "weightkg": 2.5
   },
   "swadloon": {
     "name": "Swadloon",
@@ -8325,7 +8767,8 @@
       "leafguard",
       "chlorophyll",
       "overcoat"
-    ]
+    ],
+    "weightkg": 7.3
   },
   "leavanny": {
     "name": "Leavanny",
@@ -8345,7 +8788,8 @@
       "swarm",
       "chlorophyll",
       "overcoat"
-    ]
+    ],
+    "weightkg": 20.5
   },
   "cottonee": {
     "name": "Cottonee",
@@ -8365,7 +8809,8 @@
       "prankster",
       "infiltrator",
       "chlorophyll"
-    ]
+    ],
+    "weightkg": 0.6
   },
   "whimsicott": {
     "name": "Whimsicott",
@@ -8385,7 +8830,8 @@
       "prankster",
       "infiltrator",
       "chlorophyll"
-    ]
+    ],
+    "weightkg": 6.6
   },
   "petilil": {
     "name": "Petilil",
@@ -8404,7 +8850,8 @@
       "chlorophyll",
       "owntempo",
       "leafguard"
-    ]
+    ],
+    "weightkg": 6.6
   },
   "lilligant": {
     "name": "Lilligant",
@@ -8423,7 +8870,8 @@
       "chlorophyll",
       "owntempo",
       "leafguard"
-    ]
+    ],
+    "weightkg": 16.3
   },
   "lilliganthisui": {
     "name": "Lilligant-Hisui",
@@ -8443,7 +8891,8 @@
       "chlorophyll",
       "hustle",
       "leafguard"
-    ]
+    ],
+    "weightkg": 19.2
   },
   "basculin": {
     "name": "Basculin",
@@ -8462,7 +8911,8 @@
       "reckless",
       "adaptability",
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 18
   },
   "basculinbluestriped": {
     "name": "Basculin-Blue-Striped",
@@ -8481,7 +8931,8 @@
       "rockhead",
       "adaptability",
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 18
   },
   "basculinwhitestriped": {
     "name": "Basculin-White-Striped",
@@ -8500,7 +8951,8 @@
       "rattled",
       "adaptability",
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 18
   },
   "sandile": {
     "name": "Sandile",
@@ -8520,7 +8972,8 @@
       "intimidate",
       "moxie",
       "angerpoint"
-    ]
+    ],
+    "weightkg": 15.2
   },
   "krokorok": {
     "name": "Krokorok",
@@ -8540,7 +8993,8 @@
       "intimidate",
       "moxie",
       "angerpoint"
-    ]
+    ],
+    "weightkg": 33.4
   },
   "krookodile": {
     "name": "Krookodile",
@@ -8560,7 +9014,8 @@
       "intimidate",
       "moxie",
       "angerpoint"
-    ]
+    ],
+    "weightkg": 96.3
   },
   "scraggy": {
     "name": "Scraggy",
@@ -8580,7 +9035,8 @@
       "shedskin",
       "moxie",
       "intimidate"
-    ]
+    ],
+    "weightkg": 11.8
   },
   "scrafty": {
     "name": "Scrafty",
@@ -8600,7 +9056,8 @@
       "shedskin",
       "moxie",
       "intimidate"
-    ]
+    ],
+    "weightkg": 30
   },
   "zorua": {
     "name": "Zorua",
@@ -8617,7 +9074,8 @@
     },
     "abilities": [
       "illusion"
-    ]
+    ],
+    "weightkg": 12.5
   },
   "zoruahisui": {
     "name": "Zorua-Hisui",
@@ -8635,7 +9093,8 @@
     },
     "abilities": [
       "illusion"
-    ]
+    ],
+    "weightkg": 12.5
   },
   "zoroark": {
     "name": "Zoroark",
@@ -8652,7 +9111,8 @@
     },
     "abilities": [
       "illusion"
-    ]
+    ],
+    "weightkg": 81.1
   },
   "zoroarkhisui": {
     "name": "Zoroark-Hisui",
@@ -8670,7 +9130,8 @@
     },
     "abilities": [
       "illusion"
-    ]
+    ],
+    "weightkg": 73
   },
   "minccino": {
     "name": "Minccino",
@@ -8689,7 +9150,8 @@
       "cutecharm",
       "technician",
       "skilllink"
-    ]
+    ],
+    "weightkg": 5.8
   },
   "cinccino": {
     "name": "Cinccino",
@@ -8708,7 +9170,8 @@
       "cutecharm",
       "technician",
       "skilllink"
-    ]
+    ],
+    "weightkg": 7.5
   },
   "gothita": {
     "name": "Gothita",
@@ -8727,7 +9190,8 @@
       "frisk",
       "competitive",
       "shadowtag"
-    ]
+    ],
+    "weightkg": 5.8
   },
   "gothorita": {
     "name": "Gothorita",
@@ -8746,7 +9210,8 @@
       "frisk",
       "competitive",
       "shadowtag"
-    ]
+    ],
+    "weightkg": 18
   },
   "gothitelle": {
     "name": "Gothitelle",
@@ -8765,7 +9230,8 @@
       "frisk",
       "competitive",
       "shadowtag"
-    ]
+    ],
+    "weightkg": 44
   },
   "solosis": {
     "name": "Solosis",
@@ -8784,7 +9250,8 @@
       "overcoat",
       "magicguard",
       "regenerator"
-    ]
+    ],
+    "weightkg": 1
   },
   "duosion": {
     "name": "Duosion",
@@ -8803,7 +9270,8 @@
       "overcoat",
       "magicguard",
       "regenerator"
-    ]
+    ],
+    "weightkg": 8
   },
   "reuniclus": {
     "name": "Reuniclus",
@@ -8822,7 +9290,8 @@
       "overcoat",
       "magicguard",
       "regenerator"
-    ]
+    ],
+    "weightkg": 20.1
   },
   "ducklett": {
     "name": "Ducklett",
@@ -8842,7 +9311,8 @@
       "keeneye",
       "bigpecks",
       "hydration"
-    ]
+    ],
+    "weightkg": 5.5
   },
   "swanna": {
     "name": "Swanna",
@@ -8862,7 +9332,8 @@
       "keeneye",
       "bigpecks",
       "hydration"
-    ]
+    ],
+    "weightkg": 24.2
   },
   "deerling": {
     "name": "Deerling",
@@ -8882,7 +9353,8 @@
       "chlorophyll",
       "sapsipper",
       "serenegrace"
-    ]
+    ],
+    "weightkg": 19.5
   },
   "sawsbuck": {
     "name": "Sawsbuck",
@@ -8902,7 +9374,8 @@
       "chlorophyll",
       "sapsipper",
       "serenegrace"
-    ]
+    ],
+    "weightkg": 92.5
   },
   "foongus": {
     "name": "Foongus",
@@ -8921,7 +9394,8 @@
     "abilities": [
       "effectspore",
       "regenerator"
-    ]
+    ],
+    "weightkg": 1
   },
   "amoonguss": {
     "name": "Amoonguss",
@@ -8940,7 +9414,8 @@
     "abilities": [
       "effectspore",
       "regenerator"
-    ]
+    ],
+    "weightkg": 10.5
   },
   "alomomola": {
     "name": "Alomomola",
@@ -8959,7 +9434,8 @@
       "healer",
       "hydration",
       "regenerator"
-    ]
+    ],
+    "weightkg": 31.6
   },
   "joltik": {
     "name": "Joltik",
@@ -8979,7 +9455,8 @@
       "compoundeyes",
       "unnerve",
       "swarm"
-    ]
+    ],
+    "weightkg": 0.6
   },
   "galvantula": {
     "name": "Galvantula",
@@ -8999,7 +9476,8 @@
       "compoundeyes",
       "unnerve",
       "swarm"
-    ]
+    ],
+    "weightkg": 14.3
   },
   "tynamo": {
     "name": "Tynamo",
@@ -9016,7 +9494,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "eelektrik": {
     "name": "Eelektrik",
@@ -9033,7 +9512,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 22
   },
   "eelektross": {
     "name": "Eelektross",
@@ -9050,7 +9530,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 80.5
   },
   "litwick": {
     "name": "Litwick",
@@ -9070,7 +9551,8 @@
       "flashfire",
       "flamebody",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 3.1
   },
   "lampent": {
     "name": "Lampent",
@@ -9090,7 +9572,8 @@
       "flashfire",
       "flamebody",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 13
   },
   "chandelure": {
     "name": "Chandelure",
@@ -9110,7 +9593,8 @@
       "flashfire",
       "flamebody",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 34.3
   },
   "axew": {
     "name": "Axew",
@@ -9129,7 +9613,8 @@
       "rivalry",
       "moldbreaker",
       "unnerve"
-    ]
+    ],
+    "weightkg": 18
   },
   "fraxure": {
     "name": "Fraxure",
@@ -9148,7 +9633,8 @@
       "rivalry",
       "moldbreaker",
       "unnerve"
-    ]
+    ],
+    "weightkg": 36
   },
   "haxorus": {
     "name": "Haxorus",
@@ -9167,7 +9653,8 @@
       "rivalry",
       "moldbreaker",
       "unnerve"
-    ]
+    ],
+    "weightkg": 105.5
   },
   "cubchoo": {
     "name": "Cubchoo",
@@ -9186,7 +9673,8 @@
       "snowcloak",
       "slushrush",
       "rattled"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "beartic": {
     "name": "Beartic",
@@ -9205,7 +9693,8 @@
       "snowcloak",
       "slushrush",
       "swiftswim"
-    ]
+    ],
+    "weightkg": 260
   },
   "cryogonal": {
     "name": "Cryogonal",
@@ -9222,7 +9711,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 148
   },
   "mienfoo": {
     "name": "Mienfoo",
@@ -9241,7 +9731,8 @@
       "innerfocus",
       "regenerator",
       "reckless"
-    ]
+    ],
+    "weightkg": 20
   },
   "mienshao": {
     "name": "Mienshao",
@@ -9260,7 +9751,8 @@
       "innerfocus",
       "regenerator",
       "reckless"
-    ]
+    ],
+    "weightkg": 35.5
   },
   "golett": {
     "name": "Golett",
@@ -9280,7 +9772,8 @@
       "ironfist",
       "klutz",
       "noguard"
-    ]
+    ],
+    "weightkg": 92
   },
   "golurk": {
     "name": "Golurk",
@@ -9300,7 +9793,8 @@
       "ironfist",
       "klutz",
       "noguard"
-    ]
+    ],
+    "weightkg": 330
   },
   "pawniard": {
     "name": "Pawniard",
@@ -9320,7 +9814,8 @@
       "defiant",
       "innerfocus",
       "pressure"
-    ]
+    ],
+    "weightkg": 10.2
   },
   "bisharp": {
     "name": "Bisharp",
@@ -9340,7 +9835,8 @@
       "defiant",
       "innerfocus",
       "pressure"
-    ]
+    ],
+    "weightkg": 70
   },
   "rufflet": {
     "name": "Rufflet",
@@ -9360,7 +9856,8 @@
       "keeneye",
       "sheerforce",
       "hustle"
-    ]
+    ],
+    "weightkg": 10.5
   },
   "braviary": {
     "name": "Braviary",
@@ -9380,7 +9877,8 @@
       "keeneye",
       "sheerforce",
       "defiant"
-    ]
+    ],
+    "weightkg": 41
   },
   "braviaryhisui": {
     "name": "Braviary-Hisui",
@@ -9400,7 +9898,8 @@
       "keeneye",
       "sheerforce",
       "tintedlens"
-    ]
+    ],
+    "weightkg": 43.4
   },
   "vullaby": {
     "name": "Vullaby",
@@ -9420,7 +9919,8 @@
       "bigpecks",
       "overcoat",
       "weakarmor"
-    ]
+    ],
+    "weightkg": 9
   },
   "mandibuzz": {
     "name": "Mandibuzz",
@@ -9440,7 +9940,8 @@
       "bigpecks",
       "overcoat",
       "weakarmor"
-    ]
+    ],
+    "weightkg": 39.5
   },
   "deino": {
     "name": "Deino",
@@ -9458,7 +9959,8 @@
     },
     "abilities": [
       "hustle"
-    ]
+    ],
+    "weightkg": 17.3
   },
   "zweilous": {
     "name": "Zweilous",
@@ -9476,7 +9978,8 @@
     },
     "abilities": [
       "hustle"
-    ]
+    ],
+    "weightkg": 50
   },
   "hydreigon": {
     "name": "Hydreigon",
@@ -9494,7 +9997,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 160
   },
   "larvesta": {
     "name": "Larvesta",
@@ -9513,7 +10017,8 @@
     "abilities": [
       "flamebody",
       "swarm"
-    ]
+    ],
+    "weightkg": 28.8
   },
   "volcarona": {
     "name": "Volcarona",
@@ -9532,7 +10037,8 @@
     "abilities": [
       "flamebody",
       "swarm"
-    ]
+    ],
+    "weightkg": 46
   },
   "cobalion": {
     "name": "Cobalion",
@@ -9550,7 +10056,8 @@
     },
     "abilities": [
       "justified"
-    ]
+    ],
+    "weightkg": 250
   },
   "terrakion": {
     "name": "Terrakion",
@@ -9568,7 +10075,8 @@
     },
     "abilities": [
       "justified"
-    ]
+    ],
+    "weightkg": 260
   },
   "virizion": {
     "name": "Virizion",
@@ -9586,7 +10094,8 @@
     },
     "abilities": [
       "justified"
-    ]
+    ],
+    "weightkg": 200
   },
   "tornadus": {
     "name": "Tornadus",
@@ -9604,7 +10113,8 @@
     "abilities": [
       "prankster",
       "defiant"
-    ]
+    ],
+    "weightkg": 63
   },
   "tornadustherian": {
     "name": "Tornadus-Therian",
@@ -9621,7 +10131,8 @@
     },
     "abilities": [
       "regenerator"
-    ]
+    ],
+    "weightkg": 63
   },
   "thundurus": {
     "name": "Thundurus",
@@ -9640,7 +10151,8 @@
     "abilities": [
       "prankster",
       "defiant"
-    ]
+    ],
+    "weightkg": 61
   },
   "thundurustherian": {
     "name": "Thundurus-Therian",
@@ -9658,7 +10170,8 @@
     },
     "abilities": [
       "voltabsorb"
-    ]
+    ],
+    "weightkg": 61
   },
   "reshiram": {
     "name": "Reshiram",
@@ -9676,7 +10189,8 @@
     },
     "abilities": [
       "turboblaze"
-    ]
+    ],
+    "weightkg": 330
   },
   "zekrom": {
     "name": "Zekrom",
@@ -9694,7 +10208,8 @@
     },
     "abilities": [
       "teravolt"
-    ]
+    ],
+    "weightkg": 345
   },
   "landorus": {
     "name": "Landorus",
@@ -9713,7 +10228,8 @@
     "abilities": [
       "sandforce",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 68
   },
   "landorustherian": {
     "name": "Landorus-Therian",
@@ -9731,7 +10247,8 @@
     },
     "abilities": [
       "intimidate"
-    ]
+    ],
+    "weightkg": 68
   },
   "kyurem": {
     "name": "Kyurem",
@@ -9749,7 +10266,8 @@
     },
     "abilities": [
       "pressure"
-    ]
+    ],
+    "weightkg": 325
   },
   "kyuremblack": {
     "name": "Kyurem-Black",
@@ -9767,7 +10285,8 @@
     },
     "abilities": [
       "teravolt"
-    ]
+    ],
+    "weightkg": 325
   },
   "kyuremwhite": {
     "name": "Kyurem-White",
@@ -9785,7 +10304,8 @@
     },
     "abilities": [
       "turboblaze"
-    ]
+    ],
+    "weightkg": 325
   },
   "keldeo": {
     "name": "Keldeo",
@@ -9803,7 +10323,8 @@
     },
     "abilities": [
       "justified"
-    ]
+    ],
+    "weightkg": 48.5
   },
   "keldeoresolute": {
     "name": "Keldeo-Resolute",
@@ -9821,7 +10342,8 @@
     },
     "abilities": [
       "justified"
-    ]
+    ],
+    "weightkg": 48.5
   },
   "meloetta": {
     "name": "Meloetta",
@@ -9839,7 +10361,8 @@
     },
     "abilities": [
       "serenegrace"
-    ]
+    ],
+    "weightkg": 6.5
   },
   "meloettapirouette": {
     "name": "Meloetta-Pirouette",
@@ -9857,7 +10380,8 @@
     },
     "abilities": [
       "serenegrace"
-    ]
+    ],
+    "weightkg": 6.5
   },
   "chespin": {
     "name": "Chespin",
@@ -9875,7 +10399,8 @@
     "abilities": [
       "overgrow",
       "bulletproof"
-    ]
+    ],
+    "weightkg": 9
   },
   "quilladin": {
     "name": "Quilladin",
@@ -9893,7 +10418,8 @@
     "abilities": [
       "overgrow",
       "bulletproof"
-    ]
+    ],
+    "weightkg": 29
   },
   "chesnaught": {
     "name": "Chesnaught",
@@ -9912,7 +10438,8 @@
     "abilities": [
       "overgrow",
       "bulletproof"
-    ]
+    ],
+    "weightkg": 90
   },
   "fennekin": {
     "name": "Fennekin",
@@ -9930,7 +10457,8 @@
     "abilities": [
       "blaze",
       "magician"
-    ]
+    ],
+    "weightkg": 9.4
   },
   "braixen": {
     "name": "Braixen",
@@ -9948,7 +10476,8 @@
     "abilities": [
       "blaze",
       "magician"
-    ]
+    ],
+    "weightkg": 14.5
   },
   "delphox": {
     "name": "Delphox",
@@ -9967,7 +10496,8 @@
     "abilities": [
       "blaze",
       "magician"
-    ]
+    ],
+    "weightkg": 39
   },
   "froakie": {
     "name": "Froakie",
@@ -9985,7 +10515,8 @@
     "abilities": [
       "torrent",
       "protean"
-    ]
+    ],
+    "weightkg": 7
   },
   "frogadier": {
     "name": "Frogadier",
@@ -10003,7 +10534,8 @@
     "abilities": [
       "torrent",
       "protean"
-    ]
+    ],
+    "weightkg": 10.9
   },
   "greninja": {
     "name": "Greninja",
@@ -10023,7 +10555,8 @@
       "torrent",
       "protean",
       "battlebond"
-    ]
+    ],
+    "weightkg": 40
   },
   "greninjabond": {
     "name": "Greninja-Bond",
@@ -10041,7 +10574,8 @@
     },
     "abilities": [
       "battlebond"
-    ]
+    ],
+    "weightkg": 40
   },
   "fletchling": {
     "name": "Fletchling",
@@ -10060,7 +10594,8 @@
     "abilities": [
       "bigpecks",
       "galewings"
-    ]
+    ],
+    "weightkg": 1.7
   },
   "fletchinder": {
     "name": "Fletchinder",
@@ -10079,7 +10614,8 @@
     "abilities": [
       "flamebody",
       "galewings"
-    ]
+    ],
+    "weightkg": 16
   },
   "talonflame": {
     "name": "Talonflame",
@@ -10098,7 +10634,8 @@
     "abilities": [
       "flamebody",
       "galewings"
-    ]
+    ],
+    "weightkg": 24.5
   },
   "scatterbug": {
     "name": "Scatterbug",
@@ -10117,7 +10654,8 @@
       "shielddust",
       "compoundeyes",
       "friendguard"
-    ]
+    ],
+    "weightkg": 2.5
   },
   "spewpa": {
     "name": "Spewpa",
@@ -10135,7 +10673,8 @@
     "abilities": [
       "shedskin",
       "friendguard"
-    ]
+    ],
+    "weightkg": 8.4
   },
   "vivillon": {
     "name": "Vivillon",
@@ -10155,7 +10694,8 @@
       "shielddust",
       "compoundeyes",
       "friendguard"
-    ]
+    ],
+    "weightkg": 17
   },
   "vivillonfancy": {
     "name": "Vivillon-Fancy",
@@ -10175,7 +10715,8 @@
       "shielddust",
       "compoundeyes",
       "friendguard"
-    ]
+    ],
+    "weightkg": 17
   },
   "vivillonpokeball": {
     "name": "Vivillon-Pokeball",
@@ -10195,7 +10736,8 @@
       "shielddust",
       "compoundeyes",
       "friendguard"
-    ]
+    ],
+    "weightkg": 17
   },
   "litleo": {
     "name": "Litleo",
@@ -10215,7 +10757,8 @@
       "rivalry",
       "unnerve",
       "moxie"
-    ]
+    ],
+    "weightkg": 13.5
   },
   "pyroar": {
     "name": "Pyroar",
@@ -10235,7 +10778,8 @@
       "rivalry",
       "unnerve",
       "moxie"
-    ]
+    ],
+    "weightkg": 81.5
   },
   "flabebe": {
     "name": "Flabébé",
@@ -10253,7 +10797,8 @@
     "abilities": [
       "flowerveil",
       "symbiosis"
-    ]
+    ],
+    "weightkg": 0.1
   },
   "floette": {
     "name": "Floette",
@@ -10271,7 +10816,8 @@
     "abilities": [
       "flowerveil",
       "symbiosis"
-    ]
+    ],
+    "weightkg": 0.9
   },
   "florges": {
     "name": "Florges",
@@ -10289,7 +10835,8 @@
     "abilities": [
       "flowerveil",
       "symbiosis"
-    ]
+    ],
+    "weightkg": 10
   },
   "skiddo": {
     "name": "Skiddo",
@@ -10307,7 +10854,8 @@
     "abilities": [
       "sapsipper",
       "grasspelt"
-    ]
+    ],
+    "weightkg": 31
   },
   "gogoat": {
     "name": "Gogoat",
@@ -10325,7 +10873,8 @@
     "abilities": [
       "sapsipper",
       "grasspelt"
-    ]
+    ],
+    "weightkg": 91
   },
   "espurr": {
     "name": "Espurr",
@@ -10344,7 +10893,8 @@
       "keeneye",
       "infiltrator",
       "owntempo"
-    ]
+    ],
+    "weightkg": 3.5
   },
   "meowstic": {
     "name": "Meowstic",
@@ -10363,7 +10913,8 @@
       "keeneye",
       "infiltrator",
       "prankster"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "meowsticf": {
     "name": "Meowstic-F",
@@ -10382,7 +10933,8 @@
       "keeneye",
       "infiltrator",
       "competitive"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "inkay": {
     "name": "Inkay",
@@ -10402,7 +10954,8 @@
       "contrary",
       "suctioncups",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 3.5
   },
   "malamar": {
     "name": "Malamar",
@@ -10422,7 +10975,8 @@
       "contrary",
       "suctioncups",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 47
   },
   "skrelp": {
     "name": "Skrelp",
@@ -10442,7 +10996,8 @@
       "poisonpoint",
       "poisontouch",
       "adaptability"
-    ]
+    ],
+    "weightkg": 7.3
   },
   "dragalge": {
     "name": "Dragalge",
@@ -10462,7 +11017,8 @@
       "poisonpoint",
       "poisontouch",
       "adaptability"
-    ]
+    ],
+    "weightkg": 81.5
   },
   "clauncher": {
     "name": "Clauncher",
@@ -10479,7 +11035,8 @@
     },
     "abilities": [
       "megalauncher"
-    ]
+    ],
+    "weightkg": 8.3
   },
   "clawitzer": {
     "name": "Clawitzer",
@@ -10496,7 +11053,8 @@
     },
     "abilities": [
       "megalauncher"
-    ]
+    ],
+    "weightkg": 35.3
   },
   "sylveon": {
     "name": "Sylveon",
@@ -10514,7 +11072,8 @@
     "abilities": [
       "cutecharm",
       "pixilate"
-    ]
+    ],
+    "weightkg": 23.5
   },
   "hawlucha": {
     "name": "Hawlucha",
@@ -10534,7 +11093,8 @@
       "limber",
       "unburden",
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 21.5
   },
   "dedenne": {
     "name": "Dedenne",
@@ -10554,7 +11114,8 @@
       "cheekpouch",
       "pickup",
       "plus"
-    ]
+    ],
+    "weightkg": 2.2
   },
   "carbink": {
     "name": "Carbink",
@@ -10573,7 +11134,8 @@
     "abilities": [
       "clearbody",
       "sturdy"
-    ]
+    ],
+    "weightkg": 5.7
   },
   "goomy": {
     "name": "Goomy",
@@ -10592,7 +11154,8 @@
       "sapsipper",
       "hydration",
       "gooey"
-    ]
+    ],
+    "weightkg": 2.8
   },
   "sliggoo": {
     "name": "Sliggoo",
@@ -10611,7 +11174,8 @@
       "sapsipper",
       "hydration",
       "gooey"
-    ]
+    ],
+    "weightkg": 17.5
   },
   "sliggoohisui": {
     "name": "Sliggoo-Hisui",
@@ -10631,7 +11195,8 @@
       "sapsipper",
       "shellarmor",
       "gooey"
-    ]
+    ],
+    "weightkg": 68.5
   },
   "goodra": {
     "name": "Goodra",
@@ -10650,7 +11215,8 @@
       "sapsipper",
       "hydration",
       "gooey"
-    ]
+    ],
+    "weightkg": 150.5
   },
   "goodrahisui": {
     "name": "Goodra-Hisui",
@@ -10670,7 +11236,8 @@
       "sapsipper",
       "shellarmor",
       "gooey"
-    ]
+    ],
+    "weightkg": 334.1
   },
   "klefki": {
     "name": "Klefki",
@@ -10689,7 +11256,8 @@
     "abilities": [
       "prankster",
       "magician"
-    ]
+    ],
+    "weightkg": 3
   },
   "phantump": {
     "name": "Phantump",
@@ -10709,7 +11277,8 @@
       "naturalcure",
       "frisk",
       "harvest"
-    ]
+    ],
+    "weightkg": 7
   },
   "trevenant": {
     "name": "Trevenant",
@@ -10729,7 +11298,8 @@
       "naturalcure",
       "frisk",
       "harvest"
-    ]
+    ],
+    "weightkg": 71
   },
   "bergmite": {
     "name": "Bergmite",
@@ -10748,7 +11318,8 @@
       "owntempo",
       "icebody",
       "sturdy"
-    ]
+    ],
+    "weightkg": 99.5
   },
   "avalugg": {
     "name": "Avalugg",
@@ -10767,7 +11338,8 @@
       "owntempo",
       "icebody",
       "sturdy"
-    ]
+    ],
+    "weightkg": 505
   },
   "avalugghisui": {
     "name": "Avalugg-Hisui",
@@ -10787,7 +11359,8 @@
       "strongjaw",
       "icebody",
       "sturdy"
-    ]
+    ],
+    "weightkg": 262.4
   },
   "noibat": {
     "name": "Noibat",
@@ -10807,7 +11380,8 @@
       "frisk",
       "infiltrator",
       "telepathy"
-    ]
+    ],
+    "weightkg": 8
   },
   "noivern": {
     "name": "Noivern",
@@ -10827,7 +11401,8 @@
       "frisk",
       "infiltrator",
       "telepathy"
-    ]
+    ],
+    "weightkg": 85
   },
   "diancie": {
     "name": "Diancie",
@@ -10845,7 +11420,8 @@
     },
     "abilities": [
       "clearbody"
-    ]
+    ],
+    "weightkg": 8.8
   },
   "hoopa": {
     "name": "Hoopa",
@@ -10863,7 +11439,8 @@
     },
     "abilities": [
       "magician"
-    ]
+    ],
+    "weightkg": 9
   },
   "hoopaunbound": {
     "name": "Hoopa-Unbound",
@@ -10881,7 +11458,8 @@
     },
     "abilities": [
       "magician"
-    ]
+    ],
+    "weightkg": 490
   },
   "volcanion": {
     "name": "Volcanion",
@@ -10899,7 +11477,8 @@
     },
     "abilities": [
       "waterabsorb"
-    ]
+    ],
+    "weightkg": 195
   },
   "rowlet": {
     "name": "Rowlet",
@@ -10918,7 +11497,8 @@
     "abilities": [
       "overgrow",
       "longreach"
-    ]
+    ],
+    "weightkg": 1.5
   },
   "dartrix": {
     "name": "Dartrix",
@@ -10937,7 +11517,8 @@
     "abilities": [
       "overgrow",
       "longreach"
-    ]
+    ],
+    "weightkg": 16
   },
   "decidueye": {
     "name": "Decidueye",
@@ -10956,7 +11537,8 @@
     "abilities": [
       "overgrow",
       "longreach"
-    ]
+    ],
+    "weightkg": 36.6
   },
   "decidueyehisui": {
     "name": "Decidueye-Hisui",
@@ -10975,7 +11557,8 @@
     "abilities": [
       "overgrow",
       "scrappy"
-    ]
+    ],
+    "weightkg": 37
   },
   "litten": {
     "name": "Litten",
@@ -10993,7 +11576,8 @@
     "abilities": [
       "blaze",
       "intimidate"
-    ]
+    ],
+    "weightkg": 4.3
   },
   "torracat": {
     "name": "Torracat",
@@ -11011,7 +11595,8 @@
     "abilities": [
       "blaze",
       "intimidate"
-    ]
+    ],
+    "weightkg": 25
   },
   "incineroar": {
     "name": "Incineroar",
@@ -11030,7 +11615,8 @@
     "abilities": [
       "blaze",
       "intimidate"
-    ]
+    ],
+    "weightkg": 83
   },
   "popplio": {
     "name": "Popplio",
@@ -11048,7 +11634,8 @@
     "abilities": [
       "torrent",
       "liquidvoice"
-    ]
+    ],
+    "weightkg": 7.5
   },
   "brionne": {
     "name": "Brionne",
@@ -11066,7 +11653,8 @@
     "abilities": [
       "torrent",
       "liquidvoice"
-    ]
+    ],
+    "weightkg": 17.5
   },
   "primarina": {
     "name": "Primarina",
@@ -11085,7 +11673,8 @@
     "abilities": [
       "torrent",
       "liquidvoice"
-    ]
+    ],
+    "weightkg": 44
   },
   "pikipek": {
     "name": "Pikipek",
@@ -11105,7 +11694,8 @@
       "keeneye",
       "skilllink",
       "pickup"
-    ]
+    ],
+    "weightkg": 1.2
   },
   "trumbeak": {
     "name": "Trumbeak",
@@ -11125,7 +11715,8 @@
       "keeneye",
       "skilllink",
       "pickup"
-    ]
+    ],
+    "weightkg": 14.8
   },
   "toucannon": {
     "name": "Toucannon",
@@ -11145,7 +11736,8 @@
       "keeneye",
       "skilllink",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 26
   },
   "yungoos": {
     "name": "Yungoos",
@@ -11164,7 +11756,8 @@
       "stakeout",
       "strongjaw",
       "adaptability"
-    ]
+    ],
+    "weightkg": 6
   },
   "gumshoos": {
     "name": "Gumshoos",
@@ -11183,7 +11776,8 @@
       "stakeout",
       "strongjaw",
       "adaptability"
-    ]
+    ],
+    "weightkg": 14.2
   },
   "grubbin": {
     "name": "Grubbin",
@@ -11200,7 +11794,8 @@
     },
     "abilities": [
       "swarm"
-    ]
+    ],
+    "weightkg": 4.4
   },
   "charjabug": {
     "name": "Charjabug",
@@ -11218,7 +11813,8 @@
     },
     "abilities": [
       "battery"
-    ]
+    ],
+    "weightkg": 10.5
   },
   "vikavolt": {
     "name": "Vikavolt",
@@ -11236,7 +11832,8 @@
     },
     "abilities": [
       "levitate"
-    ]
+    ],
+    "weightkg": 45
   },
   "crabrawler": {
     "name": "Crabrawler",
@@ -11255,7 +11852,8 @@
       "hypercutter",
       "ironfist",
       "angerpoint"
-    ]
+    ],
+    "weightkg": 7
   },
   "crabominable": {
     "name": "Crabominable",
@@ -11275,7 +11873,8 @@
       "hypercutter",
       "ironfist",
       "angerpoint"
-    ]
+    ],
+    "weightkg": 180
   },
   "oricorio": {
     "name": "Oricorio",
@@ -11293,7 +11892,8 @@
     },
     "abilities": [
       "dancer"
-    ]
+    ],
+    "weightkg": 3.4
   },
   "oricoriopompom": {
     "name": "Oricorio-Pom-Pom",
@@ -11311,7 +11911,8 @@
     },
     "abilities": [
       "dancer"
-    ]
+    ],
+    "weightkg": 3.4
   },
   "oricoriopau": {
     "name": "Oricorio-Pa'u",
@@ -11329,7 +11930,8 @@
     },
     "abilities": [
       "dancer"
-    ]
+    ],
+    "weightkg": 3.4
   },
   "oricoriosensu": {
     "name": "Oricorio-Sensu",
@@ -11347,7 +11949,8 @@
     },
     "abilities": [
       "dancer"
-    ]
+    ],
+    "weightkg": 3.4
   },
   "cutiefly": {
     "name": "Cutiefly",
@@ -11367,7 +11970,8 @@
       "honeygather",
       "shielddust",
       "sweetveil"
-    ]
+    ],
+    "weightkg": 0.2
   },
   "ribombee": {
     "name": "Ribombee",
@@ -11387,7 +11991,8 @@
       "honeygather",
       "shielddust",
       "sweetveil"
-    ]
+    ],
+    "weightkg": 0.5
   },
   "rockruff": {
     "name": "Rockruff",
@@ -11407,7 +12012,8 @@
       "vitalspirit",
       "steadfast",
       "owntempo"
-    ]
+    ],
+    "weightkg": 9.2
   },
   "rockruffdusk": {
     "name": "Rockruff-Dusk",
@@ -11424,7 +12030,8 @@
     },
     "abilities": [
       "owntempo"
-    ]
+    ],
+    "weightkg": 9.2
   },
   "lycanroc": {
     "name": "Lycanroc",
@@ -11443,7 +12050,8 @@
       "keeneye",
       "sandrush",
       "steadfast"
-    ]
+    ],
+    "weightkg": 25
   },
   "lycanrocmidnight": {
     "name": "Lycanroc-Midnight",
@@ -11462,7 +12070,8 @@
       "keeneye",
       "vitalspirit",
       "noguard"
-    ]
+    ],
+    "weightkg": 25
   },
   "lycanrocdusk": {
     "name": "Lycanroc-Dusk",
@@ -11479,7 +12088,8 @@
     },
     "abilities": [
       "toughclaws"
-    ]
+    ],
+    "weightkg": 25
   },
   "mareanie": {
     "name": "Mareanie",
@@ -11499,7 +12109,8 @@
       "merciless",
       "limber",
       "regenerator"
-    ]
+    ],
+    "weightkg": 8
   },
   "toxapex": {
     "name": "Toxapex",
@@ -11519,7 +12130,8 @@
       "merciless",
       "limber",
       "regenerator"
-    ]
+    ],
+    "weightkg": 14.5
   },
   "mudbray": {
     "name": "Mudbray",
@@ -11538,7 +12150,8 @@
       "owntempo",
       "stamina",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 110
   },
   "mudsdale": {
     "name": "Mudsdale",
@@ -11557,7 +12170,8 @@
       "owntempo",
       "stamina",
       "innerfocus"
-    ]
+    ],
+    "weightkg": 920
   },
   "dewpider": {
     "name": "Dewpider",
@@ -11576,7 +12190,8 @@
     "abilities": [
       "waterbubble",
       "waterabsorb"
-    ]
+    ],
+    "weightkg": 4
   },
   "araquanid": {
     "name": "Araquanid",
@@ -11595,7 +12210,8 @@
     "abilities": [
       "waterbubble",
       "waterabsorb"
-    ]
+    ],
+    "weightkg": 82
   },
   "fomantis": {
     "name": "Fomantis",
@@ -11613,7 +12229,8 @@
     "abilities": [
       "leafguard",
       "contrary"
-    ]
+    ],
+    "weightkg": 1.5
   },
   "lurantis": {
     "name": "Lurantis",
@@ -11631,7 +12248,8 @@
     "abilities": [
       "leafguard",
       "contrary"
-    ]
+    ],
+    "weightkg": 18.5
   },
   "salandit": {
     "name": "Salandit",
@@ -11650,7 +12268,8 @@
     "abilities": [
       "corrosion",
       "oblivious"
-    ]
+    ],
+    "weightkg": 4.8
   },
   "salazzle": {
     "name": "Salazzle",
@@ -11669,7 +12288,8 @@
     "abilities": [
       "corrosion",
       "oblivious"
-    ]
+    ],
+    "weightkg": 22.2
   },
   "bounsweet": {
     "name": "Bounsweet",
@@ -11688,7 +12308,8 @@
       "leafguard",
       "oblivious",
       "sweetveil"
-    ]
+    ],
+    "weightkg": 3.2
   },
   "steenee": {
     "name": "Steenee",
@@ -11707,7 +12328,8 @@
       "leafguard",
       "oblivious",
       "sweetveil"
-    ]
+    ],
+    "weightkg": 8.2
   },
   "tsareena": {
     "name": "Tsareena",
@@ -11726,7 +12348,8 @@
       "leafguard",
       "queenlymajesty",
       "sweetveil"
-    ]
+    ],
+    "weightkg": 21.4
   },
   "comfey": {
     "name": "Comfey",
@@ -11745,7 +12368,8 @@
       "flowerveil",
       "triage",
       "naturalcure"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "oranguru": {
     "name": "Oranguru",
@@ -11765,7 +12389,8 @@
       "innerfocus",
       "telepathy",
       "symbiosis"
-    ]
+    ],
+    "weightkg": 76
   },
   "passimian": {
     "name": "Passimian",
@@ -11783,7 +12408,8 @@
     "abilities": [
       "receiver",
       "defiant"
-    ]
+    ],
+    "weightkg": 82.8
   },
   "sandygast": {
     "name": "Sandygast",
@@ -11802,7 +12428,8 @@
     "abilities": [
       "watercompaction",
       "sandveil"
-    ]
+    ],
+    "weightkg": 70
   },
   "palossand": {
     "name": "Palossand",
@@ -11821,7 +12448,8 @@
     "abilities": [
       "watercompaction",
       "sandveil"
-    ]
+    ],
+    "weightkg": 250
   },
   "minior": {
     "name": "Minior",
@@ -11839,7 +12467,8 @@
     },
     "abilities": [
       "shieldsdown"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "miniormeteor": {
     "name": "Minior-Meteor",
@@ -11857,7 +12486,8 @@
     },
     "abilities": [
       "shieldsdown"
-    ]
+    ],
+    "weightkg": 40
   },
   "komala": {
     "name": "Komala",
@@ -11874,7 +12504,8 @@
     },
     "abilities": [
       "comatose"
-    ]
+    ],
+    "weightkg": 19.9
   },
   "mimikyu": {
     "name": "Mimikyu",
@@ -11892,7 +12523,8 @@
     },
     "abilities": [
       "disguise"
-    ]
+    ],
+    "weightkg": 0.7
   },
   "mimikyubusted": {
     "name": "Mimikyu-Busted",
@@ -11910,7 +12542,8 @@
     },
     "abilities": [
       "disguise"
-    ]
+    ],
+    "weightkg": 0.7
   },
   "bruxish": {
     "name": "Bruxish",
@@ -11930,7 +12563,8 @@
       "dazzling",
       "strongjaw",
       "wonderskin"
-    ]
+    ],
+    "weightkg": 19
   },
   "jangmoo": {
     "name": "Jangmo-o",
@@ -11949,7 +12583,8 @@
       "bulletproof",
       "soundproof",
       "overcoat"
-    ]
+    ],
+    "weightkg": 29.7
   },
   "hakamoo": {
     "name": "Hakamo-o",
@@ -11969,7 +12604,8 @@
       "bulletproof",
       "soundproof",
       "overcoat"
-    ]
+    ],
+    "weightkg": 47
   },
   "kommoo": {
     "name": "Kommo-o",
@@ -11989,7 +12625,8 @@
       "bulletproof",
       "soundproof",
       "overcoat"
-    ]
+    ],
+    "weightkg": 78.2
   },
   "cosmog": {
     "name": "Cosmog",
@@ -12006,7 +12643,8 @@
     },
     "abilities": [
       "unaware"
-    ]
+    ],
+    "weightkg": 0.1
   },
   "cosmoem": {
     "name": "Cosmoem",
@@ -12023,7 +12661,8 @@
     },
     "abilities": [
       "sturdy"
-    ]
+    ],
+    "weightkg": 999.9
   },
   "solgaleo": {
     "name": "Solgaleo",
@@ -12041,7 +12680,8 @@
     },
     "abilities": [
       "fullmetalbody"
-    ]
+    ],
+    "weightkg": 230
   },
   "lunala": {
     "name": "Lunala",
@@ -12059,7 +12699,8 @@
     },
     "abilities": [
       "shadowshield"
-    ]
+    ],
+    "weightkg": 120
   },
   "necrozma": {
     "name": "Necrozma",
@@ -12076,7 +12717,8 @@
     },
     "abilities": [
       "prismarmor"
-    ]
+    ],
+    "weightkg": 230
   },
   "necrozmaduskmane": {
     "name": "Necrozma-Dusk-Mane",
@@ -12094,7 +12736,8 @@
     },
     "abilities": [
       "prismarmor"
-    ]
+    ],
+    "weightkg": 460
   },
   "necrozmadawnwings": {
     "name": "Necrozma-Dawn-Wings",
@@ -12112,7 +12755,8 @@
     },
     "abilities": [
       "prismarmor"
-    ]
+    ],
+    "weightkg": 350
   },
   "magearna": {
     "name": "Magearna",
@@ -12130,7 +12774,8 @@
     },
     "abilities": [
       "soulheart"
-    ]
+    ],
+    "weightkg": 80.5
   },
   "magearnaoriginal": {
     "name": "Magearna-Original",
@@ -12148,7 +12793,8 @@
     },
     "abilities": [
       "soulheart"
-    ]
+    ],
+    "weightkg": 80.5
   },
   "grookey": {
     "name": "Grookey",
@@ -12166,7 +12812,8 @@
     "abilities": [
       "overgrow",
       "grassysurge"
-    ]
+    ],
+    "weightkg": 5
   },
   "thwackey": {
     "name": "Thwackey",
@@ -12184,7 +12831,8 @@
     "abilities": [
       "overgrow",
       "grassysurge"
-    ]
+    ],
+    "weightkg": 14
   },
   "rillaboom": {
     "name": "Rillaboom",
@@ -12202,7 +12850,8 @@
     "abilities": [
       "overgrow",
       "grassysurge"
-    ]
+    ],
+    "weightkg": 90
   },
   "scorbunny": {
     "name": "Scorbunny",
@@ -12220,7 +12869,8 @@
     "abilities": [
       "blaze",
       "libero"
-    ]
+    ],
+    "weightkg": 4.5
   },
   "raboot": {
     "name": "Raboot",
@@ -12238,7 +12888,8 @@
     "abilities": [
       "blaze",
       "libero"
-    ]
+    ],
+    "weightkg": 9
   },
   "cinderace": {
     "name": "Cinderace",
@@ -12256,7 +12907,8 @@
     "abilities": [
       "blaze",
       "libero"
-    ]
+    ],
+    "weightkg": 33
   },
   "sobble": {
     "name": "Sobble",
@@ -12274,7 +12926,8 @@
     "abilities": [
       "torrent",
       "sniper"
-    ]
+    ],
+    "weightkg": 4
   },
   "drizzile": {
     "name": "Drizzile",
@@ -12292,7 +12945,8 @@
     "abilities": [
       "torrent",
       "sniper"
-    ]
+    ],
+    "weightkg": 11.5
   },
   "inteleon": {
     "name": "Inteleon",
@@ -12310,7 +12964,8 @@
     "abilities": [
       "torrent",
       "sniper"
-    ]
+    ],
+    "weightkg": 45.2
   },
   "skwovet": {
     "name": "Skwovet",
@@ -12328,7 +12983,8 @@
     "abilities": [
       "cheekpouch",
       "gluttony"
-    ]
+    ],
+    "weightkg": 2.5
   },
   "greedent": {
     "name": "Greedent",
@@ -12346,7 +13002,8 @@
     "abilities": [
       "cheekpouch",
       "gluttony"
-    ]
+    ],
+    "weightkg": 6
   },
   "rookidee": {
     "name": "Rookidee",
@@ -12365,7 +13022,8 @@
       "keeneye",
       "unnerve",
       "bigpecks"
-    ]
+    ],
+    "weightkg": 1.8
   },
   "corvisquire": {
     "name": "Corvisquire",
@@ -12384,7 +13042,8 @@
       "keeneye",
       "unnerve",
       "bigpecks"
-    ]
+    ],
+    "weightkg": 16
   },
   "corviknight": {
     "name": "Corviknight",
@@ -12404,7 +13063,8 @@
       "pressure",
       "unnerve",
       "mirrorarmor"
-    ]
+    ],
+    "weightkg": 75
   },
   "chewtle": {
     "name": "Chewtle",
@@ -12423,7 +13083,8 @@
       "strongjaw",
       "shellarmor",
       "swiftswim"
-    ]
+    ],
+    "weightkg": 8.5
   },
   "drednaw": {
     "name": "Drednaw",
@@ -12443,7 +13104,8 @@
       "strongjaw",
       "shellarmor",
       "swiftswim"
-    ]
+    ],
+    "weightkg": 115.5
   },
   "rolycoly": {
     "name": "Rolycoly",
@@ -12462,7 +13124,8 @@
       "steamengine",
       "heatproof",
       "flashfire"
-    ]
+    ],
+    "weightkg": 12
   },
   "carkol": {
     "name": "Carkol",
@@ -12482,7 +13145,8 @@
       "steamengine",
       "flamebody",
       "flashfire"
-    ]
+    ],
+    "weightkg": 78
   },
   "coalossal": {
     "name": "Coalossal",
@@ -12502,7 +13166,8 @@
       "steamengine",
       "flamebody",
       "flashfire"
-    ]
+    ],
+    "weightkg": 310.5
   },
   "applin": {
     "name": "Applin",
@@ -12522,7 +13187,8 @@
       "ripen",
       "gluttony",
       "bulletproof"
-    ]
+    ],
+    "weightkg": 0.5
   },
   "flapple": {
     "name": "Flapple",
@@ -12542,7 +13208,8 @@
       "ripen",
       "gluttony",
       "hustle"
-    ]
+    ],
+    "weightkg": 1
   },
   "appletun": {
     "name": "Appletun",
@@ -12562,7 +13229,8 @@
       "ripen",
       "gluttony",
       "thickfat"
-    ]
+    ],
+    "weightkg": 13
   },
   "silicobra": {
     "name": "Silicobra",
@@ -12581,7 +13249,8 @@
       "sandspit",
       "shedskin",
       "sandveil"
-    ]
+    ],
+    "weightkg": 7.6
   },
   "sandaconda": {
     "name": "Sandaconda",
@@ -12600,7 +13269,8 @@
       "sandspit",
       "shedskin",
       "sandveil"
-    ]
+    ],
+    "weightkg": 65.5
   },
   "cramorant": {
     "name": "Cramorant",
@@ -12618,7 +13288,8 @@
     },
     "abilities": [
       "gulpmissile"
-    ]
+    ],
+    "weightkg": 18
   },
   "cramorantgulping": {
     "name": "Cramorant-Gulping",
@@ -12636,7 +13307,8 @@
     },
     "abilities": [
       "gulpmissile"
-    ]
+    ],
+    "weightkg": 18
   },
   "cramorantgorging": {
     "name": "Cramorant-Gorging",
@@ -12654,7 +13326,8 @@
     },
     "abilities": [
       "gulpmissile"
-    ]
+    ],
+    "weightkg": 18
   },
   "arrokuda": {
     "name": "Arrokuda",
@@ -12672,7 +13345,8 @@
     "abilities": [
       "swiftswim",
       "propellertail"
-    ]
+    ],
+    "weightkg": 1
   },
   "barraskewda": {
     "name": "Barraskewda",
@@ -12690,7 +13364,8 @@
     "abilities": [
       "swiftswim",
       "propellertail"
-    ]
+    ],
+    "weightkg": 30
   },
   "toxel": {
     "name": "Toxel",
@@ -12710,7 +13385,8 @@
       "rattled",
       "static",
       "klutz"
-    ]
+    ],
+    "weightkg": 11
   },
   "toxtricity": {
     "name": "Toxtricity",
@@ -12730,7 +13406,8 @@
       "punkrock",
       "plus",
       "technician"
-    ]
+    ],
+    "weightkg": 40
   },
   "toxtricitylowkey": {
     "name": "Toxtricity-Low-Key",
@@ -12750,7 +13427,8 @@
       "punkrock",
       "minus",
       "technician"
-    ]
+    ],
+    "weightkg": 40
   },
   "sinistea": {
     "name": "Sinistea",
@@ -12768,7 +13446,8 @@
     "abilities": [
       "weakarmor",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 0.2
   },
   "sinisteaantique": {
     "name": "Sinistea-Antique",
@@ -12786,7 +13465,8 @@
     "abilities": [
       "weakarmor",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 0.2
   },
   "polteageist": {
     "name": "Polteageist",
@@ -12804,7 +13484,8 @@
     "abilities": [
       "weakarmor",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 0.4
   },
   "polteageistantique": {
     "name": "Polteageist-Antique",
@@ -12822,7 +13503,8 @@
     "abilities": [
       "weakarmor",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 0.4
   },
   "hatenna": {
     "name": "Hatenna",
@@ -12841,7 +13523,8 @@
       "healer",
       "anticipation",
       "magicbounce"
-    ]
+    ],
+    "weightkg": 3.4
   },
   "hattrem": {
     "name": "Hattrem",
@@ -12860,7 +13543,8 @@
       "healer",
       "anticipation",
       "magicbounce"
-    ]
+    ],
+    "weightkg": 4.8
   },
   "hatterene": {
     "name": "Hatterene",
@@ -12880,7 +13564,8 @@
       "healer",
       "anticipation",
       "magicbounce"
-    ]
+    ],
+    "weightkg": 5.1
   },
   "impidimp": {
     "name": "Impidimp",
@@ -12900,7 +13585,8 @@
       "prankster",
       "frisk",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 5.5
   },
   "morgrem": {
     "name": "Morgrem",
@@ -12920,7 +13606,8 @@
       "prankster",
       "frisk",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 12.5
   },
   "grimmsnarl": {
     "name": "Grimmsnarl",
@@ -12940,7 +13627,8 @@
       "prankster",
       "frisk",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 61
   },
   "perrserker": {
     "name": "Perrserker",
@@ -12959,7 +13647,8 @@
       "battlearmor",
       "toughclaws",
       "steelyspirit"
-    ]
+    ],
+    "weightkg": 28
   },
   "milcery": {
     "name": "Milcery",
@@ -12977,7 +13666,8 @@
     "abilities": [
       "sweetveil",
       "aromaveil"
-    ]
+    ],
+    "weightkg": 0.3
   },
   "alcremie": {
     "name": "Alcremie",
@@ -12995,7 +13685,8 @@
     "abilities": [
       "sweetveil",
       "aromaveil"
-    ]
+    ],
+    "weightkg": 0.5
   },
   "falinks": {
     "name": "Falinks",
@@ -13013,7 +13704,8 @@
     "abilities": [
       "battlearmor",
       "defiant"
-    ]
+    ],
+    "weightkg": 62
   },
   "pincurchin": {
     "name": "Pincurchin",
@@ -13031,7 +13723,8 @@
     "abilities": [
       "lightningrod",
       "electricsurge"
-    ]
+    ],
+    "weightkg": 1
   },
   "snom": {
     "name": "Snom",
@@ -13050,7 +13743,8 @@
     "abilities": [
       "shielddust",
       "icescales"
-    ]
+    ],
+    "weightkg": 3.8
   },
   "frosmoth": {
     "name": "Frosmoth",
@@ -13069,7 +13763,8 @@
     "abilities": [
       "shielddust",
       "icescales"
-    ]
+    ],
+    "weightkg": 42
   },
   "stonjourner": {
     "name": "Stonjourner",
@@ -13086,7 +13781,8 @@
     },
     "abilities": [
       "powerspot"
-    ]
+    ],
+    "weightkg": 520
   },
   "eiscue": {
     "name": "Eiscue",
@@ -13103,7 +13799,8 @@
     },
     "abilities": [
       "iceface"
-    ]
+    ],
+    "weightkg": 89
   },
   "eiscuenoice": {
     "name": "Eiscue-Noice",
@@ -13120,7 +13817,8 @@
     },
     "abilities": [
       "iceface"
-    ]
+    ],
+    "weightkg": 89
   },
   "indeedee": {
     "name": "Indeedee",
@@ -13140,7 +13838,8 @@
       "innerfocus",
       "synchronize",
       "psychicsurge"
-    ]
+    ],
+    "weightkg": 28
   },
   "indeedeef": {
     "name": "Indeedee-F",
@@ -13160,7 +13859,8 @@
       "owntempo",
       "synchronize",
       "psychicsurge"
-    ]
+    ],
+    "weightkg": 28
   },
   "morpeko": {
     "name": "Morpeko",
@@ -13178,7 +13878,8 @@
     },
     "abilities": [
       "hungerswitch"
-    ]
+    ],
+    "weightkg": 3
   },
   "morpekohangry": {
     "name": "Morpeko-Hangry",
@@ -13196,7 +13897,8 @@
     },
     "abilities": [
       "hungerswitch"
-    ]
+    ],
+    "weightkg": 3
   },
   "cufant": {
     "name": "Cufant",
@@ -13214,7 +13916,8 @@
     "abilities": [
       "sheerforce",
       "heavymetal"
-    ]
+    ],
+    "weightkg": 100
   },
   "copperajah": {
     "name": "Copperajah",
@@ -13232,7 +13935,8 @@
     "abilities": [
       "sheerforce",
       "heavymetal"
-    ]
+    ],
+    "weightkg": 650
   },
   "duraludon": {
     "name": "Duraludon",
@@ -13252,7 +13956,8 @@
       "lightmetal",
       "heavymetal",
       "stalwart"
-    ]
+    ],
+    "weightkg": 40
   },
   "dreepy": {
     "name": "Dreepy",
@@ -13272,7 +13977,8 @@
       "clearbody",
       "infiltrator",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 2
   },
   "drakloak": {
     "name": "Drakloak",
@@ -13292,7 +13998,8 @@
       "clearbody",
       "infiltrator",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 11
   },
   "dragapult": {
     "name": "Dragapult",
@@ -13312,7 +14019,8 @@
       "clearbody",
       "infiltrator",
       "cursedbody"
-    ]
+    ],
+    "weightkg": 50
   },
   "zacian": {
     "name": "Zacian",
@@ -13329,7 +14037,8 @@
     },
     "abilities": [
       "intrepidsword"
-    ]
+    ],
+    "weightkg": 110
   },
   "zaciancrowned": {
     "name": "Zacian-Crowned",
@@ -13347,7 +14056,8 @@
     },
     "abilities": [
       "intrepidsword"
-    ]
+    ],
+    "weightkg": 355
   },
   "zamazenta": {
     "name": "Zamazenta",
@@ -13364,7 +14074,8 @@
     },
     "abilities": [
       "dauntlessshield"
-    ]
+    ],
+    "weightkg": 210
   },
   "zamazentacrowned": {
     "name": "Zamazenta-Crowned",
@@ -13382,7 +14093,8 @@
     },
     "abilities": [
       "dauntlessshield"
-    ]
+    ],
+    "weightkg": 785
   },
   "eternatus": {
     "name": "Eternatus",
@@ -13400,7 +14112,8 @@
     },
     "abilities": [
       "pressure"
-    ]
+    ],
+    "weightkg": 950
   },
   "kubfu": {
     "name": "Kubfu",
@@ -13417,7 +14130,8 @@
     },
     "abilities": [
       "innerfocus"
-    ]
+    ],
+    "weightkg": 12
   },
   "urshifu": {
     "name": "Urshifu",
@@ -13435,7 +14149,8 @@
     },
     "abilities": [
       "unseenfist"
-    ]
+    ],
+    "weightkg": 105
   },
   "urshifurapidstrike": {
     "name": "Urshifu-Rapid-Strike",
@@ -13453,7 +14168,8 @@
     },
     "abilities": [
       "unseenfist"
-    ]
+    ],
+    "weightkg": 105
   },
   "zarude": {
     "name": "Zarude",
@@ -13471,7 +14187,8 @@
     },
     "abilities": [
       "leafguard"
-    ]
+    ],
+    "weightkg": 70
   },
   "zarudedada": {
     "name": "Zarude-Dada",
@@ -13489,7 +14206,8 @@
     },
     "abilities": [
       "leafguard"
-    ]
+    ],
+    "weightkg": 70
   },
   "regieleki": {
     "name": "Regieleki",
@@ -13506,7 +14224,8 @@
     },
     "abilities": [
       "transistor"
-    ]
+    ],
+    "weightkg": 145
   },
   "regidrago": {
     "name": "Regidrago",
@@ -13523,7 +14242,8 @@
     },
     "abilities": [
       "dragonsmaw"
-    ]
+    ],
+    "weightkg": 200
   },
   "glastrier": {
     "name": "Glastrier",
@@ -13540,7 +14260,8 @@
     },
     "abilities": [
       "chillingneigh"
-    ]
+    ],
+    "weightkg": 800
   },
   "spectrier": {
     "name": "Spectrier",
@@ -13557,7 +14278,8 @@
     },
     "abilities": [
       "grimneigh"
-    ]
+    ],
+    "weightkg": 44.5
   },
   "calyrex": {
     "name": "Calyrex",
@@ -13575,7 +14297,8 @@
     },
     "abilities": [
       "unnerve"
-    ]
+    ],
+    "weightkg": 7.7
   },
   "calyrexice": {
     "name": "Calyrex-Ice",
@@ -13593,7 +14316,8 @@
     },
     "abilities": [
       "asoneglastrier"
-    ]
+    ],
+    "weightkg": 809.1
   },
   "calyrexshadow": {
     "name": "Calyrex-Shadow",
@@ -13611,7 +14335,8 @@
     },
     "abilities": [
       "asonespectrier"
-    ]
+    ],
+    "weightkg": 53.6
   },
   "wyrdeer": {
     "name": "Wyrdeer",
@@ -13631,7 +14356,8 @@
       "intimidate",
       "frisk",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 95.1
   },
   "kleavor": {
     "name": "Kleavor",
@@ -13651,7 +14377,8 @@
       "swarm",
       "sheerforce",
       "sharpness"
-    ]
+    ],
+    "weightkg": 89
   },
   "ursaluna": {
     "name": "Ursaluna",
@@ -13671,7 +14398,8 @@
       "guts",
       "bulletproof",
       "unnerve"
-    ]
+    ],
+    "weightkg": 290
   },
   "ursalunabloodmoon": {
     "name": "Ursaluna-Bloodmoon",
@@ -13689,7 +14417,8 @@
     },
     "abilities": [
       "mindseye"
-    ]
+    ],
+    "weightkg": 333
   },
   "basculegion": {
     "name": "Basculegion",
@@ -13709,7 +14438,8 @@
       "swiftswim",
       "adaptability",
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 110
   },
   "basculegionf": {
     "name": "Basculegion-F",
@@ -13729,7 +14459,8 @@
       "swiftswim",
       "adaptability",
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 110
   },
   "sneasler": {
     "name": "Sneasler",
@@ -13749,7 +14480,8 @@
       "pressure",
       "unburden",
       "poisontouch"
-    ]
+    ],
+    "weightkg": 43
   },
   "overqwil": {
     "name": "Overqwil",
@@ -13769,7 +14501,8 @@
       "poisonpoint",
       "swiftswim",
       "intimidate"
-    ]
+    ],
+    "weightkg": 60.5
   },
   "enamorus": {
     "name": "Enamorus",
@@ -13788,7 +14521,8 @@
     "abilities": [
       "cutecharm",
       "contrary"
-    ]
+    ],
+    "weightkg": 48
   },
   "enamorustherian": {
     "name": "Enamorus-Therian",
@@ -13806,7 +14540,8 @@
     },
     "abilities": [
       "overcoat"
-    ]
+    ],
+    "weightkg": 48
   },
   "sprigatito": {
     "name": "Sprigatito",
@@ -13824,7 +14559,8 @@
     "abilities": [
       "overgrow",
       "protean"
-    ]
+    ],
+    "weightkg": 4.1
   },
   "floragato": {
     "name": "Floragato",
@@ -13842,7 +14578,8 @@
     "abilities": [
       "overgrow",
       "protean"
-    ]
+    ],
+    "weightkg": 12.2
   },
   "meowscarada": {
     "name": "Meowscarada",
@@ -13861,7 +14598,8 @@
     "abilities": [
       "overgrow",
       "protean"
-    ]
+    ],
+    "weightkg": 31.2
   },
   "fuecoco": {
     "name": "Fuecoco",
@@ -13879,7 +14617,8 @@
     "abilities": [
       "blaze",
       "unaware"
-    ]
+    ],
+    "weightkg": 9.8
   },
   "crocalor": {
     "name": "Crocalor",
@@ -13897,7 +14636,8 @@
     "abilities": [
       "blaze",
       "unaware"
-    ]
+    ],
+    "weightkg": 30.7
   },
   "skeledirge": {
     "name": "Skeledirge",
@@ -13916,7 +14656,8 @@
     "abilities": [
       "blaze",
       "unaware"
-    ]
+    ],
+    "weightkg": 326.5
   },
   "quaxly": {
     "name": "Quaxly",
@@ -13934,7 +14675,8 @@
     "abilities": [
       "torrent",
       "moxie"
-    ]
+    ],
+    "weightkg": 6.1
   },
   "quaxwell": {
     "name": "Quaxwell",
@@ -13952,7 +14694,8 @@
     "abilities": [
       "torrent",
       "moxie"
-    ]
+    ],
+    "weightkg": 21.5
   },
   "quaquaval": {
     "name": "Quaquaval",
@@ -13971,7 +14714,8 @@
     "abilities": [
       "torrent",
       "moxie"
-    ]
+    ],
+    "weightkg": 61.9
   },
   "lechonk": {
     "name": "Lechonk",
@@ -13990,7 +14734,8 @@
       "aromaveil",
       "gluttony",
       "thickfat"
-    ]
+    ],
+    "weightkg": 10.2
   },
   "oinkologne": {
     "name": "Oinkologne",
@@ -14009,7 +14754,8 @@
       "lingeringaroma",
       "gluttony",
       "thickfat"
-    ]
+    ],
+    "weightkg": 120
   },
   "oinkolognef": {
     "name": "Oinkologne-F",
@@ -14028,7 +14774,8 @@
       "aromaveil",
       "gluttony",
       "thickfat"
-    ]
+    ],
+    "weightkg": 120
   },
   "tarountula": {
     "name": "Tarountula",
@@ -14046,7 +14793,8 @@
     "abilities": [
       "insomnia",
       "stakeout"
-    ]
+    ],
+    "weightkg": 4
   },
   "spidops": {
     "name": "Spidops",
@@ -14064,7 +14812,8 @@
     "abilities": [
       "insomnia",
       "stakeout"
-    ]
+    ],
+    "weightkg": 16.5
   },
   "nymble": {
     "name": "Nymble",
@@ -14082,7 +14831,8 @@
     "abilities": [
       "swarm",
       "tintedlens"
-    ]
+    ],
+    "weightkg": 1
   },
   "lokix": {
     "name": "Lokix",
@@ -14101,7 +14851,8 @@
     "abilities": [
       "swarm",
       "tintedlens"
-    ]
+    ],
+    "weightkg": 17.5
   },
   "pawmi": {
     "name": "Pawmi",
@@ -14120,7 +14871,8 @@
       "static",
       "naturalcure",
       "ironfist"
-    ]
+    ],
+    "weightkg": 2.5
   },
   "pawmo": {
     "name": "Pawmo",
@@ -14140,7 +14892,8 @@
       "voltabsorb",
       "naturalcure",
       "ironfist"
-    ]
+    ],
+    "weightkg": 6.5
   },
   "pawmot": {
     "name": "Pawmot",
@@ -14160,7 +14913,8 @@
       "voltabsorb",
       "naturalcure",
       "ironfist"
-    ]
+    ],
+    "weightkg": 41
   },
   "tandemaus": {
     "name": "Tandemaus",
@@ -14179,7 +14933,8 @@
       "runaway",
       "pickup",
       "owntempo"
-    ]
+    ],
+    "weightkg": 1.8
   },
   "maushold": {
     "name": "Maushold",
@@ -14198,7 +14953,8 @@
       "friendguard",
       "cheekpouch",
       "technician"
-    ]
+    ],
+    "weightkg": 2.3
   },
   "mausholdfour": {
     "name": "Maushold-Four",
@@ -14217,7 +14973,8 @@
       "friendguard",
       "cheekpouch",
       "technician"
-    ]
+    ],
+    "weightkg": 2.8
   },
   "fidough": {
     "name": "Fidough",
@@ -14235,7 +14992,8 @@
     "abilities": [
       "owntempo",
       "klutz"
-    ]
+    ],
+    "weightkg": 10.9
   },
   "dachsbun": {
     "name": "Dachsbun",
@@ -14253,7 +15011,8 @@
     "abilities": [
       "wellbakedbody",
       "aromaveil"
-    ]
+    ],
+    "weightkg": 14.9
   },
   "smoliv": {
     "name": "Smoliv",
@@ -14272,7 +15031,8 @@
     "abilities": [
       "earlybird",
       "harvest"
-    ]
+    ],
+    "weightkg": 6.5
   },
   "dolliv": {
     "name": "Dolliv",
@@ -14291,7 +15051,8 @@
     "abilities": [
       "earlybird",
       "harvest"
-    ]
+    ],
+    "weightkg": 11.9
   },
   "arboliva": {
     "name": "Arboliva",
@@ -14310,7 +15071,8 @@
     "abilities": [
       "seedsower",
       "harvest"
-    ]
+    ],
+    "weightkg": 48.2
   },
   "squawkabilly": {
     "name": "Squawkabilly",
@@ -14330,7 +15092,8 @@
       "intimidate",
       "hustle",
       "guts"
-    ]
+    ],
+    "weightkg": 2.4
   },
   "squawkabillyblue": {
     "name": "Squawkabilly-Blue",
@@ -14350,7 +15113,8 @@
       "intimidate",
       "hustle",
       "guts"
-    ]
+    ],
+    "weightkg": 2.4
   },
   "squawkabillyyellow": {
     "name": "Squawkabilly-Yellow",
@@ -14370,7 +15134,8 @@
       "intimidate",
       "hustle",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 2.4
   },
   "squawkabillywhite": {
     "name": "Squawkabilly-White",
@@ -14390,7 +15155,8 @@
       "intimidate",
       "hustle",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 2.4
   },
   "nacli": {
     "name": "Nacli",
@@ -14409,7 +15175,8 @@
       "purifyingsalt",
       "sturdy",
       "clearbody"
-    ]
+    ],
+    "weightkg": 16
   },
   "naclstack": {
     "name": "Naclstack",
@@ -14428,7 +15195,8 @@
       "purifyingsalt",
       "sturdy",
       "clearbody"
-    ]
+    ],
+    "weightkg": 105
   },
   "garganacl": {
     "name": "Garganacl",
@@ -14447,7 +15215,8 @@
       "purifyingsalt",
       "sturdy",
       "clearbody"
-    ]
+    ],
+    "weightkg": 240
   },
   "charcadet": {
     "name": "Charcadet",
@@ -14465,7 +15234,8 @@
     "abilities": [
       "flashfire",
       "flamebody"
-    ]
+    ],
+    "weightkg": 10.5
   },
   "armarouge": {
     "name": "Armarouge",
@@ -14484,7 +15254,8 @@
     "abilities": [
       "flashfire",
       "weakarmor"
-    ]
+    ],
+    "weightkg": 85
   },
   "ceruledge": {
     "name": "Ceruledge",
@@ -14503,7 +15274,8 @@
     "abilities": [
       "flashfire",
       "weakarmor"
-    ]
+    ],
+    "weightkg": 62
   },
   "tadbulb": {
     "name": "Tadbulb",
@@ -14522,7 +15294,8 @@
       "owntempo",
       "static",
       "damp"
-    ]
+    ],
+    "weightkg": 0.4
   },
   "bellibolt": {
     "name": "Bellibolt",
@@ -14541,7 +15314,8 @@
       "electromorphosis",
       "static",
       "damp"
-    ]
+    ],
+    "weightkg": 113
   },
   "wattrel": {
     "name": "Wattrel",
@@ -14561,7 +15335,8 @@
       "windpower",
       "voltabsorb",
       "competitive"
-    ]
+    ],
+    "weightkg": 3.6
   },
   "kilowattrel": {
     "name": "Kilowattrel",
@@ -14581,7 +15356,8 @@
       "windpower",
       "voltabsorb",
       "competitive"
-    ]
+    ],
+    "weightkg": 38.6
   },
   "maschiff": {
     "name": "Maschiff",
@@ -14600,7 +15376,8 @@
       "intimidate",
       "runaway",
       "stakeout"
-    ]
+    ],
+    "weightkg": 16
   },
   "mabosstiff": {
     "name": "Mabosstiff",
@@ -14619,7 +15396,8 @@
       "intimidate",
       "guarddog",
       "stakeout"
-    ]
+    ],
+    "weightkg": 61
   },
   "shroodle": {
     "name": "Shroodle",
@@ -14639,7 +15417,8 @@
       "unburden",
       "pickpocket",
       "prankster"
-    ]
+    ],
+    "weightkg": 0.7
   },
   "grafaiai": {
     "name": "Grafaiai",
@@ -14659,7 +15438,8 @@
       "unburden",
       "poisontouch",
       "prankster"
-    ]
+    ],
+    "weightkg": 27.2
   },
   "bramblin": {
     "name": "Bramblin",
@@ -14678,7 +15458,8 @@
     "abilities": [
       "windrider",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 0.6
   },
   "brambleghast": {
     "name": "Brambleghast",
@@ -14697,7 +15478,8 @@
     "abilities": [
       "windrider",
       "infiltrator"
-    ]
+    ],
+    "weightkg": 6
   },
   "toedscool": {
     "name": "Toedscool",
@@ -14715,7 +15497,8 @@
     },
     "abilities": [
       "myceliummight"
-    ]
+    ],
+    "weightkg": 33
   },
   "toedscruel": {
     "name": "Toedscruel",
@@ -14733,7 +15516,8 @@
     },
     "abilities": [
       "myceliummight"
-    ]
+    ],
+    "weightkg": 58
   },
   "klawf": {
     "name": "Klawf",
@@ -14752,7 +15536,8 @@
       "angershell",
       "shellarmor",
       "regenerator"
-    ]
+    ],
+    "weightkg": 79
   },
   "capsakid": {
     "name": "Capsakid",
@@ -14771,7 +15556,8 @@
       "chlorophyll",
       "insomnia",
       "klutz"
-    ]
+    ],
+    "weightkg": 3
   },
   "scovillain": {
     "name": "Scovillain",
@@ -14791,7 +15577,8 @@
       "chlorophyll",
       "insomnia",
       "moody"
-    ]
+    ],
+    "weightkg": 15
   },
   "rellor": {
     "name": "Rellor",
@@ -14809,7 +15596,8 @@
     "abilities": [
       "compoundeyes",
       "shedskin"
-    ]
+    ],
+    "weightkg": 1
   },
   "rabsca": {
     "name": "Rabsca",
@@ -14828,7 +15616,8 @@
     "abilities": [
       "synchronize",
       "telepathy"
-    ]
+    ],
+    "weightkg": 3.5
   },
   "flittle": {
     "name": "Flittle",
@@ -14847,7 +15636,8 @@
       "anticipation",
       "frisk",
       "speedboost"
-    ]
+    ],
+    "weightkg": 1.5
   },
   "espathra": {
     "name": "Espathra",
@@ -14866,7 +15656,8 @@
       "opportunist",
       "frisk",
       "speedboost"
-    ]
+    ],
+    "weightkg": 90
   },
   "tinkatink": {
     "name": "Tinkatink",
@@ -14886,7 +15677,8 @@
       "moldbreaker",
       "owntempo",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 8.9
   },
   "tinkatuff": {
     "name": "Tinkatuff",
@@ -14906,7 +15698,8 @@
       "moldbreaker",
       "owntempo",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 59.1
   },
   "tinkaton": {
     "name": "Tinkaton",
@@ -14926,7 +15719,8 @@
       "moldbreaker",
       "owntempo",
       "pickpocket"
-    ]
+    ],
+    "weightkg": 112.8
   },
   "wiglett": {
     "name": "Wiglett",
@@ -14945,7 +15739,8 @@
       "gooey",
       "rattled",
       "sandveil"
-    ]
+    ],
+    "weightkg": 1.8
   },
   "wugtrio": {
     "name": "Wugtrio",
@@ -14964,7 +15759,8 @@
       "gooey",
       "rattled",
       "sandveil"
-    ]
+    ],
+    "weightkg": 5.4
   },
   "bombirdier": {
     "name": "Bombirdier",
@@ -14984,7 +15780,8 @@
       "bigpecks",
       "keeneye",
       "rockypayload"
-    ]
+    ],
+    "weightkg": 42.9
   },
   "finizen": {
     "name": "Finizen",
@@ -15001,7 +15798,8 @@
     },
     "abilities": [
       "waterveil"
-    ]
+    ],
+    "weightkg": 60.2
   },
   "palafin": {
     "name": "Palafin",
@@ -15018,7 +15816,8 @@
     },
     "abilities": [
       "zerotohero"
-    ]
+    ],
+    "weightkg": 60.2
   },
   "palafinhero": {
     "name": "Palafin-Hero",
@@ -15035,7 +15834,8 @@
     },
     "abilities": [
       "zerotohero"
-    ]
+    ],
+    "weightkg": 97.4
   },
   "varoom": {
     "name": "Varoom",
@@ -15054,7 +15854,8 @@
     "abilities": [
       "overcoat",
       "slowstart"
-    ]
+    ],
+    "weightkg": 35
   },
   "revavroom": {
     "name": "Revavroom",
@@ -15073,7 +15874,8 @@
     "abilities": [
       "overcoat",
       "filter"
-    ]
+    ],
+    "weightkg": 120
   },
   "cyclizar": {
     "name": "Cyclizar",
@@ -15092,7 +15894,8 @@
     "abilities": [
       "shedskin",
       "regenerator"
-    ]
+    ],
+    "weightkg": 63
   },
   "orthworm": {
     "name": "Orthworm",
@@ -15110,7 +15913,8 @@
     "abilities": [
       "eartheater",
       "sandveil"
-    ]
+    ],
+    "weightkg": 310
   },
   "glimmet": {
     "name": "Glimmet",
@@ -15129,7 +15933,8 @@
     "abilities": [
       "toxicdebris",
       "corrosion"
-    ]
+    ],
+    "weightkg": 8
   },
   "glimmora": {
     "name": "Glimmora",
@@ -15148,7 +15953,8 @@
     "abilities": [
       "toxicdebris",
       "corrosion"
-    ]
+    ],
+    "weightkg": 45
   },
   "greavard": {
     "name": "Greavard",
@@ -15166,7 +15972,8 @@
     "abilities": [
       "pickup",
       "fluffy"
-    ]
+    ],
+    "weightkg": 35
   },
   "houndstone": {
     "name": "Houndstone",
@@ -15184,7 +15991,8 @@
     "abilities": [
       "sandrush",
       "fluffy"
-    ]
+    ],
+    "weightkg": 15
   },
   "flamigo": {
     "name": "Flamigo",
@@ -15204,7 +16012,8 @@
       "scrappy",
       "tangledfeet",
       "costar"
-    ]
+    ],
+    "weightkg": 37
   },
   "cetoddle": {
     "name": "Cetoddle",
@@ -15223,7 +16032,8 @@
       "thickfat",
       "snowcloak",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 45
   },
   "cetitan": {
     "name": "Cetitan",
@@ -15242,7 +16052,8 @@
       "thickfat",
       "slushrush",
       "sheerforce"
-    ]
+    ],
+    "weightkg": 700
   },
   "veluza": {
     "name": "Veluza",
@@ -15261,7 +16072,8 @@
     "abilities": [
       "moldbreaker",
       "sharpness"
-    ]
+    ],
+    "weightkg": 90
   },
   "dondozo": {
     "name": "Dondozo",
@@ -15280,7 +16092,8 @@
       "unaware",
       "oblivious",
       "waterveil"
-    ]
+    ],
+    "weightkg": 220
   },
   "tatsugiri": {
     "name": "Tatsugiri",
@@ -15299,7 +16112,8 @@
     "abilities": [
       "commander",
       "stormdrain"
-    ]
+    ],
+    "weightkg": 8
   },
   "tatsugiridroopy": {
     "name": "Tatsugiri-Droopy",
@@ -15318,7 +16132,8 @@
     "abilities": [
       "commander",
       "stormdrain"
-    ]
+    ],
+    "weightkg": 8
   },
   "tatsugiristretchy": {
     "name": "Tatsugiri-Stretchy",
@@ -15337,7 +16152,8 @@
     "abilities": [
       "commander",
       "stormdrain"
-    ]
+    ],
+    "weightkg": 8
   },
   "annihilape": {
     "name": "Annihilape",
@@ -15357,7 +16173,8 @@
       "vitalspirit",
       "innerfocus",
       "defiant"
-    ]
+    ],
+    "weightkg": 56
   },
   "clodsire": {
     "name": "Clodsire",
@@ -15377,7 +16194,8 @@
       "poisonpoint",
       "waterabsorb",
       "unaware"
-    ]
+    ],
+    "weightkg": 223
   },
   "farigiraf": {
     "name": "Farigiraf",
@@ -15397,7 +16215,8 @@
       "cudchew",
       "armortail",
       "sapsipper"
-    ]
+    ],
+    "weightkg": 160
   },
   "dudunsparce": {
     "name": "Dudunsparce",
@@ -15416,7 +16235,8 @@
       "serenegrace",
       "runaway",
       "rattled"
-    ]
+    ],
+    "weightkg": 39.2
   },
   "dudunsparcethreesegment": {
     "name": "Dudunsparce-Three-Segment",
@@ -15435,7 +16255,8 @@
       "serenegrace",
       "runaway",
       "rattled"
-    ]
+    ],
+    "weightkg": 47.4
   },
   "kingambit": {
     "name": "Kingambit",
@@ -15455,7 +16276,8 @@
       "defiant",
       "supremeoverlord",
       "pressure"
-    ]
+    ],
+    "weightkg": 120
   },
   "greattusk": {
     "name": "Great Tusk",
@@ -15473,7 +16295,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 320
   },
   "screamtail": {
     "name": "Scream Tail",
@@ -15491,7 +16314,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 8
   },
   "brutebonnet": {
     "name": "Brute Bonnet",
@@ -15509,7 +16333,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 21
   },
   "fluttermane": {
     "name": "Flutter Mane",
@@ -15527,7 +16352,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 4
   },
   "slitherwing": {
     "name": "Slither Wing",
@@ -15545,7 +16371,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 92
   },
   "sandyshocks": {
     "name": "Sandy Shocks",
@@ -15563,7 +16390,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 60
   },
   "irontreads": {
     "name": "Iron Treads",
@@ -15581,7 +16409,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 240
   },
   "ironbundle": {
     "name": "Iron Bundle",
@@ -15599,7 +16428,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 11
   },
   "ironhands": {
     "name": "Iron Hands",
@@ -15617,7 +16447,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 380.7
   },
   "ironjugulis": {
     "name": "Iron Jugulis",
@@ -15635,7 +16466,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 111
   },
   "ironmoth": {
     "name": "Iron Moth",
@@ -15653,7 +16485,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 36
   },
   "ironthorns": {
     "name": "Iron Thorns",
@@ -15671,7 +16504,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 303
   },
   "frigibax": {
     "name": "Frigibax",
@@ -15690,7 +16524,8 @@
     "abilities": [
       "thermalexchange",
       "icebody"
-    ]
+    ],
+    "weightkg": 17
   },
   "arctibax": {
     "name": "Arctibax",
@@ -15709,7 +16544,8 @@
     "abilities": [
       "thermalexchange",
       "icebody"
-    ]
+    ],
+    "weightkg": 30
   },
   "baxcalibur": {
     "name": "Baxcalibur",
@@ -15728,7 +16564,8 @@
     "abilities": [
       "thermalexchange",
       "icebody"
-    ]
+    ],
+    "weightkg": 210
   },
   "gimmighoul": {
     "name": "Gimmighoul",
@@ -15745,7 +16582,8 @@
     },
     "abilities": [
       "rattled"
-    ]
+    ],
+    "weightkg": 5
   },
   "gimmighoulroaming": {
     "name": "Gimmighoul-Roaming",
@@ -15762,7 +16600,8 @@
     },
     "abilities": [
       "runaway"
-    ]
+    ],
+    "weightkg": 0.1
   },
   "gholdengo": {
     "name": "Gholdengo",
@@ -15780,7 +16619,8 @@
     },
     "abilities": [
       "goodasgold"
-    ]
+    ],
+    "weightkg": 30
   },
   "wochien": {
     "name": "Wo-Chien",
@@ -15798,7 +16638,8 @@
     },
     "abilities": [
       "tabletsofruin"
-    ]
+    ],
+    "weightkg": 74.2
   },
   "chienpao": {
     "name": "Chien-Pao",
@@ -15816,7 +16657,8 @@
     },
     "abilities": [
       "swordofruin"
-    ]
+    ],
+    "weightkg": 152.2
   },
   "tinglu": {
     "name": "Ting-Lu",
@@ -15834,7 +16676,8 @@
     },
     "abilities": [
       "vesselofruin"
-    ]
+    ],
+    "weightkg": 699.7
   },
   "chiyu": {
     "name": "Chi-Yu",
@@ -15852,7 +16695,8 @@
     },
     "abilities": [
       "beadsofruin"
-    ]
+    ],
+    "weightkg": 4.9
   },
   "roaringmoon": {
     "name": "Roaring Moon",
@@ -15870,7 +16714,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 380
   },
   "ironvaliant": {
     "name": "Iron Valiant",
@@ -15888,7 +16733,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 35
   },
   "koraidon": {
     "name": "Koraidon",
@@ -15906,7 +16752,8 @@
     },
     "abilities": [
       "orichalcumpulse"
-    ]
+    ],
+    "weightkg": 303
   },
   "miraidon": {
     "name": "Miraidon",
@@ -15924,7 +16771,8 @@
     },
     "abilities": [
       "hadronengine"
-    ]
+    ],
+    "weightkg": 240
   },
   "walkingwake": {
     "name": "Walking Wake",
@@ -15942,7 +16790,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 280
   },
   "ironleaves": {
     "name": "Iron Leaves",
@@ -15960,7 +16809,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 125
   },
   "dipplin": {
     "name": "Dipplin",
@@ -15980,7 +16830,8 @@
       "supersweetsyrup",
       "gluttony",
       "stickyhold"
-    ]
+    ],
+    "weightkg": 4.4
   },
   "poltchageist": {
     "name": "Poltchageist",
@@ -15999,7 +16850,8 @@
     "abilities": [
       "hospitality",
       "heatproof"
-    ]
+    ],
+    "weightkg": 1.1
   },
   "poltchageistartisan": {
     "name": "Poltchageist-Artisan",
@@ -16018,7 +16870,8 @@
     "abilities": [
       "hospitality",
       "heatproof"
-    ]
+    ],
+    "weightkg": 1.1
   },
   "sinistcha": {
     "name": "Sinistcha",
@@ -16037,7 +16890,8 @@
     "abilities": [
       "hospitality",
       "heatproof"
-    ]
+    ],
+    "weightkg": 2.2
   },
   "sinistchamasterpiece": {
     "name": "Sinistcha-Masterpiece",
@@ -16056,7 +16910,8 @@
     "abilities": [
       "hospitality",
       "heatproof"
-    ]
+    ],
+    "weightkg": 2.2
   },
   "okidogi": {
     "name": "Okidogi",
@@ -16075,7 +16930,8 @@
     "abilities": [
       "toxicchain",
       "guarddog"
-    ]
+    ],
+    "weightkg": 92
   },
   "munkidori": {
     "name": "Munkidori",
@@ -16094,7 +16950,8 @@
     "abilities": [
       "toxicchain",
       "frisk"
-    ]
+    ],
+    "weightkg": 12.2
   },
   "fezandipiti": {
     "name": "Fezandipiti",
@@ -16113,7 +16970,8 @@
     "abilities": [
       "toxicchain",
       "technician"
-    ]
+    ],
+    "weightkg": 30.1
   },
   "ogerpon": {
     "name": "Ogerpon",
@@ -16130,7 +16988,8 @@
     },
     "abilities": [
       "defiant"
-    ]
+    ],
+    "weightkg": 39.8
   },
   "ogerponwellspring": {
     "name": "Ogerpon-Wellspring",
@@ -16148,7 +17007,8 @@
     },
     "abilities": [
       "waterabsorb"
-    ]
+    ],
+    "weightkg": 39.8
   },
   "ogerponhearthflame": {
     "name": "Ogerpon-Hearthflame",
@@ -16166,7 +17026,8 @@
     },
     "abilities": [
       "moldbreaker"
-    ]
+    ],
+    "weightkg": 39.8
   },
   "ogerponcornerstone": {
     "name": "Ogerpon-Cornerstone",
@@ -16184,7 +17045,8 @@
     },
     "abilities": [
       "sturdy"
-    ]
+    ],
+    "weightkg": 39.8
   },
   "ogerpontealtera": {
     "name": "Ogerpon-Teal-Tera",
@@ -16201,7 +17063,8 @@
     },
     "abilities": [
       "embodyaspectteal"
-    ]
+    ],
+    "weightkg": 39.8
   },
   "ogerponwellspringtera": {
     "name": "Ogerpon-Wellspring-Tera",
@@ -16219,7 +17082,8 @@
     },
     "abilities": [
       "embodyaspectwellspring"
-    ]
+    ],
+    "weightkg": 39.8
   },
   "ogerponhearthflametera": {
     "name": "Ogerpon-Hearthflame-Tera",
@@ -16237,7 +17101,8 @@
     },
     "abilities": [
       "embodyaspecthearthflame"
-    ]
+    ],
+    "weightkg": 39.8
   },
   "ogerponcornerstonetera": {
     "name": "Ogerpon-Cornerstone-Tera",
@@ -16255,7 +17120,8 @@
     },
     "abilities": [
       "embodyaspectcornerstone"
-    ]
+    ],
+    "weightkg": 39.8
   },
   "archaludon": {
     "name": "Archaludon",
@@ -16275,7 +17141,8 @@
       "stamina",
       "sturdy",
       "stalwart"
-    ]
+    ],
+    "weightkg": 60
   },
   "hydrapple": {
     "name": "Hydrapple",
@@ -16295,7 +17162,8 @@
       "supersweetsyrup",
       "regenerator",
       "stickyhold"
-    ]
+    ],
+    "weightkg": 93
   },
   "gougingfire": {
     "name": "Gouging Fire",
@@ -16313,7 +17181,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 590
   },
   "ragingbolt": {
     "name": "Raging Bolt",
@@ -16331,7 +17200,8 @@
     },
     "abilities": [
       "protosynthesis"
-    ]
+    ],
+    "weightkg": 480
   },
   "ironboulder": {
     "name": "Iron Boulder",
@@ -16349,7 +17219,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 162.5
   },
   "ironcrown": {
     "name": "Iron Crown",
@@ -16367,7 +17238,8 @@
     },
     "abilities": [
       "quarkdrive"
-    ]
+    ],
+    "weightkg": 156
   },
   "terapagos": {
     "name": "Terapagos",
@@ -16384,7 +17256,8 @@
     },
     "abilities": [
       "terashift"
-    ]
+    ],
+    "weightkg": 6.5
   },
   "terapagosterastal": {
     "name": "Terapagos-Terastal",
@@ -16401,7 +17274,8 @@
     },
     "abilities": [
       "terashell"
-    ]
+    ],
+    "weightkg": 16
   },
   "terapagosstellar": {
     "name": "Terapagos-Stellar",
@@ -16418,7 +17292,8 @@
     },
     "abilities": [
       "teraformzero"
-    ]
+    ],
+    "weightkg": 77
   },
   "pecharunt": {
     "name": "Pecharunt",
@@ -16436,6 +17311,7 @@
     },
     "abilities": [
       "poisonpuppeteer"
-    ]
+    ],
+    "weightkg": 0.3
   }
 }

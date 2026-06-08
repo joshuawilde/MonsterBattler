@@ -81,8 +81,8 @@ namespace MonsterBattler.Sim
                 LastMoveUsed = m.LastMoveUsed, LockedMoveId = m.LockedMoveId,
                 LastDamageAmount = m.LastDamageAmount, LastDamageCategory = m.LastDamageCategory,
                 LastDamageSource = m.LastDamageSource, // relinked by caller
-                LastDamageTurn = m.LastDamageTurn,
-                TeraType = m.TeraType, IsTerastallized = m.IsTerastallized, IsActive = m.IsActive,
+                LastDamageTurn = m.LastDamageTurn, LastDamageWasContact = m.LastDamageWasContact, ItemLost = m.ItemLost, ActedThisTurn = m.ActedThisTurn, SwitchedInThisTurn = m.SwitchedInThisTurn,
+                TeraType = m.TeraType, IsTerastallized = m.IsTerastallized, TypeOverridden = m.TypeOverridden, OType1 = m.OType1, OType2 = m.OType2, IsActive = m.IsActive, FaintLogged = m.FaintLogged,
             };
             System.Array.Copy(m.IVs, c.IVs, m.IVs.Length);
             System.Array.Copy(m.EVs, c.EVs, m.EVs.Length);

@@ -76,6 +76,7 @@ namespace MonsterBattler.Sim.Tests
                         SpA = Int(stats, "spa"), SpD = Int(stats, "spd"), Spe = Int(stats, "spe"),
                     },
                     AbilityIds = abilities,
+                    WeightKg = o.TryGetProperty("weightkg", out var wk) ? (float)wk.GetDouble() : 0f,
                 };
             }
 

@@ -30,6 +30,9 @@ namespace MonsterBattler.Sim
         public int TurnNumber;
         public bool IsFinished;
         public int? WinningSide;
+        Pokemon _currentAttacker; // the mon currently using a move (for status source: Synchronize/Corrosion)
+        bool _bouncing;           // guard so Magic Bounce can't ping-pong a status move forever
+        bool _dancing;            // guard so Dancer can't recursively copy dance moves
 
         public Battle(Dex dex, ulong seed)
         {
@@ -55,12 +58,16 @@ namespace MonsterBattler.Sim
             TurnNumber++;
             Log.Turn(TurnNumber);
 
+            // Reset per-turn flags (Analytic = moved last, Stakeout = target switched in this turn).
+            foreach (var side in Sides)
+                foreach (var mon in side.Team) { mon.ActedThisTurn = false; mon.SwitchedInThisTurn = false; }
+
             // Phase 0: Pursuit intercept — a Pursuit user catches a switching foe with doubled BP.
             InterceptPursuit(ref s0, ref s1);
 
             // Phase 1: switches (both sides, side-0 first as a placeholder for richer ordering).
-            if (s0.Kind == ChoiceKind.Switch) TrySwitch(Sides[0], s0.SwitchToIndex);
-            if (s1.Kind == ChoiceKind.Switch) TrySwitch(Sides[1], s1.SwitchToIndex);
+            if (s0.Kind == ChoiceKind.Switch) { TrySwitch(Sides[0], s0.SwitchToIndex); if (Sides[0].ActiveSlots.Count > 0) Sides[0].ActiveSlots[0].SwitchedInThisTurn = true; }
+            if (s1.Kind == ChoiceKind.Switch) { TrySwitch(Sides[1], s1.SwitchToIndex); if (Sides[1].ActiveSlots.Count > 0) Sides[1].ActiveSlots[0].SwitchedInThisTurn = true; }
 
             // Phase 2: moves in priority/Speed order.
             var moveActions = new List<(Side attacker, Side defender, Choice c)>();
@@ -94,10 +101,31 @@ namespace MonsterBattler.Sim
             // decision to the player instead of auto-picking next alive.
             foreach (var side in Sides)
                 foreach (var mon in side.ActiveSlots)
-                    if (mon.IsFainted) Log.Faint(mon);
+                    if (mon.IsFainted && !mon.FaintLogged)
+                    {
+                        mon.FaintLogged = true;
+                        Log.Faint(mon);
+                        var fe = new FaintEvent { Battle = this, Pokemon = mon, Source = mon.LastDamageSource };
+                        // The fainting mon reacts (Aftermath), then every other active mon does
+                        // (Moxie/Chilling-Grim Neigh check ev.Source==self; Soul-Heart on any faint).
+                        Dispatch(mon, (e, o) => e.OnFaint(fe, o));
+                        foreach (var s2 in Sides)
+                            foreach (var other in s2.ActiveSlots)
+                                if (other != null && other != mon && !other.IsFainted)
+                                    Dispatch(other, (e, o) => e.OnFaint(fe, o));
+                    }
             AutoSwitchFainted();
 
             CheckWinCondition();
+        }
+
+        /// <summary>Move priority after ability modifiers (Prankster/Gale Wings/Triage).</summary>
+        int EffectivePriority(Pokemon user, Data.MoveData move)
+        {
+            if (user == null) return move.Priority;
+            var ev = new ModifyPriorityEvent { Battle = this, User = user, Move = move, Priority = move.Priority };
+            Dispatch(user, (e, o) => e.OnModifyPriority(ev, o));
+            return ev.Priority;
         }
 
         void OrderMoves(List<(Side attacker, Side defender, Choice c)> moves)
@@ -106,8 +134,8 @@ namespace MonsterBattler.Sim
             var a = moves[0]; var b = moves[1];
             var aMove = Dex.GetMove(a.c.MoveId);
             var bMove = Dex.GetMove(b.c.MoveId);
-            int aPrio = aMove.Priority;
-            int bPrio = bMove.Priority;
+            int aPrio = EffectivePriority(a.attacker.ActiveSlots[0], aMove);
+            int bPrio = EffectivePriority(b.attacker.ActiveSlots[0], bMove);
             if (aPrio != bPrio) { if (aPrio < bPrio) (moves[0], moves[1]) = (moves[1], moves[0]); return; }
             int aSpe = GetEffectiveSpeed(a.attacker.ActiveSlots[0]);
             int bSpe = GetEffectiveSpeed(b.attacker.ActiveSlots[0]);
@@ -147,6 +175,7 @@ namespace MonsterBattler.Sim
             if (choice.Kind != ChoiceKind.Move) return;
             var user = attacker.ActiveSlots[0];
             if (user.IsFainted) return;
+            user.ActedThisTurn = true; // for Analytic (did the foe already move this turn?)
 
             // Terastallize before the move — once per battle per side, requires a TeraType set.
             if (choice.Terastallize && !user.IsTerastallized && user.TeraType != MonType.None && !attacker.HasUsedTera)
@@ -193,6 +222,7 @@ namespace MonsterBattler.Sim
             {
                 RunSwitchOut(new SwitchOutEvent { Battle = this, Pokemon = outgoing });
                 outgoing.IsActive = false;
+                outgoing.TypeOverridden = false; outgoing.ItemLost = false; // revert on switch out
                 outgoing.Volatiles.Clear();
                 outgoing.Tags.Clear();
                 outgoing.ToxicCounter = 0;
@@ -229,6 +259,69 @@ namespace MonsterBattler.Sim
 
         void UseMove(Pokemon user, Pokemon target, string moveId)
         {
+            // Mold Breaker / Teravolt / Turboblaze suppress the target's ability for the whole move;
+            // Mycelium Might does the same, but only for the user's status moves.
+            bool moldBreaker = user.AbilityEffect is Effects.Abilities.MoldBreakerEffect
+                || user.AbilityEffect is Effects.Abilities.TeravoltEffect
+                || user.AbilityEffect is Effects.Abilities.TurboblazeEffect
+                || (user.AbilityEffect is Effects.Abilities.MyceliumMightEffect
+                    && Dex.GetMove(moveId).Category == MoveCategory.Status);
+            Effects.Effect suppressed = null;
+            if (moldBreaker && target != null && target != user) { suppressed = target.AbilityEffect; target.AbilityEffect = null; }
+            try { UseMoveCore(user, target, moveId); }
+            finally { if (suppressed != null) target.AbilityEffect = suppressed; }
+
+            // Gulp Missile: Cramorant enters its gulping form after Surf / Dive.
+            if ((moveId == "surf" || moveId == "dive") && !user.IsFainted &&
+                user.AbilityEffect is Effects.Abilities.GulpmissileEffect && user.GetVolatile("gulpmissilecharge") == null)
+                AddVolatile(user, "gulpmissilecharge", user);
+
+            // Dancer: any other active mon instantly copies a dance move.
+            if (!_dancing && IsDanceMove(moveId))
+            {
+                foreach (var s in Sides)
+                    foreach (var d in s.ActiveSlots)
+                        if (d != null && d != user && !d.IsFainted && d.AbilityEffect is Effects.Abilities.DancerEffect)
+                        {
+                            _dancing = true;
+                            var foeSide = OpposingSideOf(d);
+                            var dTarget = foeSide != null && foeSide.ActiveSlots.Count > 0 ? foeSide.ActiveSlots[0] : user;
+                            UseMove(d, dTarget, moveId);
+                            _dancing = false;
+                        }
+            }
+        }
+
+        static bool IsPowderMove(string id) => id switch
+        {
+            "spore" or "sleeppowder" or "stunspore" or "poisonpowder" or "ragepowder"
+            or "cottonspore" or "magicpowder" or "powder" => true,
+            _ => false,
+        };
+
+        static bool IsDanceMove(string id) => id switch
+        {
+            "swordsdance" or "dragondance" or "quiverdance" or "victorydance" or "fierydance"
+            or "revelationdance" or "petaldance" or "teeterdance" or "clangoroussoul" or "featherdance"
+            or "lunardance" => true,
+            _ => false,
+        };
+
+        /// <summary>True while a move is being invoked by another move (Sleep Talk) — lets it bypass the sleep gate.</summary>
+        public bool CallingMove { get; private set; }
+
+        /// <summary>Invoke a move without spending PP / choosing it (Sleep Talk, etc.).</summary>
+        public void CallMove(Pokemon user, Pokemon target, string moveId)
+        {
+            bool prev = CallingMove;
+            CallingMove = true;
+            try { UseMoveCore(user, target, moveId); }
+            finally { CallingMove = prev; }
+        }
+
+        void UseMoveCore(Pokemon user, Pokemon target, string moveId)
+        {
+            _currentAttacker = user; // status source for Synchronize / Corrosion
             var move = Dex.GetMove(moveId);
 
             // PP gate. Real PS substitutes Struggle when every slot is at 0; that escape hatch
@@ -242,11 +335,55 @@ namespace MonsterBattler.Sim
                 return;
             }
             if (slot != null) slot.Pp--;
+            // Pressure: the target's ability makes the move cost an extra PP.
+            if (slot != null && target != null && target != user && target.AbilityEffect is Effects.Abilities.PressureEffect)
+                slot.Pp = System.Math.Max(0, slot.Pp - 1);
 
             // BeforeMove gate: Sleep, Confusion, full-paralyze, Truant, Recharge, etc.
             var before = new BeforeMoveEvent { Battle = this, User = user, Move = move };
             RunBeforeMove(before);
             if (before.Cancelled) return;
+
+            // Protean / Libero: the user becomes the move's type the first time it acts each switch-in.
+            if ((user.AbilityEffect is Effects.Abilities.ProteanEffect || user.AbilityEffect is Effects.Abilities.LiberoEffect)
+                && !user.Tags.Contains("typechanged") && move.Type != MonType.None && !user.IsTerastallized)
+            {
+                user.TypeOverridden = true; user.OType1 = move.Type; user.OType2 = MonType.None;
+                user.Tags.Add("typechanged");
+                Log.Raw($"|-start|{Ident(user)}|typechange|[from] ability");
+            }
+
+            // Damp: blocks explosion-style moves while any active mon has it.
+            if ((moveId == "explosion" || moveId == "selfdestruct" || moveId == "mistyexplosion" || moveId == "mindblown")
+                && AnyActiveHas<Effects.Abilities.DampEffect>())
+            {
+                Log.Raw($"|cant|{Ident(user)}|ability: Damp|{move.Name}");
+                return;
+            }
+            // Queenly Majesty / Dazzling / Armor Tail: block opposing increased-priority moves.
+            if (target != null && target != user && EffectivePriority(user, move) > 0 &&
+                target.AbilityEffect is Effects.Abilities.QueenlyMajestyEffect)
+            {
+                Log.Raw($"|cant|{Ident(target)}|ability: Queenly Majesty|{move.Name}");
+                return;
+            }
+            // Magic Bounce: reflects an opposing status move back at its user.
+            if (!_bouncing && target != null && target != user && move.Category == MoveCategory.Status &&
+                move.Target != MoveTarget.Self && target.AbilityEffect is Effects.Abilities.MagicBounceEffect)
+            {
+                Log.Raw($"|-activate|{Ident(target)}|ability: Magic Bounce");
+                _bouncing = true;
+                UseMoveCore(target, user, moveId);
+                _bouncing = false;
+                return;
+            }
+            // Powder moves miss Grass types, Overcoat holders, and Safety Goggles.
+            if (target != null && target != user && IsPowderMove(moveId) &&
+                (HasType(target, MonType.Grass) || target.AbilityEffect is Effects.Abilities.OvercoatEffect || target.HasItem("safetygoggles")))
+            {
+                Log.Raw($"|-immune|{Ident(target)}");
+                return;
+            }
 
             // Two-turn charge moves (Solar Beam, Sky Attack, Phantom Force).
             if (move.TwoTurn)
@@ -305,14 +442,37 @@ namespace MonsterBattler.Sim
             if (move.Category != MoveCategory.Status && move.BasePower > 0)
             {
                 int targetHits = RollMultihitCount(move);
+                // Skill Link: multi-hit moves always hit the maximum number of times.
+                if (user.AbilityEffect is Effects.Abilities.SkillLinkEffect && move.MultihitMax >= 2)
+                    targetHits = move.MultihitMax;
                 for (int h = 0; h < targetHits; h++)
                 {
                     if (target.IsFainted) break;
-                    isCrit = RollCrit(move.CritRatio);
+                    isCrit = RollCrit(move.CritRatio)
+                        && !(target.AbilityEffect is Effects.Abilities.ShellArmorEffect); // Shell/Battle Armor: never crit
                     int hitDamage = DamageCalc.Compute(this, user, target, move, isCrit);
 
+                    // Disguise / Ice Face: the first qualifying hit is absorbed and breaks the form.
+                    if (hitDamage > 0 && !target.Tags.Contains("formbroken"))
+                    {
+                        bool disguise = target.AbilityEffect is Effects.Abilities.DisguiseEffect;
+                        bool iceFace = target.AbilityEffect is Effects.Abilities.IceFaceEffect && move.Category == MoveCategory.Physical;
+                        if (disguise || iceFace)
+                        {
+                            target.Tags.Add("formbroken");
+                            Log.Raw($"|-activate|{Ident(target)}|ability: {(disguise ? "Disguise" : "Ice Face")}");
+                            if (disguise)
+                            {
+                                ApplyDamage(target, System.Math.Max(1, target.MaxStats[(int)Stat.HP] / 8), DamageSource.Other);
+                                Log.Raw($"|-damage|{Ident(target)}|{target.CurrentHp}/{target.MaxStats[(int)Stat.HP]}");
+                            }
+                            continue; // hit fully absorbed
+                        }
+                    }
+
                     var sub = target.GetVolatile("substitute");
-                    bool absorbed = sub != null && hitDamage > 0 && !move.Sound && user != target;
+                    bool absorbed = sub != null && hitDamage > 0 && !move.Sound && user != target
+                        && !(user.AbilityEffect is Effects.Abilities.InfiltratorEffect); // Infiltrator pierces Substitute
                     if (absorbed)
                     {
                         if (hitDamage >= sub.Counter) RemoveVolatile(target, "substitute");
@@ -328,7 +488,7 @@ namespace MonsterBattler.Sim
                         ApplyDamage(target, hitDamage);
                         if (isCrit) Log.Raw($"|-crit|{Ident(target)}");
                         Log.Damage(target, hitDamage);
-                        RecordIncomingDamage(target, hitDamage, move.Category, user);
+                        RecordIncomingDamage(target, hitDamage, move.Category, user, move.Contact);
                     }
 
                     var hit = new HitEvent { Battle = this, User = user, Target = target, Move = move, DamageDealt = hitDamage };
@@ -359,21 +519,30 @@ namespace MonsterBattler.Sim
             bool connected = move.Category != MoveCategory.Status ? totalDamage > 0 : true;
             ApplySecondaries(user, target, move, connected);
 
-            // Drain: heal user for a fraction of total damage dealt.
+            // Drain: heal user for a fraction of total damage dealt — unless Liquid Ooze hurts instead.
             if (move.DrainDen > 0 && totalDamage > 0 && !user.IsFainted)
             {
                 int max = user.MaxStats[(int)Stat.HP];
                 int heal = System.Math.Max(1, totalDamage * move.DrainNum / move.DrainDen);
-                int actual = System.Math.Min(heal, max - user.CurrentHp);
-                if (actual > 0)
+                if (target != null && target.AbilityEffect is Effects.Abilities.LiquidOozeEffect)
                 {
-                    user.CurrentHp += actual;
-                    Log.Raw($"|-heal|{Ident(user)}|{user.CurrentHp}/{max}|[from] drain|[of] {Ident(target)}");
+                    ApplyDamage(user, heal, DamageSource.Other);
+                    Log.Raw($"|-damage|{Ident(user)}|{user.CurrentHp}/{max}|[from] ability: Liquid Ooze|[of] {Ident(target)}");
+                }
+                else
+                {
+                    int actual = System.Math.Min(heal, max - user.CurrentHp);
+                    if (actual > 0)
+                    {
+                        user.CurrentHp += actual;
+                        Log.Raw($"|-heal|{Ident(user)}|{user.CurrentHp}/{max}|[from] drain|[of] {Ident(target)}");
+                    }
                 }
             }
 
-            // Recoil: user takes a fraction of total damage dealt.
-            if (move.RecoilDen > 0 && totalDamage > 0 && !user.IsFainted)
+            // Recoil: user takes a fraction of total damage dealt (Rock Head negates it).
+            if (move.RecoilDen > 0 && totalDamage > 0 && !user.IsFainted &&
+                !(user.AbilityEffect is Effects.Abilities.RockHeadEffect))
             {
                 int recoil = System.Math.Max(1, totalDamage * move.RecoilNum / move.RecoilDen);
                 ApplyDamage(user, recoil, DamageSource.Recoil);
@@ -420,12 +589,73 @@ namespace MonsterBattler.Sim
         {
             if (target == null || target.IsFainted) return null;
             if (target.Volatiles.ContainsKey(id)) return null;
+            if (VolatileBlockedByAbility(target, id)) return null; // Oblivious/Own Tempo/Aroma Veil/Inner Focus
             var effect = EffectRegistry.Get(id);
             if (effect == null) return null;
             var slot = new VolatileSlot { Effect = effect, Source = source, Turns = turns, SingleTurn = singleTurn };
             target.Volatiles[id] = slot;
             Log.Raw($"|-start|{Ident(target)}|{id}");
             return slot;
+        }
+
+        /// <summary>A mon's battle weight in kg, after Heavy Metal (×2) / Light Metal (÷2) / Float Stone.</summary>
+        public float EffectiveWeight(Pokemon mon)
+        {
+            if (mon?.Species == null) return 0f;
+            float w = mon.Species.WeightKg;
+            if (mon.AbilityEffect is Effects.Abilities.HeavymetalEffect) w *= 2f;
+            else if (mon.AbilityEffect is Effects.Abilities.LightmetalEffect) w *= 0.5f;
+            if (mon.HasItem("floatstone")) w *= 0.5f;
+            return System.Math.Max(0.1f, w);
+        }
+
+        bool AnyActiveHas<T>() where T : Effects.Effect
+        {
+            foreach (var s in Sides)
+                foreach (var m in s.ActiveSlots)
+                    if (m != null && !m.IsFainted && m.AbilityEffect is T) return true;
+            return false;
+        }
+
+        /// <summary>True if an opposing ability prevents this mon from voluntarily switching out.</summary>
+        public bool IsTrapped(Pokemon mon)
+        {
+            if (mon == null || mon.IsFainted || mon.Species == null) return false;
+            if (mon.Species.Type1 == MonType.Ghost || mon.Species.Type2 == MonType.Ghost) return false; // Ghosts never trapped
+            var opp = OpposingSideOf(mon);
+            if (opp == null) return false;
+            foreach (var foe in opp.ActiveSlots)
+            {
+                if (foe == null || foe.IsFainted) continue;
+                var ab = foe.AbilityEffect;
+                if (ab is Effects.Abilities.ShadowTagEffect && !(mon.AbilityEffect is Effects.Abilities.ShadowTagEffect)) return true;
+                if (ab is Effects.Abilities.MagnetPullEffect &&
+                    (mon.Species.Type1 == MonType.Steel || mon.Species.Type2 == MonType.Steel)) return true;
+                if (ab is Effects.Abilities.ArenaTrapEffect && IsGrounded(mon)) return true;
+            }
+            return false;
+        }
+
+        bool IsGrounded(Pokemon m)
+        {
+            if (m.Species != null && (m.Species.Type1 == MonType.Flying || m.Species.Type2 == MonType.Flying)) return false;
+            if (m.AbilityEffect is Effects.Abilities.LevitateEffect) return false;
+            if (m.HasItem("airballoon")) return false;
+            return true;
+        }
+
+        // Abilities that grant immunity to specific volatile statuses.
+        bool VolatileBlockedByAbility(Pokemon mon, string id)
+        {
+            var ab = mon.AbilityEffect;
+            if (ab == null) return false;
+            return ab switch
+            {
+                Effects.Abilities.ObliviousEffect => id == "taunt" || id == "attract",
+                Effects.Abilities.OwnTempoEffect => id == "confusion",
+                Effects.Abilities.AromaVeilEffect => id == "taunt" || id == "encore" || id == "disable" || id == "attract",
+                _ => false,
+            };
         }
 
         public bool RemoveVolatile(Pokemon target, string id)
@@ -493,6 +723,14 @@ namespace MonsterBattler.Sim
             Log.Raw($"|-weather|{weather}");
         }
 
+        public void SetTerrain(Terrain terrain, int turns = 5)
+        {
+            if (Field.Terrain == terrain) return;
+            Field.Terrain = terrain;
+            Field.TerrainTurnsLeft = turns;
+            Log.Raw($"|-fieldstart|{terrain} Terrain");
+        }
+
         void TickWeather()
         {
             if (Field.Weather == Weather.None) return;
@@ -506,6 +744,12 @@ namespace MonsterBattler.Sim
                     {
                         if (mon == null || mon.IsFainted) continue;
                         if (HasType(mon, MonType.Rock) || HasType(mon, MonType.Ground) || HasType(mon, MonType.Steel)) continue;
+                        if (mon.AbilityEffect is Effects.Abilities.OvercoatEffect ||
+                            mon.AbilityEffect is Effects.Abilities.MagicGuardEffect ||
+                            mon.AbilityEffect is Effects.Abilities.SandForceEffect ||
+                            mon.AbilityEffect is Effects.Abilities.SandRushEffect ||
+                            mon.AbilityEffect is Effects.Abilities.SandVeilEffect ||
+                            mon.HasItem("safetygoggles")) continue;
                         int dmg = System.Math.Max(1, mon.MaxStats[(int)Stat.HP] / 16);
                         ApplyDamage(mon, dmg, DamageSource.Sandstorm);
                         Log.Raw($"|-damage|{Ident(mon)}|{mon.CurrentHp}/{mon.MaxStats[(int)Stat.HP]}|[from] Sandstorm");
@@ -595,15 +839,25 @@ namespace MonsterBattler.Sim
         public bool BoostStat(Pokemon mon, Stat stat, int delta, Pokemon source = null)
         {
             if (mon == null || mon.IsFainted || delta == 0) return false;
-            // Opponent-induced stat drops can be refused by ability.
+            // Contrary inverts every stat change before anything else sees it.
+            if (mon.AbilityEffect is Effects.Abilities.ContraryEffect) delta = -delta;
+            // Opponent-induced stat drops can be refused — or reflected — by ability.
             if (delta < 0 && source != null && source != mon && mon.AbilityEffect != null)
             {
+                // Mirror Armor bounces the drop back at the attacker instead.
+                if (mon.AbilityEffect is Effects.Abilities.MirrorArmorEffect)
+                {
+                    Log.Raw($"|-ability|{Ident(mon)}|Mirror Armor");
+                    BoostStat(source, stat, delta, mon);
+                    return false;
+                }
                 bool block = false;
                 if (mon.AbilityEffect is Effects.Abilities.ClearBodyEffect ||
                     mon.AbilityEffect is Effects.Abilities.WhiteSmokeEffect ||
                     mon.AbilityEffect is Effects.Abilities.FullMetalBodyEffect) block = true;
                 if (stat == Stat.Atk && mon.AbilityEffect is Effects.Abilities.HyperCutterEffect) block = true;
                 if (stat == Stat.Def && mon.AbilityEffect is Effects.Abilities.BigPecksEffect) block = true;
+                if (stat == Stat.Acc && mon.AbilityEffect is Effects.Abilities.KeenEyeEffect) block = true;
                 if (block)
                 {
                     Log.Raw($"|-immune|{Ident(mon)}|[from] ability: {mon.AbilityEffect.DisplayName}");
@@ -622,6 +876,12 @@ namespace MonsterBattler.Sim
             int magnitude = System.Math.Abs(after - before);
             string verb = delta > 0 ? "boost" : "unboost";
             Log.Raw($"|-{verb}|{Ident(mon)}|{stat.ToString().ToLower()}|{magnitude}");
+            // A foe lowered our stat — let reactive abilities answer (Defiant, Competitive).
+            if (delta < 0 && source != null && source != mon)
+            {
+                var sl = new StatModifyEvent { Battle = this, Owner = mon, Stat = stat };
+                Dispatch(mon, (e, o) => e.OnAfterStatLowered(sl, o));
+            }
             return true;
         }
 
@@ -651,13 +911,14 @@ namespace MonsterBattler.Sim
         }
 
         /// <summary>Tracks the last damage instance received — used by Counter / Mirror Coat / Metal Burst.</summary>
-        public void RecordIncomingDamage(Pokemon target, int amount, MoveCategory category, Pokemon source)
+        public void RecordIncomingDamage(Pokemon target, int amount, MoveCategory category, Pokemon source, bool contact = false)
         {
             if (target == null || amount <= 0) return;
             target.LastDamageAmount = amount;
             target.LastDamageCategory = category;
             target.LastDamageSource = source;
             target.LastDamageTurn = TurnNumber;
+            target.LastDamageWasContact = contact;
         }
 
         /// <summary>
@@ -681,9 +942,38 @@ namespace MonsterBattler.Sim
             Log.Raw($"|-formechange|{Ident(mon)}|{newSp.Name}");
         }
 
+        /// <summary>Transform/Imposter: copy the target's species, stats (except HP), stages, types,
+        /// ability and moves (each at 5 PP). The user keeps its own HP and max HP.</summary>
+        public void Transform(Pokemon user, Pokemon target)
+        {
+            if (user == null || target == null || target.Species == null) return;
+            user.Species = target.Species;
+            for (int i = 1; i < 6; i++) user.MaxStats[i] = target.MaxStats[i]; // Atk..Spe; keep HP
+            System.Array.Copy(target.StatStages, user.StatStages, target.StatStages.Length);
+            var (t1, t2) = target.CurrentTypes();
+            user.TypeOverridden = true; user.OType1 = t1; user.OType2 = t2;
+            user.Ability = target.Ability; user.AbilityEffect = target.AbilityEffect;
+            user.Moves.Clear();
+            foreach (var ms in target.Moves)
+                user.Moves.Add(new MoveSlot { Move = ms.Move, Pp = System.Math.Min(5, ms.MaxPp), MaxPp = System.Math.Min(5, ms.MaxPp) });
+            user.Tags.Add("transformed");
+            Log.Raw($"|-transform|{Ident(user)}|{Ident(target)}");
+        }
+
         public void ApplyStatus(Pokemon target, StatusCondition status)
         {
             if (target.IsFainted || target.Status != StatusCondition.None) return;
+
+            // Poison-type immunity to (bad) poison — bypassed by the attacker's Corrosion.
+            bool corrosion = _currentAttacker != null && _currentAttacker.AbilityEffect is Effects.Abilities.CorrosionEffect;
+            if ((status == StatusCondition.Poison || status == StatusCondition.BadlyPoisoned) && !corrosion &&
+                target.Species != null && (target.Species.Type1 == MonType.Steel || target.Species.Type2 == MonType.Steel
+                    || target.Species.Type1 == MonType.Poison || target.Species.Type2 == MonType.Poison))
+            {
+                Log.Raw($"|-immune|{Ident(target)}");
+                return;
+            }
+
             var tryEv = new TryStatusEvent { Battle = this, Target = target, Status = status };
             RunTryStatus(tryEv);
             if (tryEv.Blocked)
@@ -696,6 +986,22 @@ namespace MonsterBattler.Sim
             if (status == StatusCondition.Sleep) target.SleepTurnsLeft = Prng.Range(1, 4); // gen 5+: 1..3 turns
             if (status == StatusCondition.BadlyPoisoned) target.ToxicCounter = 0;
             Log.Raw($"|-status|{Ident(target)}|{StatusEffectId(status)}");
+
+            // Synchronize: reflect the status back at the attacker.
+            if (target.AbilityEffect is Effects.Abilities.SynchronizeEffect && _currentAttacker != null && _currentAttacker != target &&
+                (status == StatusCondition.Burn || status == StatusCondition.Poison ||
+                 status == StatusCondition.BadlyPoisoned || status == StatusCondition.Paralysis))
+            {
+                ApplyStatus(_currentAttacker, status);
+            }
+
+            // Poison Puppeteer: a foe the owner poisons is also confused.
+            if ((status == StatusCondition.Poison || status == StatusCondition.BadlyPoisoned) &&
+                _currentAttacker != null && _currentAttacker != target &&
+                _currentAttacker.AbilityEffect is Effects.Abilities.PoisonPuppeteerEffect)
+            {
+                AddVolatile(target, "confusion", _currentAttacker);
+            }
         }
 
         /// <summary>

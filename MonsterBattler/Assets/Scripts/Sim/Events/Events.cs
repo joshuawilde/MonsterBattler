@@ -81,6 +81,14 @@ namespace MonsterBattler.Sim.Events
         public int BasePower;
     }
 
+    /// <summary>Lets abilities adjust a move's priority before turn ordering (Prankster, Gale Wings, Triage).</summary>
+    public sealed class ModifyPriorityEvent : BattleEvent
+    {
+        public Pokemon User;
+        public MoveData Move;
+        public int Priority;
+    }
+
     /// <summary>
     /// Type-changing abilities (Pixilate / Aerilate / Galvanize / Refrigerate, etc.) listen
     /// for this and rewrite the move's effective Type for the rest of the calc, plus add a
@@ -121,16 +129,19 @@ namespace MonsterBattler.Sim.Events
     public sealed class SwitchInEvent : BattleEvent
     {
         public Pokemon Pokemon;
+        public Pokemon Source; // the mon that landed the KO, if any
     }
 
     public sealed class SwitchOutEvent : BattleEvent
     {
         public Pokemon Pokemon;
+        public Pokemon Source; // the mon that landed the KO, if any
     }
 
     public sealed class FaintEvent : BattleEvent
     {
         public Pokemon Pokemon;
+        public Pokemon Source; // the mon that landed the KO, if any
     }
 
     /// <summary>

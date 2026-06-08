@@ -11,6 +11,7 @@ namespace MonsterBattler.Sim.Effects.Statuses
         public override void OnResidual(ResidualEvent ev, Pokemon owner)
         {
             if (owner != ev.Target || owner.IsFainted) return;
+            if (Abilities.PoisonHealEffect.HealInstead(owner, ev.Battle)) return; // Poison Heal converts the chip to healing
             int dmg = System.Math.Max(1, owner.MaxStats[(int)Stat.HP] / 8);
             ev.Battle.ApplyDamage(owner, dmg, DamageSource.Poison);
             ev.Battle.Log.Raw($"|-damage|{owner.Species?.Name ?? owner.Nickname}|{owner.CurrentHp}/{owner.MaxStats[(int)Stat.HP]}|[from] psn");

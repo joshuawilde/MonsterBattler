@@ -71,6 +71,7 @@ function convertSpecies() {
         spa: s.baseStats.spa, spd: s.baseStats.spd, spe: s.baseStats.spe,
       },
       abilities: [...new Set(Object.values(s.abilities).map(toID))],
+      weightkg: s.weightkg,
     };
   }
   return out;
@@ -109,6 +110,8 @@ function convertMoves() {
     if (secs.length) o.secondaries = secs;
     // Guaranteed self stat changes (Close Combat, Overheat, Draco Meteor, …).
     if (m.self && m.self.boosts) o.selfBoosts = boostsToArr(m.self.boosts);
+    // Self-targeting setup moves carry their boosts at the top level (Quiver Dance, Agility, …).
+    else if (m.target === 'self' && m.boosts) o.selfBoosts = boostsToArr(m.boosts);
     if (m.flags && m.flags.charge) o.twoTurn = true;
     if (m.shortDesc) o.desc = m.shortDesc;
     o.target = TARGET_MAP[m.target] || 'Normal';

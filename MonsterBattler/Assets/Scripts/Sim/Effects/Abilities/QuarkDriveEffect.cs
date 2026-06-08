@@ -19,7 +19,7 @@ namespace MonsterBattler.Sim.Effects.Abilities
             }
             else if (owner.HasItem("boosterenergy"))
             {
-                owner.Item = null;
+                owner.Item = null; owner.ItemLost = true;
                 ev.Battle.Log.Raw($"|-enditem|{owner.Species?.Name ?? owner.Nickname}|Booster Energy");
                 Volatiles.ParadoxBoostVolatile.Activate(owner, ev.Battle, "booster", DisplayName);
             }
