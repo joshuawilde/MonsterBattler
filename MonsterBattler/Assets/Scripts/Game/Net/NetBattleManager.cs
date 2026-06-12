@@ -187,7 +187,11 @@ namespace MonsterBattler.Game.Net
             _sim.Step(c0, c1);
             _sim.Log.Lines.Clear();
             ObserversTurn(c0, c1);
-            if (_sim.IsFinished) Debug.Log($"[NetBattle] finished, winner side {_sim.WinningSide}");
+            if (_sim.IsFinished)
+            {
+                Debug.Log($"[NetBattle] finished, winner side {_sim.WinningSide}");
+                Invoke(nameof(ResetMatch), 5f); // durable server: ready for the next pair
+            }
             else SubmitBotInputsIfNeeded();
         }
 
@@ -264,10 +268,23 @@ namespace MonsterBattler.Game.Net
         void OnRemoteConnState(NetworkConnection conn, FishNet.Transporting.RemoteConnectionStateArgs args)
         {
             if (args.ConnectionState != FishNet.Transporting.RemoteConnectionState.Stopped) return;
-            if (!_running || PlayerOf(conn) == null) return;
-            Debug.Log("[NetBattle] player disconnected — aborting match");
+            if (PlayerOf(conn) == null) return;
+            if (_running)
+            {
+                Debug.Log("[NetBattle] player disconnected — aborting match");
+                ObserversAbort();
+            }
+            ResetMatch();
+        }
+
+        /// <summary>Clear all match state so a durable server can host the next pair.</summary>
+        void ResetMatch()
+        {
+            _players.Clear();
+            _sim = null;
+            _botAI = null;
+            _botSide = -1;
             _running = false;
-            ObserversAbort();
         }
     }
 }
