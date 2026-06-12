@@ -28,11 +28,30 @@ namespace MonsterBattler.Game.UI
             var color = TypeStyle.BgColor(move.Type);
 
             if (Registry.TryGetValue(move.Id, out var anim)) anim(fx, atk, def, color);
+            else if (PsAnims.TryPlay(fx, move.Id, atk, def)) { } // full extracted Showdown set
             else if (move.Category == MoveCategory.Status) DefaultStatus(fx, atk, def, move, color);
             else if (move.Contact) DefaultContact(fx, atk, def, color);
             else DefaultRanged(fx, atk, def, color);
 
             yield return fx.WaitDone();
+        }
+
+        /// <summary>Item knocked off / consumed: the item pops up off the mon and arcs away
+        /// behind it, shrinking and fading. towardPlayer flips the arc direction.</summary>
+        public static void ItemFlies(FxScene fx, Vector3 monPos, bool flyLeft)
+        {
+            if (fx == null) return;
+            Vector3 from = monPos + Vector3.up * 0.9f;
+            float dirX = flyLeft ? -1f : 1f;
+            Vector3 apex = from + new Vector3(dirX * 0.5f, 0.7f, 0f);
+            Vector3 land = from + new Vector3(dirX * 1.4f, -0.5f, 0f);
+            // Two linear segments approximate the arc: up-and-out, then out-and-down.
+            fx.ShowEffect("item",
+                FxScene.State.At(from).Scale(0.55f).Alpha(1f),
+                FxScene.State.At(apex).Scale(0.5f).Alpha(1f).Time(240f), FxScene.Fade.Linear);
+            fx.ShowEffect("item",
+                FxScene.State.At(apex).Scale(0.5f).Alpha(1f).Time(240f),
+                FxScene.State.At(land).Scale(0.35f).Alpha(0f).Time(620f), FxScene.Fade.Decel);
         }
 
         // ---- defaults (cover all moves without a custom entry) -------------------------------

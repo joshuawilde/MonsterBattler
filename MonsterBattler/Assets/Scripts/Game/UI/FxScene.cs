@@ -26,6 +26,9 @@ namespace MonsterBattler.Game.UI
         [SerializeField] Sprite _icicle;
         [SerializeField] Sprite _leaf;
         [SerializeField] Sprite _rock;
+        [SerializeField] Sprite _item;
+        [SerializeField] Sprite _web;
+        [SerializeField] Sprite _spike;
 
         readonly Dictionary<string, Sprite> _byName = new();
         int _running;
@@ -39,6 +42,7 @@ namespace MonsterBattler.Game.UI
             Add("orb", _orb); Add("ring", _ring); Add("lightning", _lightning);
             Add("fist", _fist); Add("impact", _impact); Add("slash", _slash);
             Add("icicle", _icicle); Add("leaf", _leaf); Add("rock", _rock);
+            Add("item", _item); Add("web", _web); Add("spike", _spike);
         }
 
         public struct State
@@ -62,16 +66,21 @@ namespace MonsterBattler.Game.UI
             public State Tint(Color c) { var s = this; s.tint = c; return s; }
         }
 
-        public enum Fade { Fade, Decel, Linear }   // how opacity resolves at the end
+        public enum Fade { Fade, Decel, Linear, Explode, Gone }   // how the sprite resolves at the end
+        public enum Ease { Linear, Swing, Accel, Decel }          // tween timing curve
 
         /// <summary>Spawn one fx sprite and tween it from → to (PS showEffect).</summary>
         public void ShowEffect(string sprite, State from, State to, Fade fade = Fade.Fade)
+            => ShowEffect(sprite, from, to, fade == Fade.Decel ? Ease.Decel : Ease.Linear, fade);
+
+        /// <summary>Full form: explicit ease + fade + optional ballistic y-arc (world units; negative dips under).</summary>
+        public void ShowEffect(string sprite, State from, State to, Ease ease, Fade fade, float arcY = 0f)
         {
             if (_fxPrefab == null || !_byName.TryGetValue(sprite, out var spr)) return;
-            StartCoroutine(RunEffect(spr, from, to, fade));
+            StartCoroutine(RunEffect(spr, from, to, ease, fade, arcY));
         }
 
-        IEnumerator RunEffect(Sprite spr, State from, State to, Fade fade)
+        IEnumerator RunEffect(Sprite spr, State from, State to, Ease ease, Fade fade, float arcY)
         {
             _running++;
             if (from.timeMs > 0f) yield return new WaitForSeconds(from.timeMs / 1000f);
@@ -84,22 +93,31 @@ namespace MonsterBattler.Game.UI
             for (float t = 0f; t < dur; t += UnityEngine.Time.deltaTime)
             {
                 float k = Mathf.Clamp01(t / dur);
-                if (fade == Fade.Decel) k = 1f - (1f - k) * (1f - k);
-                Apply(sr, from, to, k, fade);
+                k = ease switch
+                {
+                    Ease.Swing => 0.5f - Mathf.Cos(k * Mathf.PI) * 0.5f,
+                    Ease.Accel => k * k,
+                    Ease.Decel => 1f - (1f - k) * (1f - k),
+                    _ => k,
+                };
+                Apply(sr, from, to, k, fade, arcY);
                 yield return null;
             }
             Destroy(sr.gameObject);
             _running--;
         }
 
-        static void Apply(SpriteRenderer sr, State a, State b, float k, Fade fade)
+        static void Apply(SpriteRenderer sr, State a, State b, float k, Fade fade, float arcY)
         {
-            sr.transform.position = Vector3.Lerp(a.pos, b.pos, k);
+            var pos = Vector3.Lerp(a.pos, b.pos, k);
+            pos.y += arcY * 4f * k * (1f - k); // parabolic arc for thrown/ballistic sprites
+            sr.transform.position = pos;
+            float tail = fade is Fade.Fade or Fade.Explode && k > 0.7f ? (k - 0.7f) / 0.3f : 0f;
             float sx = Mathf.Lerp(a.scale * a.xscale, b.scale * b.xscale, k);
             float sy = Mathf.Lerp(a.scale * a.yscale, b.scale * b.yscale, k);
+            if (fade == Fade.Explode) { sx *= 1f + 0.8f * tail; sy *= 1f + 0.8f * tail; }
             sr.transform.localScale = new Vector3(sx, sy, 1f);
-            float alpha = Mathf.Lerp(a.opacity, b.opacity, k);
-            if (fade == Fade.Fade && k > 0.7f) alpha *= 1f - (k - 0.7f) / 0.3f; // fade out at the tail
+            float alpha = Mathf.Lerp(a.opacity, b.opacity, k) * (1f - tail);
             var c = Color.Lerp(a.tint, b.tint, k);
             c.a = alpha;
             sr.color = c;

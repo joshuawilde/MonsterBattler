@@ -83,6 +83,7 @@ namespace MonsterBattler.Game
 
         [Header("Move VFX (scene-authored FxScene layer)")]
         [SerializeField] UI.FxScene _fxScene;
+        [SerializeField] UI.HazardLayer _hazards;
 
         [Header("End screen (scene-authored)")]
         [SerializeField] GameObject _endScreen;          // full-screen overlay shown when the battle ends
@@ -222,6 +223,7 @@ namespace MonsterBattler.Game
             side1.Team.AddRange(opponentTeam);
             side1.ActiveSlots.Add(opponentTeam[0]); opponentTeam[0].IsActive = true;
             _battle.Setup(side0, side1);
+            _hazards?.ClearAll();
 
             // Use the matchmade opponent's Elo (so its shown rating drives real difficulty); else the inspector value.
             int aiElo = Meta.MetaGame.CurrentOpponent.elo > 0 ? Meta.MetaGame.CurrentOpponent.elo : _opponentElo;
@@ -974,6 +976,27 @@ namespace MonsterBattler.Game
                     string name = parts[3].StartsWith("ability: ") ? parts[3].Substring(9) : parts[3];
                     if (side >= 0 && tag == "-ability") { SpawnPopup(side, name, AbilityBg); beat = true; }
                     else if (side >= 0 && parts[3].StartsWith("ability: ")) { SpawnPopup(side, name, AbilityBg); beat = true; }
+                }
+                else if ((tag == "-sidestart" || tag == "-sideend") && parts.Length > 3 && _hazards != null)
+                {
+                    int side = parts[2] == "p1" ? 0 : parts[2] == "p2" ? 1 : -1;
+                    if (side >= 0)
+                    {
+                        if (tag == "-sidestart") _hazards.Stack(side, parts[3]);
+                        else _hazards.Remove(side, parts[3]);
+                    }
+                }
+                else if (tag == "-enditem" && parts.Length > 3)
+                {
+                    int side = SideForName(parts[2], active);
+                    if (side >= 0)
+                    {
+                        SpawnPopup(side, $"Lost {parts[3]}", DropBg);
+                        var v = View(side);
+                        if (v != null && _fxScene != null)
+                            UI.MoveAnims.ItemFlies(_fxScene, v.transform.position, side == 0);
+                        beat = true;
+                    }
                 }
 
                 if (beat && _turnStepDelay > 0f) yield return new WaitForSeconds(_turnStepDelay);

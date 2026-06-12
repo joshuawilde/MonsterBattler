@@ -33,6 +33,8 @@ namespace MonsterBattler.Game.UI
 
         void Configure()
         {
+            // Duration can only be set while fully stopped (Unity asserts otherwise).
+            _ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             var main = _ps.main;
             main.duration = 1f;
             main.loop = false;
