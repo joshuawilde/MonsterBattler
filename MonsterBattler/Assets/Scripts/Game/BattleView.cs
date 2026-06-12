@@ -121,6 +121,13 @@ namespace MonsterBattler.Game
         [SerializeField] float _actionGapDelay = 0.75f;
 
         Battle _battle;
+
+        // Which sim side is the local player. 0 in local battles; assigned by the server online
+        // (the mirror sim must keep the server's canonical side order for determinism, so the
+        // UI remaps through Mine/Theirs + view-side helpers instead of assuming index 0).
+        int _mySide;
+        Side Mine => _battle.Sides[_mySide];
+        Side Theirs => _battle.Sides[1 - _mySide];
         MoveButton[] _moves;
         UI.TeamIcon[] _playerRoster = System.Array.Empty<UI.TeamIcon>();
         UI.TeamIcon[] _oppRoster = System.Array.Empty<UI.TeamIcon>();
@@ -155,6 +162,8 @@ namespace MonsterBattler.Game
         public void BeginBattle()
         {
             Application.runInBackground = true;
+            _session = null;
+            _mySide = 0;
 
             ulong seed = _randomizeSeed ? (ulong)System.DateTime.UtcNow.Ticks : _seed;
 
@@ -232,6 +241,36 @@ namespace MonsterBattler.Game
                 ? AI.BattleAIFactory.ForElo(aiElo, seed ^ 0x9E3779B97F4A7C15)
                 : new RandomPlayerAI(_opponentMoveBias);
 
+            FinishBattleSetup();
+        }
+
+        /// <summary>Online PvP entry: both teams come from the server's specs and the sim mirrors
+        /// the server's canonical battle (same seed + side order). Inputs flow through session.</summary>
+        public void BeginNetBattle(Net.IBattleSession session, ulong seed, Net.NetTeamSpec spec0, Net.NetTeamSpec spec1)
+        {
+            Application.runInBackground = true;
+            var dex = DexLoader.LoadFromStreamingAssets();
+            var randbats = RandbatsLoader.LoadFromStreamingAssets();
+            _battle = new Battle(dex, seed) { ManualSwitches = true };
+            _session = session;
+            _mySide = session.MySide;
+            _opponentAI = null;
+
+            var side0 = new Side { Name = spec0.Username };
+            side0.Team.AddRange(spec0.Build(dex, randbats));
+            side0.ActiveSlots.Add(side0.Team[0]); side0.Team[0].IsActive = true;
+            var side1 = new Side { Name = spec1.Username };
+            side1.Team.AddRange(spec1.Build(dex, randbats));
+            side1.ActiveSlots.Add(side1.Team[0]); side1.Team[0].IsActive = true;
+            _battle.Setup(side0, side1);
+            _hazards?.ClearAll();
+            AudioManager.I?.PlayBattleMusic();
+
+            FinishBattleSetup();
+        }
+
+        void FinishBattleSetup()
+        {
             _moves = new[] { _move0, _move1, _move2, _move3 };
             _hpFills = new[] { _hp0Fill, _hp1Fill };
             _hpTexts = new[] { _hp0Text, _hp1Text };
@@ -283,51 +322,107 @@ namespace MonsterBattler.Game
             return team;
         }
 
+        Net.IBattleSession _session; // null → local bot battle
+
         IEnumerator BattleLoop()
         {
             while (!_battle.IsFinished)
             {
-                // Forced switch: if our active fainted (engine no longer auto-switches us),
-                // require the player to pick a replacement before the next turn.
-                if (_battle.Sides[0].ActiveSlots[0].IsFainted && HasAliveBench(_battle.Sides[0]))
+                if (_session == null) yield return LocalTurn();
+                else
                 {
-                    yield return PromptForcedSwitch();
-                    if (_battle.IsFinished) break;
+                    yield return NetTurn();
+                    if (_session.Aborted) break; // opponent left — server already decided the result
                 }
-
-                _pendingChoice = null;
-                SetInputEnabled(true);
-                while (_pendingChoice == null) yield return null;
-                SetInputEnabled(false);
-
-                var playerChoice = _pendingChoice.Value;
-                var opponentChoice = _opponentAI.ChooseAction(_battle, _battle.Sides[1], _battle.Sides[0]);
-
-                // The sim resolves the whole turn at once and records an ordered log; capture the
-                // names that were active going in, then replay that log beat-by-beat with delays.
-                var preActive = new[] { MonName(_battle.Sides[0].ActiveSlots[0]), MonName(_battle.Sides[1].ActiveSlots[0]) };
-                _battle.Step(playerChoice, opponentChoice);
-                var lines = new List<string>(_battle.Log.Lines);
-                _battle.Log.Lines.Clear();
-
-                yield return PlaybackTurn(lines, preActive);
-                RefreshAll(); // final authoritative sync (status badges, field, stat stages, roster)
-                yield return new WaitForSeconds(0.3f);
             }
             SetInputEnabled(false);
             ShowEndScreen();
         }
 
+        IEnumerator LocalTurn()
+        {
+            // Forced switch: if our active fainted (engine no longer auto-switches us),
+            // require the player to pick a replacement before the next turn.
+            if (Mine.ActiveSlots[0].IsFainted && HasAliveBench(Mine))
+            {
+                yield return PromptForcedSwitch();
+                if (_battle.IsFinished) yield break;
+            }
+
+            _pendingChoice = null;
+            SetInputEnabled(true);
+            while (_pendingChoice == null) yield return null;
+            SetInputEnabled(false);
+
+            var playerChoice = _pendingChoice.Value;
+            var opponentChoice = _opponentAI.ChooseAction(_battle, Theirs, Mine);
+            yield return ResolveTurn(playerChoice, opponentChoice);
+        }
+
+        IEnumerator NetTurn()
+        {
+            // Replacement phase: any side whose active fainted picks; both picks apply together
+            // in canonical sim-side order so the mirrors stay deterministic.
+            bool iNeed = Mine.ActiveSlots[0].IsFainted && HasAliveBench(Mine);
+            bool theyNeed = Theirs.ActiveSlots[0].IsFainted && HasAliveBench(Theirs);
+            if (iNeed || theyNeed)
+            {
+                int myPick = -1;
+                if (iNeed) { yield return PromptForcedSwitch(apply: false); myPick = _pendingForcedSwitchIdx; }
+                else ShowSwitchPrompt("Waiting for opponent…");
+                int theirPick = -1;
+                yield return _session.ExchangeReplacements(myPick, p => theirPick = p);
+                if (_session.Aborted) yield break;
+                int s0 = _mySide == 0 ? myPick : theirPick;
+                int s1 = _mySide == 0 ? theirPick : myPick;
+                if (s0 >= 0) _battle.Switch(_battle.Sides[0], s0);
+                if (s1 >= 0) _battle.Switch(_battle.Sides[1], s1);
+                if (_forcedSwitchBanner != null) _forcedSwitchBanner.SetActive(false);
+                FlushLog();
+                RefreshAll();
+                if (_battle.IsFinished) yield break;
+            }
+
+            _pendingChoice = null;
+            SetInputEnabled(true);
+            while (_pendingChoice == null) yield return null;
+            SetInputEnabled(false);
+
+            var myChoice = _pendingChoice.Value;
+            ShowSwitchPrompt("Waiting for opponent…");
+            Choice? theirChoice = null;
+            yield return _session.ExchangeTurn(myChoice, c => theirChoice = c);
+            if (_forcedSwitchBanner != null) _forcedSwitchBanner.SetActive(false);
+            if (_session.Aborted || theirChoice == null) yield break;
+
+            if (_mySide == 0) yield return ResolveTurn(myChoice, theirChoice.Value);
+            else yield return ResolveTurn(theirChoice.Value, myChoice);
+        }
+
+        /// <summary>Step the sim with choices in SIM side order and play the turn back.</summary>
+        IEnumerator ResolveTurn(Choice side0Choice, Choice side1Choice)
+        {
+            // The sim resolves the whole turn at once and records an ordered log; capture the
+            // names that were active going in, then replay that log beat-by-beat with delays.
+            var preActive = new[] { MonName(Mine.ActiveSlots[0]), MonName(Theirs.ActiveSlots[0]) };
+            _battle.Step(side0Choice, side1Choice);
+            var lines = new List<string>(_battle.Log.Lines);
+            _battle.Log.Lines.Clear();
+
+            yield return PlaybackTurn(lines, preActive);
+            RefreshAll(); // final authoritative sync (status badges, field, stat stages, roster)
+            yield return new WaitForSeconds(0.3f);
+        }
+
         void ShowEndScreen()
         {
-            if (_battle.WinningSide == 0) AudioManager.I?.PlayVictory();
+            bool won = _battle.WinningSide == _mySide;
+            if (won) AudioManager.I?.PlayVictory();
             else AudioManager.I?.PlayDefeat();
-            (string label, Color color) = _battle.WinningSide switch
-            {
-                0 => ("Victory!", new Color(0.30f, 0.78f, 0.33f)),
-                1 => ("Defeat",   new Color(0.86f, 0.25f, 0.22f)),
-                _ => ("Draw",     new Color(0.80f, 0.80f, 0.85f)),
-            };
+            (string label, Color color) = _battle.WinningSide < 0
+                ? ("Draw", new Color(0.80f, 0.80f, 0.85f))
+                : won ? ("Victory!", new Color(0.30f, 0.78f, 0.33f))
+                      : ("Defeat", new Color(0.86f, 0.25f, 0.22f));
 
             if (_battle.WinningSide < 0) // draw — no rating change
             {
@@ -335,17 +430,17 @@ namespace MonsterBattler.Game
             }
             else
             {
-                var res = Meta.MetaGame.ResolveMatch(_battle.WinningSide == 0);
+                var res = Meta.MetaGame.ResolveMatch(_battle.WinningSide == _mySide);
                 // Progression: a few locked moves on your team inch toward unlocking.
                 var teamIds = new List<string>();
-                foreach (var m in _battle.Sides[0].Team) if (m.Species != null) teamIds.Add(m.Species.Id);
-                _endGains = Meta.MetaGame.AwardMoveProgress(_battle.WinningSide == 0, teamIds);
+                foreach (var m in Mine.Team) if (m.Species != null) teamIds.Add(m.Species.Id);
+                _endGains = Meta.MetaGame.AwardMoveProgress(_battle.WinningSide == _mySide, teamIds);
 
                 // Leveling: per-mon XP by participation (battled / benched / survived).
                 var part = new List<(string, bool, bool)>();
-                foreach (var m in _battle.Sides[0].Team)
+                foreach (var m in Mine.Team)
                     if (m.Species != null) part.Add((m.Species.Id, m.HasBeenActive, !m.IsFainted));
-                _endXp = Meta.MetaGame.AwardXp(_battle.WinningSide == 0, part);
+                _endXp = Meta.MetaGame.AwardXp(_battle.WinningSide == _mySide, part);
                 if (_endResultText != null)
                 {
                     string s = res.eloDelta >= 0 ? "+" : "";
@@ -439,7 +534,7 @@ namespace MonsterBattler.Game
         string StatDiffLine(string species, int oldLevel, int newLevel)
         {
             Pokemon mon = null;
-            foreach (var m in _battle.Sides[0].Team)
+            foreach (var m in Mine.Team)
                 if (m.Species != null && m.Species.Id == species) { mon = m; break; }
             if (mon == null) return $"Lv {newLevel}";
             var bs = mon.Species.BaseStats;
@@ -472,7 +567,12 @@ namespace MonsterBattler.Game
             else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        IEnumerator PromptForcedSwitch()
+        IEnumerator PromptForcedSwitch() => PromptForcedSwitch(apply: true);
+
+        /// <summary>Collect the player's replacement pick into _pendingForcedSwitchIdx.
+        /// apply=false (online) leaves the sim untouched — both sides' switches are applied
+        /// together in canonical order after the replacement exchange.</summary>
+        IEnumerator PromptForcedSwitch(bool apply)
         {
             // Disable moves; only the (non-fainted) switch buttons should be tappable.
             _isInForcedSwitch = true;
@@ -497,11 +597,14 @@ namespace MonsterBattler.Game
                 if (bannerRt != null) bannerRt.localScale = Vector3.one;
                 _forcedSwitchBanner.SetActive(false);
             }
-            _battle.Switch(_battle.Sides[0], _pendingForcedSwitchIdx);
+            if (apply)
+            {
+                _battle.Switch(Mine, _pendingForcedSwitchIdx);
+                FlushLog();
+                RefreshAll();
+            }
             _isInForcedSwitch = false;
-            FlushLog();
-            RefreshAll();
-            yield return new WaitForSeconds(0.4f);
+            yield return new WaitForSeconds(apply ? 0.4f : 0f);
         }
 
         static bool HasAliveBench(Side side)
@@ -523,7 +626,7 @@ namespace MonsterBattler.Game
         void OnMoveClicked(int idx)
         {
             if (_isInForcedSwitch) return; // moves locked during forced-switch prompt
-            var player = _battle.Sides[0].ActiveSlots[0];
+            var player = Mine.ActiveSlots[0];
             if (idx >= player.Moves.Count) return;
             var move = player.Moves[idx].Move;
 
@@ -531,7 +634,7 @@ namespace MonsterBattler.Game
             // arm the move, prompt for a roster pick, and submit once the player chooses.
             // (Trapped mons can still pivot out, but our swap UI is gated on !trapped — fall back
             // to auto-pick there rather than soft-locking.)
-            if (move.PivotsOut && HasAliveBench(_battle.Sides[0]) && !_battle.IsTrapped(player))
+            if (move.PivotsOut && HasAliveBench(Mine) && !_battle.IsTrapped(player))
             {
                 _pivotMoveId = move.Id;
                 ShowSwitchPrompt("Choose who switches in!");
@@ -561,7 +664,7 @@ namespace MonsterBattler.Game
 
         void OnOppRosterClicked(int idx)
         {
-            var team = _battle.Sides[1].Team;
+            var team = Theirs.Team;
             if (idx >= 0 && idx < team.Count) Inspect(team[idx]);
         }
 
@@ -578,7 +681,7 @@ namespace MonsterBattler.Game
         /// <summary>True if <paramref name="mon"/> is a legal switch target for the player right now.</summary>
         bool CanSwap(Pokemon mon)
         {
-            var side = _battle.Sides[0];
+            var side = Mine;
             if (!side.Team.Contains(mon)) return false;          // must be your mon
             if (mon.IsFainted || mon == side.ActiveSlots[0]) return false; // not fainted / not already out
             // A trapping ability blocks voluntary switches (but not forced post-faint replacements).
@@ -594,7 +697,7 @@ namespace MonsterBattler.Game
         void OnSwapRequested()
         {
             if (_inspectTarget == null || !CanSwap(_inspectTarget)) return;
-            int idx = _battle.Sides[0].Team.IndexOf(_inspectTarget);
+            int idx = Mine.Team.IndexOf(_inspectTarget);
             if (idx < 0) return;
             if (_isInForcedSwitch) _pendingForcedSwitchIdx = idx;
             else if (_pivotMoveId != null)
@@ -610,7 +713,7 @@ namespace MonsterBattler.Game
 
         void OnTeraClicked()
         {
-            var side = _battle.Sides[0];
+            var side = Mine;
             var player = side.ActiveSlots[0];
             if (side.HasUsedTera || player.IsTerastallized || player.TeraType == MonType.None) return;
             _teraQueued = !_teraQueued;
@@ -620,7 +723,7 @@ namespace MonsterBattler.Game
         void RefreshTeraLabel()
         {
             if (_teraLabel == null) return;
-            var side = _battle.Sides[0];
+            var side = Mine;
             var player = side.ActiveSlots[0];
             if (player.IsTerastallized)      _teraLabel.text = $"Tera: {player.TeraType} (active)";
             else if (side.HasUsedTera)       _teraLabel.text = "Tera (used)";
@@ -635,14 +738,14 @@ namespace MonsterBattler.Game
         // The actual swap happens from the info panel's Swap button (see OnSwapRequested).
         void OnSwitchClicked(int idx)
         {
-            var side = _battle.Sides[0];
+            var side = Mine;
             if (idx >= 0 && idx < side.Team.Count) Inspect(side.Team[idx]);
         }
 
         void SetInputEnabled(bool on)
         {
             _acceptingInput = on; // gates whether the panel offers a Swap action
-            var player = _battle.Sides[0].ActiveSlots[0];
+            var player = Mine.ActiveSlots[0];
             // Choice items lock the player into one move. Disable everything else when locked.
             bool isLocked = !string.IsNullOrEmpty(player.LockedMoveId);
             for (int i = 0; i < _moves.Length; i++)
@@ -685,8 +788,8 @@ namespace MonsterBattler.Game
 
         void RefreshAll()
         {
-            var p0 = _battle.Sides[0].ActiveSlots[0];
-            var p1 = _battle.Sides[1].ActiveSlots[0];
+            var p0 = Mine.ActiveSlots[0];
+            var p1 = Theirs.ActiveSlots[0];
 
             if (_turnText != null) _turnText.text = $"Turn {_battle.TurnNumber + 1}";
 
@@ -702,8 +805,8 @@ namespace MonsterBattler.Game
             if (_activeInfo1 != null) _activeInfo1.text = PokemonInfoText.ActiveStrip(p1);
 
             if (_fieldText != null) _fieldText.text = FieldStatusText.Field(_battle);
-            if (_sideText0 != null) _sideText0.text = FieldStatusText.Side(_battle.Sides[0]);
-            if (_sideText1 != null) _sideText1.text = FieldStatusText.Side(_battle.Sides[1]);
+            if (_sideText0 != null) _sideText0.text = FieldStatusText.Side(Mine);
+            if (_sideText1 != null) _sideText1.text = FieldStatusText.Side(Theirs);
             PopulateBoostChips(_boostRow0, p0);
             PopulateBoostChips(_boostRow1, p1);
 
@@ -712,7 +815,7 @@ namespace MonsterBattler.Game
                 if (_moves[i] == null) continue;
                 _moves[i].Show(i < p0.Moves.Count ? p0.Moves[i] : null, p1);
             }
-            var team = _battle.Sides[0].Team;
+            var team = Mine.Team;
             for (int i = 0; i < _playerRoster.Length; i++)
             {
                 if (_playerRoster[i] == null) continue;
@@ -722,7 +825,7 @@ namespace MonsterBattler.Game
                 _playerRoster[i].ShowMatchup(MatchupChips.Build(mine, p1), _statChipPrefab);
             }
 
-            var oppTeam = _battle.Sides[1].Team;
+            var oppTeam = Theirs.Team;
             for (int i = 0; i < _oppRoster.Length; i++)
             {
                 if (_oppRoster[i] == null) continue;
@@ -1021,7 +1124,8 @@ namespace MonsterBattler.Game
                 }
                 else if ((tag == "-sidestart" || tag == "-sideend") && parts.Length > 3 && _hazards != null)
                 {
-                    int side = parts[2] == "p1" ? 0 : parts[2] == "p2" ? 1 : -1;
+                    int sim = parts[2] == "p1" ? 0 : parts[2] == "p2" ? 1 : -1;
+                    int side = sim < 0 ? -1 : sim == _mySide ? 0 : 1; // sim side → view side
                     if (side >= 0)
                     {
                         if (tag == "-sidestart") { _hazards.Stack(side, parts[3]); AudioManager.Play("hazard"); }
@@ -1051,7 +1155,7 @@ namespace MonsterBattler.Game
         void UpdateBattleMood()
         {
             if (_battle == null || AudioManager.I == null) return;
-            int p = AliveCount(_battle.Sides[0]), o = AliveCount(_battle.Sides[1]);
+            int p = AliveCount(Mine), o = AliveCount(Theirs);
             AudioManager.I.SetBattleMood(
                 p <= 1 ? AudioManager.Mood.Tension :
                 o <= 1 ? AudioManager.Mood.Triumph : AudioManager.Mood.Base);
@@ -1091,7 +1195,7 @@ namespace MonsterBattler.Game
         {
             for (int s = 0; s < 2; s++)
                 foreach (var m in _battle.Sides[s].Team)
-                    if (MonName(m) == name) return s;
+                    if (MonName(m) == name) return s == _mySide ? 0 : 1; // sim side → view side
             return -1;
         }
 

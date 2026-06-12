@@ -828,7 +828,7 @@ PlayerSettings:
   webWasm2023: 0
   scriptingDefineSymbols:
     Standalone: UNITY_PIPELINE_URP
-    iPhone: UNITY_PIPELINE_URP
+    iPhone: UNITY_PIPELINE_URP;FISHNET;FISHNET_V4
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

@@ -25,6 +25,7 @@ namespace MonsterBattler.Game.Meta
         [SerializeField] TextMeshProUGUI _homeTeam;
         [SerializeField] TextMeshProUGUI _homeElo;       // "You · Elo 1000"
         [SerializeField] Button _battleButton;
+        [SerializeField] Button _battleOnlineButton; // optional: PvP via NetBootstrap
         [SerializeField] Button _boxButton;
         [SerializeField] Button _summonButton;
 
@@ -78,6 +79,7 @@ namespace MonsterBattler.Game.Meta
             Application.targetFrameRate = 120;
             try { _dex = DexLoader.LoadFromStreamingAssets(); } catch { _dex = null; }
             Wire(_battleButton, OnBattle);
+            Wire(_battleOnlineButton, OnBattleOnline);
             Wire(_boxButton, ShowBox);
             Wire(_summonButton, ShowSummon);
             Wire(_boxBackButton, ShowHome);
@@ -187,6 +189,63 @@ namespace MonsterBattler.Game.Meta
             if (_matchmakingPanel != null) _matchmakingPanel.SetActive(false);
             if (_menuRoot != null) _menuRoot.SetActive(false);
             if (_battleView != null) _battleView.BeginBattle();
+        }
+
+        void OnBattleOnline()
+        {
+            if (_battleView == null) _battleView = FindObjectOfType<BattleView>();
+            StopAllCoroutines();
+            StartCoroutine(OnlineFlow());
+        }
+
+        // Connect → queue with our team → server starts the match (NetBootstrap calls
+        // BeginNetBattle) → hide the menu. Reuses the matchmaking panel for status.
+        System.Collections.IEnumerator OnlineFlow()
+        {
+            if (_homePanel != null) _homePanel.SetActive(false);
+            if (_boxPanel != null) _boxPanel.SetActive(false);
+            if (_summonPanel != null) _summonPanel.SetActive(false);
+            if (_matchmakingPanel != null) _matchmakingPanel.SetActive(true);
+            var prof = MetaGame.Profile;
+            if (_mmPlayerName != null) _mmPlayerName.text = prof.username;
+            if (_mmPlayerElo != null) _mmPlayerElo.text = $"Elo {prof.elo}";
+            if (_mmOppName != null) _mmOppName.text = "?";
+            if (_mmOppElo != null) _mmOppElo.text = "";
+
+            var net = Net.NetBootstrap.Instance != null ? Net.NetBootstrap.Instance : FindObjectOfType<Net.NetBootstrap>();
+            if (net == null)
+            {
+                if (_mmStatus != null) _mmStatus.text = "Online unavailable";
+                yield return new WaitForSeconds(1.5f);
+                if (_matchmakingPanel != null) _matchmakingPanel.SetActive(false);
+                ShowHome();
+                yield break;
+            }
+
+            bool began = false;
+            System.Action onBegan = null;
+            onBegan = () => { began = true; net.OnlineMatchBegan -= onBegan; };
+            net.OnlineMatchBegan += onBegan;
+            net.JoinOnline();
+
+            float t = 0f;
+            while (!began && t < 45f && net.Status != "Connection failed")
+            {
+                if (_mmStatus != null) _mmStatus.text = string.IsNullOrEmpty(net.Status) ? "Connecting…" : net.Status;
+                t += Time.deltaTime;
+                yield return null;
+            }
+            if (!began)
+            {
+                net.OnlineMatchBegan -= onBegan;
+                if (_mmStatus != null) _mmStatus.text = "Couldn't find a match";
+                yield return new WaitForSeconds(1.4f);
+                if (_matchmakingPanel != null) _matchmakingPanel.SetActive(false);
+                ShowHome();
+                yield break;
+            }
+            if (_matchmakingPanel != null) _matchmakingPanel.SetActive(false);
+            if (_menuRoot != null) _menuRoot.SetActive(false);
         }
 
         void OnPull()

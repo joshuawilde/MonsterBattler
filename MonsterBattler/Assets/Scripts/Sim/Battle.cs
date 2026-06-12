@@ -249,8 +249,13 @@ namespace MonsterBattler.Sim
             RunSwitchIn(new SwitchInEvent { Battle = this, Pokemon = incoming });
         }
 
+        /// <summary>PvP: both sides pick replacements through the session protocol, so the engine
+        /// must not auto-switch anyone. Local battles leave this false (AI side auto-switches).</summary>
+        public bool ManualSwitches;
+
         void AutoSwitchFainted()
         {
+            if (ManualSwitches) return;
             foreach (var side in Sides)
             {
                 // The player (side 0) picks their own replacement via the UI prompt.
