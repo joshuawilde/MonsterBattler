@@ -4,7 +4,11 @@ type (bottom-left) + PP (bottom-right). Saves Assets/Prefabs/MoveButton.prefab a
 as instances, re-wiring BattleView. Run with Unity open in edit mode."""
 import os, json, urllib.request
 
-URL = "http://127.0.0.1:17984/"
+import os as _os
+_pf = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "MonsterBattler", "Temp", "MCPBridgePort.txt")
+try: _PORT = int(open(_pf).read().strip())
+except Exception: _PORT = 17984
+URL = "http://127.0.0.1:%d/" % _PORT
 MOVES = "BattleUI/SafeArea/Moves"
 PREFAB = "Assets/Prefabs/MoveButton.prefab"
 

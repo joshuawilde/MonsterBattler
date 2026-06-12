@@ -103,6 +103,22 @@ namespace MonsterBattler.Sim.Tests
         }
 
         [Fact]
+        public void PivotMove_HonorsChosenIncomingMon()
+        {
+            var user = TestBattlers.Make("pikachu", "static", null, 100, "voltswitch");
+            var bench1 = TestBattlers.Make("bulbasaur", "overgrow");
+            var bench2 = TestBattlers.Make("snorlax", "thickfat");
+            var foe = TestBattlers.Make("blissey", "naturalcure");
+            var b = TestBattlers.SetupBattle(user, foe);
+            b.Sides[0].Team.Add(bench1);
+            b.Sides[0].Team.Add(bench2);
+
+            // Choose the SECOND bench mon (index 2) — auto-pick would take bench1 (index 1).
+            b.Step(Choice.UseMove("voltswitch", pivotTo: 2), new Choice { Kind = ChoiceKind.Skip });
+            Assert.Same(bench2, b.Sides[0].ActiveSlots[0]);
+        }
+
+        [Fact]
         public void Disguise_AbsorbsFirstHit()
         {
             var miku = TestBattlers.Make("mimikyu", "disguise");

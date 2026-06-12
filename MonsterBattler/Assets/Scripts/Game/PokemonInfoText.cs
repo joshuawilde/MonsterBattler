@@ -57,14 +57,30 @@ namespace MonsterBattler.Game
             {
                 var mv = slot.Move;
                 string ty = mv.Type != MonType.None ? mv.Type.ToString() : "Status";
+                string cat = $"<color=#{TypeColors.CategoryHex(mv.Category)}><b>{mv.Category}</b></color>";
                 var stats = new List<string>();
                 if (mv.BasePower > 0) stats.Add($"{mv.BasePower} BP");
                 if (mv.Accuracy > 0) stats.Add($"{mv.Accuracy}%");
                 string tail = stats.Count > 0 ? $"  {string.Join(" · ", stats)}" : "";
-                sb.AppendLine($"• <b>{mv.Name}</b> <size=85%>({ty}){tail}</size>");
+                sb.AppendLine($"• <b>{mv.Name}</b> <size=85%>({ty} · {cat}){tail}</size>");
                 if (!string.IsNullOrEmpty(mv.ShortDesc)) sb.AppendLine($"<size=80%>{mv.ShortDesc}</size>");
             }
             return sb.ToString().TrimEnd();
+        }
+
+        /// <summary>Compact always-on strip for an active mon: ability · item, then the stat line
+        /// (HP omitted — the bar shows it). Boosted stats are colored.</summary>
+        public static string ActiveStrip(Pokemon m)
+        {
+            if (m == null || m.Species == null) return "";
+            var types = new StringBuilder();
+            foreach (var t in EffectiveTypes(m))
+                types.Append($"<color=#{TypeColors.Hex(t)}><b>{t}</b></color> ");
+            string ability = m.Ability != null ? m.Ability.Name : "—";
+            string item = m.Item != null ? m.Item.Name : "No item";
+            string stats = $"{StatCell(m, "Atk", Stat.Atk)}  {StatCell(m, "Def", Stat.Def)}  " +
+                           $"{StatCell(m, "SpA", Stat.SpA)}  {StatCell(m, "SpD", Stat.SpD)}  {StatCell(m, "Spe", Stat.Spe)}";
+            return $"{types}  <b>{ability}</b> · {item}\n<size=92%>{stats}</size>";
         }
 
         /// <summary>The mon's current types (Tera type when terastallized).</summary>

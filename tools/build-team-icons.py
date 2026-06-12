@@ -4,7 +4,11 @@ both team rosters: a new PlayerRoster (bottom, replaces Switch0-5) and the rebui
 Wires BattleView. Run with Unity in EDIT mode."""
 import json, urllib.request
 
-URL = "http://127.0.0.1:17984/"
+import os as _os
+_pf = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "MonsterBattler", "Temp", "MCPBridgePort.txt")
+try: _PORT = int(open(_pf).read().strip())
+except Exception: _PORT = 17984
+URL = "http://127.0.0.1:%d/" % _PORT
 SA = "BattleUI/SafeArea"
 PREFAB = "Assets/Prefabs/TeamIcon.prefab"
 
@@ -77,6 +81,16 @@ UQ = txt("Q", f"{T}/Unplayed", "?", 20, (0.85,0.87,0.95,1))
 cmd("ui.set_rect", path=UQ, anchorMin=[0,0], anchorMax=[1,1], offsetMin=[0,0], offsetMax=[0,0])
 cmd("gameobject.set_active", path=f"{T}/Unplayed", active=False)
 
+# matchup chip column (overlays the RIGHT side of the icon, like the type tags; player side only)
+# dark backing strip so the chip text reads against it instead of fighting the art
+cmd("ui.create_image", name="MatchupRow", parent={"path": T}, color=[0.05, 0.06, 0.09, 0.78], raycastTarget=False)
+cmd("ui.set_rect", path=f"{T}/MatchupRow", anchorMin=[0.42, 0.34], anchorMax=[1.0, 1.0], offsetMin=[0, 0], offsetMax=[-3, -3])
+cmd("component.add", path=f"{T}/MatchupRow", type="UnityEngine.UI.VerticalLayoutGroup")
+cmd("component.set_fields", path=f"{T}/MatchupRow", type="UnityEngine.UI.VerticalLayoutGroup", fields={
+    "m_Spacing": 2, "m_ChildAlignment": 4,
+    "m_ChildControlWidth": True, "m_ChildControlHeight": True,
+    "m_ChildForceExpandWidth": True, "m_ChildForceExpandHeight": False})
+
 cmd("component.set_fields", path=T, type="UnityEngine.UI.Button",
     fields={"m_TargetGraphic": {"sceneObjectPath": T, "componentType": "UnityEngine.UI.Image"}})
 cmd("component.set_fields", path=T, type="MonsterBattler.Game.UI.TeamIcon", fields={
@@ -92,6 +106,7 @@ cmd("component.set_fields", path=T, type="MonsterBattler.Game.UI.TeamIcon", fiel
     "_typeText2": {"sceneObjectPath": TXT2, "componentType": "TMPro.TextMeshProUGUI"},
     "_ghostOverlay": {"sceneObjectPath": f"{T}/Ghost"},
     "_unplayedBadge": {"sceneObjectPath": f"{T}/Unplayed"},
+    "_matchupRow": {"sceneObjectPath": f"{T}/MatchupRow", "componentType": "UnityEngine.RectTransform"},
 })
 cmd("prefab.save_as", path=T, assetPath=PREFAB, connectInstance=False)
 cmd("gameobject.delete", path=T)
@@ -109,7 +124,7 @@ def make_roster(name, anchorMin, anchorMax, pivot, pos):
         "m_ChildControlWidth": True, "m_ChildControlHeight": True,
         "m_ChildForceExpandWidth": False, "m_ChildForceExpandHeight": False,
     })
-    for i in range(6):
+    for i in range(4):  # TeamSize
         cmd("prefab.instantiate", assetPath=PREFAB, parent={"path": p}, name=f"Icon{i}")
     return p
 

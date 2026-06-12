@@ -57,14 +57,15 @@ namespace MonsterBattler.Sim
         /// <summary>Build a team from specific species ids (the player's collection). Each species gets a
         /// FIXED build (ability/moves/item/tera) — seeded by the species id so every copy is identical,
         /// and stable across runs. Unknown ids are skipped.</summary>
-        public List<Pokemon> BuildNamedTeam(System.Collections.Generic.IEnumerable<string> speciesIds)
+        public List<Pokemon> BuildNamedTeam(System.Collections.Generic.IEnumerable<string> speciesIds,
+                                            System.Func<string, int> levelOf = null)
         {
             var team = new List<Pokemon>();
             foreach (var id in speciesIds)
                 if (id != null && _dex.Species.ContainsKey(id) && _rb.Species.ContainsKey(id))
                 {
                     var g = new RandomTeamGenerator(_dex, _rb, new Prng(StableSeed(id)));
-                    team.Add(g.BuildSet(id));
+                    team.Add(g.BuildSet(id, levelOf?.Invoke(id) ?? -1));
                 }
             return team;
         }
@@ -93,7 +94,7 @@ namespace MonsterBattler.Sim
         }
 
         // --- single set -----------------------------------------------------------------------
-        Pokemon BuildSet(string speciesId)
+        Pokemon BuildSet(string speciesId, int levelOverride = -1)
         {
             var sp = _dex.Get(speciesId);
             var entry = _rb.Species[speciesId];
@@ -104,7 +105,7 @@ namespace MonsterBattler.Sim
             var abilityId = set.AbilityIds.Count > 0 ? Sample(set.AbilityIds)
                           : (sp.AbilityIds.Count > 0 ? sp.AbilityIds[0] : null);
             var itemId = PickItem(sp, set, abilityId, moves);
-            int level = entry.Level > 0 ? entry.Level : 80;
+            int level = levelOverride > 0 ? levelOverride : (entry.Level > 0 ? entry.Level : 80);
 
             var mon = new Pokemon
             {
@@ -246,9 +247,10 @@ namespace MonsterBattler.Sim
             mon.MaxStats[(int)Stat.Spe] = Other(bs.Spe, mon.IVs[5], mon.EVs[5], L);
         }
 
-        static int Hp(int b, int iv, int ev, int level)
+        // Public: the standard stat formulas (neutral nature), shared with UI stat-diff displays.
+        public static int Hp(int b, int iv, int ev, int level)
             => (2 * b + iv + ev / 4) * level / 100 + level + 10;
-        static int Other(int b, int iv, int ev, int level)
+        public static int Other(int b, int iv, int ev, int level)
             => (2 * b + iv + ev / 4) * level / 100 + 5;
 
         // --- prng helpers ---------------------------------------------------------------------

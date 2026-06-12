@@ -4,7 +4,11 @@ TypesRow (HLG of type-badge chips), Matchup (5 EffRow HLG rows of chips), Body (
 effectiveness become real TypeBadge chips. Wires InfoPanel. Run with Unity open in EDIT mode."""
 import json, urllib.request
 
-URL = "http://127.0.0.1:17984/"
+import os as _os
+_pf = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "MonsterBattler", "Temp", "MCPBridgePort.txt")
+try: _PORT = int(open(_pf).read().strip())
+except Exception: _PORT = 17984
+URL = "http://127.0.0.1:%d/" % _PORT
 IP = "BattleUI/SafeArea/InfoPanel"
 TYPEBADGE = "Assets/Prefabs/TypeBadge.prefab"
 

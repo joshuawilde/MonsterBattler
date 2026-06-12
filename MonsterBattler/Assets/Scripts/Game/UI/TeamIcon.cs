@@ -26,12 +26,28 @@ namespace MonsterBattler.Game.UI
         [SerializeField] TextMeshProUGUI _typeText2;   // 3-letter tag over pip 2
         [SerializeField] GameObject _ghostOverlay;     // covers thumbnail for an unseen enemy
         [SerializeField] GameObject _unplayedBadge;    // corner badge for an own mon not yet sent out
+        [SerializeField] Image _typeBg;                // type plate behind the thumb (diagonal for duals)
+        [SerializeField] Transform _matchupRow;        // HLG holding SPEED/DMG/HP chips vs enemy active (optional)
 
         public event Action Clicked;
 
         void Awake()
         {
             if (_button != null) _button.onClick.AddListener(() => Clicked?.Invoke());
+        }
+
+        /// <summary>Fill the matchup-chip row (SPEED/DMG/HP vs the enemy active). Null/empty clears it.</summary>
+        public void ShowMatchup(System.Collections.Generic.List<Game.MatchupChips.Chip> chips, TypeBadge chipPrefab)
+        {
+            if (_matchupRow == null) return;
+            for (int i = _matchupRow.childCount - 1; i >= 0; i--) Destroy(_matchupRow.GetChild(i).gameObject);
+            if (chipPrefab == null || chips == null) return;
+            foreach (var c in chips)
+            {
+                var chip = Instantiate(chipPrefab, _matchupRow);
+                chip.gameObject.SetActive(true);
+                chip.SetChip(c.label, c.color);
+            }
         }
 
         public void Show(Pokemon mon, bool isActive, bool isEnemy = false)
@@ -57,6 +73,11 @@ namespace MonsterBattler.Game.UI
                     _thumbnail.color = mon.IsFainted ? new Color(1f, 1f, 1f, 0.30f) : Color.white;
                 }
             }
+            if (_typeBg != null)
+            {
+                TypeBgSprites.Apply(_typeBg, hidden ? null : mon.Species);
+                if (!hidden && mon.IsFainted) _typeBg.color = new Color(1f, 1f, 1f, 0.35f);
+            }
 
             if (_nameText != null)
             {
@@ -67,7 +88,7 @@ namespace MonsterBattler.Game.UI
             if (_hpFill != null)
             {
                 float frac = mon.MaxStats[(int)Stat.HP] > 0 ? (float)mon.CurrentHp / mon.MaxStats[(int)Stat.HP] : 0f;
-                _hpFill.fillAmount = frac;
+                SetBarFraction(_hpFill, frac);
                 _hpFill.color = HpColor(frac);
             }
             if (_background != null)
@@ -97,6 +118,16 @@ namespace MonsterBattler.Game.UI
                 label.text = show ? TypeStyle.Abbrev(type) : "";
                 label.enabled = show;
             }
+        }
+
+        /// <summary>Bar width by anchors — Image.fillAmount is unreliable on sprite-less Filled images.</summary>
+        public static void SetBarFraction(Image fill, float frac)
+        {
+            var rt = fill.rectTransform;
+            rt.anchorMin = new Vector2(0f, 0f);
+            rt.anchorMax = new Vector2(Mathf.Clamp01(frac), 1f);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
         }
 
         static Color HpColor(float f) =>

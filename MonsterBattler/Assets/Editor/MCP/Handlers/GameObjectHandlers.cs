@@ -72,6 +72,18 @@ namespace MonsterBattler.Editor.MCP.Handlers
                 return new JObject { ["path"] = GameObjectLookup.PathOf(go) };
             });
 
+            // Reorder among siblings (z-order for UI): 0 = behind, -1 = front (last sibling).
+            MCPCommandRegistry.Register("gameobject.set_sibling_index", p =>
+            {
+                var go = GameObjectLookup.Resolve(p);
+                int index = p["index"]?.Value<int>() ?? throw new System.ArgumentException("index required");
+                Undo.RecordObject(go.transform, "MCP SetSiblingIndex");
+                if (index < 0) go.transform.SetAsLastSibling();
+                else go.transform.SetSiblingIndex(index);
+                EditorSceneManager.MarkSceneDirty(go.scene);
+                return new JObject { ["index"] = go.transform.GetSiblingIndex() };
+            });
+
             MCPCommandRegistry.Register("gameobject.set_transform", p =>
             {
                 var go = GameObjectLookup.Resolve(p);

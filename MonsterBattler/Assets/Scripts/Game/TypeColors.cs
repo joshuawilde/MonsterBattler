@@ -45,5 +45,13 @@ namespace MonsterBattler.Game
             var (r, g, b) = Rgb(t);
             return 0.30f * r + 0.59f * g + 0.11f * b;
         }
+
+        /// <summary>Hex for move-category words (Physical orange / Special blue / Status gray).</summary>
+        public static string CategoryHex(MoveCategory cat) => cat switch
+        {
+            MoveCategory.Physical => "F47B20",
+            MoveCategory.Special => "5A8CF0",
+            _ => "9CA0AA",
+        };
     }
 }

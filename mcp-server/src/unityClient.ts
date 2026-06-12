@@ -1,6 +1,20 @@
 import { randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const DEFAULT_PORT = Number(process.env.MONSTERBATTLER_MCP_PORT ?? 17984);
+// The bridge port is dynamic (multi-editor): read Temp/MCPBridgePort.txt, fall back to 17984.
+function discoverPort(): number {
+  if (process.env.MONSTERBATTLER_MCP_PORT) return Number(process.env.MONSTERBATTLER_MCP_PORT);
+  try {
+    const here = dirname(fileURLToPath(import.meta.url));
+    const portFile = join(here, "..", "..", "MonsterBattler", "Temp", "MCPBridgePort.txt");
+    return Number(readFileSync(portFile, "utf8").trim());
+  } catch {
+    return 17984;
+  }
+}
+const DEFAULT_PORT = discoverPort();
 const DEFAULT_HOST = process.env.MONSTERBATTLER_MCP_HOST ?? "127.0.0.1";
 
 export interface UnityResponse {

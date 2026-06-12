@@ -3,7 +3,11 @@
 to BattleScene and wires them to BattleView. Idempotent. Run with Unity open."""
 import json, urllib.request
 
-URL = "http://127.0.0.1:17984/"
+import os as _os
+_pf = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "MonsterBattler", "Temp", "MCPBridgePort.txt")
+try: _PORT = int(open(_pf).read().strip())
+except Exception: _PORT = 17984
+URL = "http://127.0.0.1:%d/" % _PORT
 ROOT = "BattleUI/SafeArea"
 
 def cmd(command, **params):

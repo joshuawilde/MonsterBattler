@@ -3,7 +3,11 @@
 then wires them to BattleView. Idempotent: deletes prior copies first. Re-runnable."""
 import json, urllib.request
 
-URL = "http://127.0.0.1:17984/"
+import os as _os
+_pf = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "MonsterBattler", "Temp", "MCPBridgePort.txt")
+try: _PORT = int(open(_pf).read().strip())
+except Exception: _PORT = 17984
+URL = "http://127.0.0.1:%d/" % _PORT
 
 def cmd(command, **params):
     body = json.dumps({"id": "x", "command": command, "params": params}).encode()

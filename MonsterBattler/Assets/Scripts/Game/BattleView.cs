@@ -33,12 +33,14 @@ namespace MonsterBattler.Game
         [SerializeField] TextMeshProUGUI _hp0Text;
         [SerializeField] Image _hp0Fill;
         [SerializeField] TextMeshProUGUI _status0;   // status badge (BRN/PAR/…), optional
+        [SerializeField] TextMeshProUGUI _activeInfo0; // always-on ability·item·stats strip, optional
 
         [Header("Opponent mon info")]
         [SerializeField] TextMeshProUGUI _name1;
         [SerializeField] TextMeshProUGUI _hp1Text;
         [SerializeField] Image _hp1Fill;
         [SerializeField] TextMeshProUGUI _status1;   // status badge, optional
+        [SerializeField] TextMeshProUGUI _activeInfo1; // always-on ability·item·stats strip, optional
 
         [Header("Field / side conditions (scene-authored Text, optional)")]
         [SerializeField] TextMeshProUGUI _fieldText;   // weather / terrain / Trick Room
@@ -81,8 +83,17 @@ namespace MonsterBattler.Game
 
         [Header("End screen (scene-authored)")]
         [SerializeField] GameObject _endScreen;          // full-screen overlay shown when the battle ends
-        [SerializeField] TextMeshProUGUI _endResultText; // "Victory!" / "Defeat!" / "Draw"
+        [SerializeField] GameObject _forcedSwitchBanner; // "Choose your next monster!" prompt over the roster
+        [SerializeField] TextMeshProUGUI _endResultText; // "Victory!" / "Defeat!" / "Draw" + XP/Elo line
         [SerializeField] Button _rematchButton;          // reloads the scene for a new battle
+        [Header("End screen — ranked result (optional, scene-authored)")]
+        [SerializeField] TextMeshProUGUI _resultPlayerName; // your username
+        [SerializeField] TextMeshProUGUI _resultPlayerElo;  // "1042 (+21)"
+        [SerializeField] TextMeshProUGUI _resultOppName;    // opponent username
+        [SerializeField] TextMeshProUGUI _resultOppElo;     // "1015 (-21)"
+        [Header("End screen — move progress cards (scene-authored)")]
+        [SerializeField] Transform _gainsContainer;             // cards stack here, under EndScreen
+        [SerializeField] UI.MoveProgressCard _moveCardPrefab;   // inactive in-scene template
 
         [Header("Demo")]
         [SerializeField] ulong _seed = 12345;
@@ -153,7 +164,19 @@ namespace MonsterBattler.Game
             if (metaTeam != null && metaTeam.Count > 0)
             {
                 var randbats = RandbatsLoader.LoadFromStreamingAssets();
-                playerTeam = new RandomTeamGenerator(dex, randbats, new Prng(seed)).BuildNamedTeam(metaTeam);
+                playerTeam = new RandomTeamGenerator(dex, randbats, new Prng(seed))
+                    .BuildNamedTeam(metaTeam, levelOf: Meta.MetaGame.CurrentLevel);
+                // Progression: your mons fight with their EQUIPPED moves, not the randbats roll.
+                foreach (var mon in playerTeam)
+                {
+                    var equipped = Meta.MetaGame.EquippedMoveDatas(mon.Species.Id);
+                    if (equipped.Count > 0)
+                    {
+                        mon.Moves.Clear();
+                        foreach (var m in equipped)
+                            mon.Moves.Add(new MoveSlot { Move = m, Pp = m.Pp, MaxPp = m.Pp });
+                    }
+                }
                 if (playerTeam.Count > 0)
                     opponentTeam = new RandomTeamGenerator(dex, randbats, new Prng(seed ^ 0x9E3779B97F4A7C15UL))
                         .GenerateTeam(System.Math.Max(1, playerTeam.Count));
@@ -197,8 +220,10 @@ namespace MonsterBattler.Game
             side1.ActiveSlots.Add(opponentTeam[0]); opponentTeam[0].IsActive = true;
             _battle.Setup(side0, side1);
 
-            _opponentAI = _opponentElo >= 0
-                ? AI.BattleAIFactory.ForElo(_opponentElo, seed ^ 0x9E3779B97F4A7C15)
+            // Use the matchmade opponent's Elo (so its shown rating drives real difficulty); else the inspector value.
+            int aiElo = Meta.MetaGame.CurrentOpponent.elo > 0 ? Meta.MetaGame.CurrentOpponent.elo : _opponentElo;
+            _opponentAI = aiElo >= 0
+                ? AI.BattleAIFactory.ForElo(aiElo, seed ^ 0x9E3779B97F4A7C15)
                 : new RandomPlayerAI(_opponentMoveBias);
 
             _moves = new[] { _move0, _move1, _move2, _move3 };
@@ -289,19 +314,146 @@ namespace MonsterBattler.Game
 
         void ShowEndScreen()
         {
-            if (_endResultText != null)
+            (string label, Color color) = _battle.WinningSide switch
             {
-                (string label, Color color) = _battle.WinningSide switch
-                {
-                    0    => ("Victory!", new Color(0.30f, 0.78f, 0.33f)),
-                    1    => ("Defeat",   new Color(0.86f, 0.25f, 0.22f)),
-                    _    => ("Draw",     new Color(0.80f, 0.80f, 0.85f)),
-                };
-                int reward = Meta.MetaGame.Reward(_battle.WinningSide == 0);
-                _endResultText.text = $"{label}\n<size=60%>+{reward} coins</size>";
-                _endResultText.color = color;
+                0 => ("Victory!", new Color(0.30f, 0.78f, 0.33f)),
+                1 => ("Defeat",   new Color(0.86f, 0.25f, 0.22f)),
+                _ => ("Draw",     new Color(0.80f, 0.80f, 0.85f)),
+            };
+
+            if (_battle.WinningSide < 0) // draw — no rating change
+            {
+                if (_endResultText != null) { _endResultText.text = label; _endResultText.color = color; }
             }
-            if (_endScreen != null) _endScreen.SetActive(true);
+            else
+            {
+                var res = Meta.MetaGame.ResolveMatch(_battle.WinningSide == 0);
+                // Progression: a few locked moves on your team inch toward unlocking.
+                var teamIds = new List<string>();
+                foreach (var m in _battle.Sides[0].Team) if (m.Species != null) teamIds.Add(m.Species.Id);
+                _endGains = Meta.MetaGame.AwardMoveProgress(_battle.WinningSide == 0, teamIds);
+
+                // Leveling: per-mon XP by participation (battled / benched / survived).
+                var part = new List<(string, bool, bool)>();
+                foreach (var m in _battle.Sides[0].Team)
+                    if (m.Species != null) part.Add((m.Species.Id, m.HasBeenActive, !m.IsFainted));
+                _endXp = Meta.MetaGame.AwardXp(_battle.WinningSide == 0, part);
+                if (_endResultText != null)
+                {
+                    string s = res.eloDelta >= 0 ? "+" : "";
+                    _endResultText.text = $"{label}\n<size=55%>+{res.coins} coins   ·   Elo {s}{res.eloDelta} → {res.newElo}</size>";
+                    _endResultText.color = color;
+                }
+                if (_resultPlayerName != null) _resultPlayerName.text = Meta.MetaGame.Profile.username;
+                if (_resultPlayerElo != null) _resultPlayerElo.text = EloLine(res.newElo, res.eloDelta);
+                if (_resultOppName != null) _resultOppName.text = res.oppName;
+                if (_resultOppElo != null) _resultOppElo.text = $"Elo {res.oppElo}"; // bot rating is fixed ground truth
+            }
+            if (_endScreen != null)
+            {
+                _endScreen.transform.SetAsLastSibling(); // later-built UI (moves, rosters) must not draw over it
+                _endScreen.SetActive(true);
+                StartCoroutine(EndScreenIntro());
+            }
+        }
+
+        List<Meta.MetaGame.MoveGain> _endGains;
+        List<Meta.MetaGame.XpGain> _endXp;
+
+        // Fade the dim in, pop the result text, then reveal the move-progress cards one by one.
+        System.Collections.IEnumerator EndScreenIntro()
+        {
+            var cg = _endScreen.GetComponent<CanvasGroup>();
+            var rt = _endResultText != null ? _endResultText.rectTransform : null;
+            float t = 0f, dur = 0.45f;
+            while (t < dur)
+            {
+                t += Time.unscaledDeltaTime;
+                float k = Mathf.Clamp01(t / dur);
+                if (cg != null) cg.alpha = k;
+                if (rt != null)
+                {
+                    float s = 1f + 2.2f * Mathf.Pow(1f - k, 2f) * Mathf.Sin(k * Mathf.PI);
+                    rt.localScale = Vector3.one * Mathf.Lerp(0.75f, 1f, k) * (0.85f + 0.15f * s);
+                }
+                yield return null;
+            }
+            if (cg != null) cg.alpha = 1f;
+            if (rt != null) rt.localScale = Vector3.one;
+
+            // Move-progress reveal: slide in / fill / burst, one card at a time.
+            int idx = 0;
+            if (_gainsContainer != null && _moveCardPrefab != null)
+            {
+                for (int i = _gainsContainer.childCount - 1; i >= 0; i--)
+                    Destroy(_gainsContainer.GetChild(i).gameObject);
+                if (_endGains != null)
+                    foreach (var g in _endGains)
+                    {
+                        var card = Instantiate(_moveCardPrefab, _gainsContainer);
+                        card.gameObject.SetActive(true);
+                        ((RectTransform)card.transform).anchoredPosition = new Vector2(0f, -idx * 116f);
+                        string mon = Meta.MetaGame.Dex != null && Meta.MetaGame.Dex.Species.TryGetValue(g.species, out var sp) ? sp.Name : g.species;
+                        card.SetMonIcon(MonSpriteLoader.Load(g.species, back: false));
+                        float cost = Meta.MetaGame.MoveUnlockCost;
+                        yield return card.Play(Meta.MetaGame.MoveName(g.moveId), mon,
+                                               Mathf.Clamp01((g.total - g.pts) / cost), Mathf.Clamp01(g.total / cost),
+                                               g.total, Meta.MetaGame.MoveUnlockCost, g.justUnlocked);
+                        idx++;
+                    }
+
+                // XP reveal: one card per mon — bar fills within the level; level-ups burst gold
+                // and the sub-line shows exactly which stats grew.
+                if (_endXp != null)
+                    foreach (var g in _endXp)
+                    {
+                        var card = Instantiate(_moveCardPrefab, _gainsContainer);
+                        card.gameObject.SetActive(true);
+                        ((RectTransform)card.transform).anchoredPosition = new Vector2(0f, -idx * 116f);
+                        string monName = Meta.MetaGame.Dex != null && Meta.MetaGame.Dex.Species.TryGetValue(g.species, out var sp) ? sp.Name : g.species;
+                        card.SetMonIcon(MonSpriteLoader.Load(g.species, back: false));
+                        bool leveled = g.newLevel > g.oldLevel;
+                        int toNext = Mathf.Max(0, Mathf.CeilToInt((1f - g.fracTo) * Meta.MetaGame.XpPerLevel));
+                        string title = leveled ? $"{monName}  Lv {g.oldLevel} → {g.newLevel}" : $"{monName}  Lv {g.oldLevel}";
+                        string subLine = leveled ? StatDiffLine(g.species, g.oldLevel, g.newLevel)
+                                                 : $"+{g.xp} XP  ·  {toNext} XP to Lv {g.oldLevel + 1}";
+                        int shownXp = Mathf.RoundToInt(g.fracTo * Meta.MetaGame.XpPerLevel);
+                        yield return card.Play(title, subLine, g.fracFrom, g.fracTo,
+                                               leveled ? Meta.MetaGame.XpPerLevel : shownXp, Meta.MetaGame.XpPerLevel,
+                                               leveled, unlockedText: "LEVEL UP!");
+                        idx++;
+                    }
+            }
+        }
+
+        // "HP +4 · Atk +2 · Def +3 …" — recompute the mon's stats at both levels with its battle IV/EVs.
+        string StatDiffLine(string species, int oldLevel, int newLevel)
+        {
+            Pokemon mon = null;
+            foreach (var m in _battle.Sides[0].Team)
+                if (m.Species != null && m.Species.Id == species) { mon = m; break; }
+            if (mon == null) return $"Lv {newLevel}";
+            var bs = mon.Species.BaseStats;
+            int[] bases = { bs.HP, bs.Atk, bs.Def, bs.SpA, bs.SpD, bs.Spe };
+            string[] labels = { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
+            var parts = new List<string>();
+            for (int i = 0; i < 6; i++)
+            {
+                int oldV = i == 0 ? RandomTeamGenerator.Hp(bases[i], mon.IVs[i], mon.EVs[i], oldLevel)
+                                  : RandomTeamGenerator.Other(bases[i], mon.IVs[i], mon.EVs[i], oldLevel);
+                int newV = i == 0 ? RandomTeamGenerator.Hp(bases[i], mon.IVs[i], mon.EVs[i], newLevel)
+                                  : RandomTeamGenerator.Other(bases[i], mon.IVs[i], mon.EVs[i], newLevel);
+                if (newV > oldV) parts.Add($"{labels[i]} <color=#4FCB55>+{newV - oldV}</color>");
+            }
+            return parts.Count > 0 ? string.Join("  ", parts) : $"Lv {newLevel}";
+        }
+
+        // "1042  (+21)" with a green/red delta tag.
+        static string EloLine(int elo, int delta)
+        {
+            string hex = delta >= 0 ? "#4FCB55" : "#DB4038";
+            string sign = delta >= 0 ? "+" : "";
+            return $"{elo}  <color={hex}>({sign}{delta})</color>";
         }
 
         // Return to the menu if it's in the build; otherwise just reload (dev mode).
@@ -316,8 +468,26 @@ namespace MonsterBattler.Game
             // Disable moves; only the (non-fainted) switch buttons should be tappable.
             _isInForcedSwitch = true;
             _pendingForcedSwitchIdx = -1;
+            _pivotMoveId = null; // a faint supersedes any armed pivot pick
             SetForcedSwitchUI(true);
-            while (_pendingForcedSwitchIdx < 0) yield return null;
+            ShowSwitchPrompt("Choose your next monster!");
+            var bannerRt = _forcedSwitchBanner != null ? _forcedSwitchBanner.GetComponent<RectTransform>() : null;
+            float t = 0f;
+            while (_pendingForcedSwitchIdx < 0)
+            {
+                // Gentle pulse so the prompt reads as "waiting on you".
+                if (bannerRt != null)
+                {
+                    t += Time.deltaTime;
+                    bannerRt.localScale = Vector3.one * (1f + 0.04f * Mathf.Sin(t * 5f));
+                }
+                yield return null;
+            }
+            if (_forcedSwitchBanner != null)
+            {
+                if (bannerRt != null) bannerRt.localScale = Vector3.one;
+                _forcedSwitchBanner.SetActive(false);
+            }
             _battle.Switch(_battle.Sides[0], _pendingForcedSwitchIdx);
             _isInForcedSwitch = false;
             FlushLog();
@@ -339,13 +509,42 @@ namespace MonsterBattler.Game
             // ran with the post-faint state, so fainted/active mons are correctly grayed out.
         }
 
+        string _pivotMoveId; // armed pivot move (U-turn etc.) waiting for the player to pick who comes in
+
         void OnMoveClicked(int idx)
         {
             if (_isInForcedSwitch) return; // moves locked during forced-switch prompt
             var player = _battle.Sides[0].ActiveSlots[0];
             if (idx >= player.Moves.Count) return;
-            _pendingChoice = Choice.UseMove(player.Moves[idx].Move.Id, _teraQueued);
+            var move = player.Moves[idx].Move;
+
+            // Pivot moves: Showdown lets the USER pick the incoming mon. We pick BEFORE the turn:
+            // arm the move, prompt for a roster pick, and submit once the player chooses.
+            // (Trapped mons can still pivot out, but our swap UI is gated on !trapped — fall back
+            // to auto-pick there rather than soft-locking.)
+            if (move.PivotsOut && HasAliveBench(_battle.Sides[0]) && !_battle.IsTrapped(player))
+            {
+                _pivotMoveId = move.Id;
+                ShowSwitchPrompt("Choose who switches in!");
+                return;
+            }
+            CancelPivotSelect();
+            _pendingChoice = Choice.UseMove(move.Id, _teraQueued);
             _teraQueued = false;
+        }
+
+        void ShowSwitchPrompt(string text)
+        {
+            if (_forcedSwitchBanner == null) return;
+            var label = _forcedSwitchBanner.GetComponentInChildren<TextMeshProUGUI>(includeInactive: true);
+            if (label != null) label.text = text;
+            _forcedSwitchBanner.SetActive(true);
+        }
+
+        void CancelPivotSelect()
+        {
+            _pivotMoveId = null;
+            if (!_isInForcedSwitch && _forcedSwitchBanner != null) _forcedSwitchBanner.SetActive(false);
         }
 
         Pokemon _inspectTarget;
@@ -389,6 +588,13 @@ namespace MonsterBattler.Game
             int idx = _battle.Sides[0].Team.IndexOf(_inspectTarget);
             if (idx < 0) return;
             if (_isInForcedSwitch) _pendingForcedSwitchIdx = idx;
+            else if (_pivotMoveId != null)
+            {
+                // Pivot pick: submit the armed move with the chosen incoming mon.
+                _pendingChoice = Choice.UseMove(_pivotMoveId, _teraQueued, pivotTo: idx);
+                _teraQueued = false;
+                CancelPivotSelect();
+            }
             else _pendingChoice = Choice.SwitchTo(idx);
             if (_infoPanel != null) _infoPanel.SetVisible(false);
         }
@@ -483,6 +689,8 @@ namespace MonsterBattler.Game
             SyncMonView(1, p1);
             SetStatusBadge(_status0, p0);
             SetStatusBadge(_status1, p1);
+            if (_activeInfo0 != null) _activeInfo0.text = PokemonInfoText.ActiveStrip(p0);
+            if (_activeInfo1 != null) _activeInfo1.text = PokemonInfoText.ActiveStrip(p1);
 
             if (_fieldText != null) _fieldText.text = FieldStatusText.Field(_battle);
             if (_sideText0 != null) _sideText0.text = FieldStatusText.Side(_battle.Sides[0]);
@@ -499,7 +707,10 @@ namespace MonsterBattler.Game
             for (int i = 0; i < _playerRoster.Length; i++)
             {
                 if (_playerRoster[i] == null) continue;
-                _playerRoster[i].Show(i < team.Count ? team[i] : null, isActive: i < team.Count && team[i] == p0, isEnemy: false);
+                var mine = i < team.Count ? team[i] : null;
+                _playerRoster[i].Show(mine, isActive: mine == p0, isEnemy: false);
+                // Legibility: SPEED/DMG/HP chips for each of your mons vs the enemy's active mon.
+                _playerRoster[i].ShowMatchup(MatchupChips.Build(mine, p1), _statChipPrefab);
             }
 
             var oppTeam = _battle.Sides[1].Team;

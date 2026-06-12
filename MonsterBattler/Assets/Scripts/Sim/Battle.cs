@@ -33,6 +33,8 @@ namespace MonsterBattler.Sim
         Pokemon _currentAttacker; // the mon currently using a move (for status source: Synchronize/Corrosion)
         bool _bouncing;           // guard so Magic Bounce can't ping-pong a status move forever
         bool _dancing;            // guard so Dancer can't recursively copy dance moves
+        int _pivotPrefSide = -1;  // side whose Choice carried a pivot target this action…
+        int _pivotPrefIdx = -1;   // …and the bench index it wants in (U-turn etc.)
 
         public Battle(Dex dex, ulong seed)
         {
@@ -194,7 +196,12 @@ namespace MonsterBattler.Sim
             // until the rest of the targeting system lands.
             var target = moveData.Target == MoveTarget.Self ? user : defender.ActiveSlots[0];
             if (target.IsFainted) return;
-            UseMove(user, target, choice.MoveId);
+            // Register this side's pivot preference for the duration of the move (Magic Bounce
+            // re-entry runs as the OTHER side's user, so the side check keeps it from leaking).
+            _pivotPrefSide = attacker.Index;
+            _pivotPrefIdx = choice.PivotToIndex;
+            try { UseMove(user, target, choice.MoveId); }
+            finally { _pivotPrefSide = -1; _pivotPrefIdx = -1; }
         }
 
         /// <summary>
@@ -567,19 +574,28 @@ namespace MonsterBattler.Sim
 
             // Pivot moves (U-turn, Volt Switch, Flip Turn): the user switches out after the
             // move connects, provided they're still standing and have a non-fainted bench mon.
-            // TODO: surface the choice of which bench mon to the player; for now auto-pick the
-            // first alive slot.
+            // The acting side may have pre-chosen who comes in (Choice.PivotToIndex, threaded via
+            // _pivotPrefSide/_pivotPrefIdx); otherwise auto-pick the first alive slot.
             if (move.PivotsOut && !user.IsFainted)
             {
                 var side = SideOf(user);
                 if (side != null)
                 {
-                    for (int i = 0; i < side.Team.Count; i++)
+                    int want = side.Index == _pivotPrefSide ? _pivotPrefIdx : -1;
+                    if (want >= 0 && want < side.Team.Count &&
+                        side.Team[want] != user && !side.Team[want].IsFainted)
                     {
-                        var candidate = side.Team[i];
-                        if (candidate == user || candidate.IsFainted) continue;
-                        Switch(side, i);
-                        break;
+                        Switch(side, want);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < side.Team.Count; i++)
+                        {
+                            var candidate = side.Team[i];
+                            if (candidate == user || candidate.IsFainted) continue;
+                            Switch(side, i);
+                            break;
+                        }
                     }
                 }
             }
@@ -1247,7 +1263,12 @@ namespace MonsterBattler.Sim
         public string MoveId;
         public int SwitchToIndex;
         public bool Terastallize;
-        public static Choice UseMove(string id, bool tera = false) => new Choice { Kind = ChoiceKind.Move, MoveId = id, Terastallize = tera };
+        /// <summary>For pivot moves (U-turn etc.): the bench index the user wants to bring in.
+        /// 0 means unset (treated as -1 via PivotToIndex); the engine auto-picks when unset.</summary>
+        public int PivotToIndexPlusOne;
+        public readonly int PivotToIndex => PivotToIndexPlusOne - 1;
+        public static Choice UseMove(string id, bool tera = false, int pivotTo = -1)
+            => new Choice { Kind = ChoiceKind.Move, MoveId = id, Terastallize = tera, PivotToIndexPlusOne = pivotTo + 1 };
         public static Choice SwitchTo(int idx) => new Choice { Kind = ChoiceKind.Switch, SwitchToIndex = idx };
     }
 }

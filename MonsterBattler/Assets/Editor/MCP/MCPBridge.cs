@@ -15,19 +15,51 @@ namespace MonsterBattler.Editor.MCP
     [InitializeOnLoad]
     public static class MCPBridge
     {
-        const string PortPrefKey = "MonsterBattler.MCP.Port";
-        const int DefaultPort = 17984;
+        const int BasePort = 17984;
 
         static HttpListener s_listener;
         static Thread s_acceptThread;
         static CancellationTokenSource s_cts;
+        static int s_port;
         static readonly ConcurrentQueue<PendingCall> s_mainThreadQueue = new();
 
-        public static int Port => EditorPrefs.GetInt(PortPrefKey, DefaultPort);
+        /// <summary>
+        /// Port this instance listens on. Deterministic per project instance so several Unity
+        /// editors (this project, other projects, ParrelSync clones) can run bridges side by side:
+        /// preferred = 17984 (clone_N prefers 17985+N), walking forward if taken. EditorPrefs is
+        /// machine-global so it must NOT be used. The bound port is written to
+        /// Temp/MCPBridgePort.txt for discovery by tooling.
+        /// </summary>
+        public static int Port => s_port != 0 ? s_port : PreferredPort;
+
+        static int PreferredPort
+        {
+            get
+            {
+                var projectRoot = Path.GetDirectoryName(Application.dataPath) ?? "";
+                // ParrelSync clones are "<project>_clone_N" and contain a ".clone" marker file.
+                var marker = Path.Combine(projectRoot, ".clone");
+                if (File.Exists(marker) || projectRoot.Contains("_clone_"))
+                {
+                    var idx = projectRoot.LastIndexOf("_clone_", StringComparison.Ordinal);
+                    int cloneIndex = 0;
+                    if (idx >= 0) int.TryParse(projectRoot.Substring(idx + "_clone_".Length), out cloneIndex);
+                    return BasePort + 1 + cloneIndex;
+                }
+                return BasePort;
+            }
+        }
+
         public static bool IsRunning => s_listener != null && s_listener.IsListening;
 
         static MCPBridge()
         {
+            // Asset-import workers and batch processes also load editor assemblies; they must
+            // not bind bridge ports (they'd shadow the real editors' ports).
+            foreach (var a in Environment.GetCommandLineArgs())
+                if (a == "-adb2" || a.StartsWith("AssetImportWorker", StringComparison.OrdinalIgnoreCase))
+                    return;
+
             EditorApplication.update += PumpMainThread;
             EditorApplication.quitting += Stop;
             AssemblyReloadEvents.beforeAssemblyReload += Stop;
@@ -41,21 +73,42 @@ namespace MonsterBattler.Editor.MCP
         public static void Start()
         {
             if (IsRunning) return;
+            // Try the preferred port first, then walk forward in case another editor instance
+            // (this project or another) already holds it.
+            int preferred = PreferredPort;
+            for (int candidate = preferred; candidate < preferred + 16; candidate++)
+            {
+                try
+                {
+                    s_cts = new CancellationTokenSource();
+                    s_listener = new HttpListener();
+                    s_listener.Prefixes.Add($"http://127.0.0.1:{candidate}/");
+                    s_listener.Start();
+                    s_port = candidate;
+                    WritePortFile(candidate);
+                    s_acceptThread = new Thread(AcceptLoop) { IsBackground = true, Name = "MCPBridge.Accept" };
+                    s_acceptThread.Start();
+                    Debug.Log($"[MCP] Bridge listening on http://127.0.0.1:{candidate}/");
+                    return;
+                }
+                catch (Exception)
+                {
+                    try { s_listener?.Close(); } catch { }
+                    s_listener = null;
+                    s_cts = null;
+                }
+            }
+            Debug.LogError($"[MCP] Failed to bind any port in {preferred}..{preferred + 15}");
+        }
+
+        static void WritePortFile(int port)
+        {
             try
             {
-                s_cts = new CancellationTokenSource();
-                s_listener = new HttpListener();
-                s_listener.Prefixes.Add($"http://127.0.0.1:{Port}/");
-                s_listener.Start();
-                s_acceptThread = new Thread(AcceptLoop) { IsBackground = true, Name = "MCPBridge.Accept" };
-                s_acceptThread.Start();
-                Debug.Log($"[MCP] Bridge listening on http://127.0.0.1:{Port}/");
+                var projectRoot = Path.GetDirectoryName(Application.dataPath) ?? "";
+                File.WriteAllText(Path.Combine(projectRoot, "Temp", "MCPBridgePort.txt"), port.ToString());
             }
-            catch (Exception e)
-            {
-                Debug.LogError($"[MCP] Failed to start bridge: {e.Message}");
-                Stop();
-            }
+            catch { /* Temp may not exist in exotic contexts; discovery just falls back */ }
         }
 
         public static void Stop()

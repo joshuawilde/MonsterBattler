@@ -4,7 +4,11 @@ creates Assets/Prefabs/StatChip.prefab (solid dark chip, styled, editable) and B
 containers under each nameplate, then wires BattleView. Run with Unity open in EDIT mode."""
 import os, json, urllib.request
 
-URL = "http://127.0.0.1:17984/"
+import os as _os
+_pf = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "MonsterBattler", "Temp", "MCPBridgePort.txt")
+try: _PORT = int(open(_pf).read().strip())
+except Exception: _PORT = 17984
+URL = "http://127.0.0.1:%d/" % _PORT
 SA = "BattleUI/SafeArea"
 CHIP = "Assets/Prefabs/StatChip.prefab"
 

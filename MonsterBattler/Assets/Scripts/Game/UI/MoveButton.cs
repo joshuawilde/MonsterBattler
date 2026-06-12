@@ -20,6 +20,7 @@ namespace MonsterBattler.Game.UI
         [SerializeField] TextMeshProUGUI _descText;
         [SerializeField] TextMeshProUGUI _typeText;
         [SerializeField] TextMeshProUGUI _ppText;
+        [SerializeField] Image _categoryIcon;   // physical / special / status
 
         static readonly Color Ink = new Color(0.13f, 0.13f, 0.15f);
 
@@ -57,6 +58,7 @@ namespace MonsterBattler.Game.UI
                 _descText.text = blurb; _descText.color = Ink;
             }
             if (_typeText != null) { _typeText.text = TypeStyle.Display(move.Type); _typeText.color = Ink; }
+            CategoryIcons.Apply(_categoryIcon, move.Category);
             if (_ppText != null)
             {
                 _ppText.text = $"{slot.Pp}/{slot.MaxPp}";
@@ -103,9 +105,16 @@ namespace MonsterBattler.Game.UI
             return header.Length > 0 ? $"{header}\n{desc}" : desc;
         }
 
+        CanvasGroup _group;
+
         public void SetInteractable(bool on)
         {
             if (_button != null) _button.interactable = on;
+            // When you can't act (opponent's beat, forced switch, choice-locked) the card fades
+            // way down so the actionable state is unmistakable.
+            // NOTE: no ?? on GetComponent — Unity's fake-null breaks it (MissingComponentException).
+            if (_group == null && !TryGetComponent(out _group)) _group = gameObject.AddComponent<CanvasGroup>();
+            _group.alpha = on ? 1f : 0.2f;
         }
     }
 }
