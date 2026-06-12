@@ -918,6 +918,30 @@ namespace MonsterBattler.Game
                         }
                     }
                 }
+                else if (tag == "-prepare" && parts.Length > 3)
+                {
+                    int side = SideForName(parts[2], active);
+                    if (side >= 0)
+                    {
+                        View(side)?.PlayUse(); // charge-up: rise in place, no lunge
+                        if (_fxScene != null)
+                        {
+                            string moveId = parts[3].ToLowerInvariant().Replace(" ", "").Replace("-", "").Replace("'", "");
+                            var atkT = View(side)?.transform;
+                            var defT = View(1 - side)?.transform;
+                            if (atkT != null && defT != null)
+                            {
+                                Vector3 atk = atkT.position + Vector3.up * 0.8f;
+                                Vector3 def = defT.position + Vector3.up * 0.8f;
+                                if (!UI.PsAnims.TryPlayPrepare(_fxScene, moveId, atk, def))
+                                    _fxScene.ShowEffect("orb", // generic charge shimmer fallback
+                                        UI.FxScene.State.At(atk).Scale(0.25f).Alpha(0.3f),
+                                        UI.FxScene.State.At(atk).Scale(0.9f).Alpha(0.9f).Time(450f));
+                            }
+                        }
+                        beat = true;
+                    }
+                }
                 else if (tag == "switch" && parts.Length > 3)
                 {
                     int side = SideOfTeamName(parts[2]);

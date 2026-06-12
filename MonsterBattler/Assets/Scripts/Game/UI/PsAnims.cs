@@ -23,8 +23,15 @@ namespace MonsterBattler.Game.UI
 
         /// <summary>Play moveId's extracted animation. False if the table or move is missing.</summary>
         public static bool TryPlay(FxScene fx, string moveId, Vector3 atk, Vector3 def)
+            => TryPlayList(fx, moveId, "steps", atk, def);
+
+        /// <summary>Charge-turn animation for two-turn moves (PS prepareAnim: Solar Beam, Fly…).</summary>
+        public static bool TryPlayPrepare(FxScene fx, string moveId, Vector3 atk, Vector3 def)
+            => TryPlayList(fx, moveId, "prepare", atk, def);
+
+        static bool TryPlayList(FxScene fx, string moveId, string list, Vector3 atk, Vector3 def)
         {
-            var steps = Lookup(moveId) as JArray;
+            var steps = Lookup(moveId)?[list] as JArray;
             if (steps == null || fx == null) return false;
 
             // PS-space frame: attacker at u=0, defender at u=L (same px scale as PS's ~350px gap).
@@ -134,11 +141,10 @@ namespace MonsterBattler.Game.UI
                     _loadFailed = true;
                 }
             }
-            JToken steps = null;
             var entry = _root?[moveId] as JObject;
-            if (entry != null && entry["error"] == null) steps = entry["steps"];
-            _cache[moveId] = steps;
-            return steps;
+            if (entry != null && entry["error"] != null) entry = null;
+            _cache[moveId] = entry;
+            return entry;
         }
 
         // PS fx sprite name → (our fx library sprite, tint). PS uses ~30 colored-orb variants;
