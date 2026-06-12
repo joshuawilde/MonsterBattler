@@ -1,5 +1,5 @@
-// Create the durable MonsterBattler server actor on Rivet (run once after `rivet deploy`).
-// Mirrors the working pattern in ~/NPCLLMGame/Backend/rivet.ts.
+// Create a MonsterBattler server actor on Rivet (one actor per battle — spin one up when a
+// match is made, let it die after). Mirrors the pattern in ~/NPCLLMGame/Backend/rivet.ts.
 //
 //   cd tools && npm install @rivet-gg/api
 //   RIVET_CLOUD_TOKEN=... RIVET_PROJECT=<project-slug> node rivet-create-actor.mjs
@@ -29,7 +29,7 @@ const res = await client.actors.create({
       },
     },
     resources: { cpu: 1000, memory: 1024 },          // 1 core / 1GB plenty for a turn-based relay
-    lifecycle: { durable: true },                    // one long-lived server, many matches
+    // per-match actor: not durable — create on matchmake, dies with the battle
   },
 });
 console.log(JSON.stringify(res, null, 2));
