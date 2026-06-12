@@ -166,8 +166,8 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.UnityTechnologies.com.unity.template.urpblank
-    Standalone: com.Unity-Technologies.com.unity.template.urp-blank
+    Android: com.liquidsunshinelabs.monsterbattler
+    Standalone: com.liquidsunshinelabs.monsterbattler
     iPhone: com.liquidsunshinelabs.monsterbattler
   buildNumber:
     Standalone: 0

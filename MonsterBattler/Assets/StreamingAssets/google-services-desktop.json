@@ -1,0 +1,31 @@
+{
+  "project_info": {
+    "project_number": "649547362218",
+    "project_id": "monsterbattler-70adb",
+    "storage_bucket": "monsterbattler-70adb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649547362218:ios:28b5bc100a1ae386e645d3",
+        "android_client_info": {
+          "package_name": "com.liquidsunshinelabs.monsterbattler"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_FwKw70-pzjfe1vs1Di-zbUrPoXW8z34"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 0
+        },
+        "appinvite_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

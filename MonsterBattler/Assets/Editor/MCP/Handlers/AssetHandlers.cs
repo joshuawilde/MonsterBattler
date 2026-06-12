@@ -32,6 +32,16 @@ namespace MonsterBattler.Editor.MCP.Handlers
                 return new JObject { ["path"] = path, ["border"] = p["border"] };
             });
 
+            // Import a .unitypackage non-interactively (SDKs etc.). Triggers recompiles; the
+            // bridge will go quiet during the domain reload — poll console.count after.
+            MCPCommandRegistry.Register("asset.import_package", p =>
+            {
+                var path = (string)p["path"];
+                if (!File.Exists(path)) throw new FileNotFoundException(path);
+                AssetDatabase.ImportPackage(path, interactive: false);
+                return new JObject { ["importing"] = path };
+            });
+
             // Copy a file from anywhere on disk into the project and import it.
             // params: from (absolute), to (Assets/...)
             MCPCommandRegistry.Register("asset.copy_in", p =>
