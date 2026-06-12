@@ -121,6 +121,7 @@ namespace MonsterBattler.Game.Meta
         void ShowHome()
         {
             SetPanels(home: true, box: false, summon: false);
+            AudioManager.I?.PlayMenuMusic();
             int teamN = MetaGame.BattleTeam().Count;
             if (_homeCoins != null) _homeCoins.text = $"{MetaGame.Profile.coins} coins";
             if (_homeTeam != null) _homeTeam.text = $"Team {teamN}/{MetaGame.TeamSize}  ·  {MetaGame.Profile.owned.Count} owned";

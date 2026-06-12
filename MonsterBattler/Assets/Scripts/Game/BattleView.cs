@@ -224,6 +224,7 @@ namespace MonsterBattler.Game
             side1.ActiveSlots.Add(opponentTeam[0]); opponentTeam[0].IsActive = true;
             _battle.Setup(side0, side1);
             _hazards?.ClearAll();
+            AudioManager.I?.PlayBattleMusic();
 
             // Use the matchmade opponent's Elo (so its shown rating drives real difficulty); else the inspector value.
             int aiElo = Meta.MetaGame.CurrentOpponent.elo > 0 ? Meta.MetaGame.CurrentOpponent.elo : _opponentElo;
@@ -319,6 +320,8 @@ namespace MonsterBattler.Game
 
         void ShowEndScreen()
         {
+            if (_battle.WinningSide == 0) AudioManager.I?.PlayVictory();
+            else AudioManager.I?.PlayDefeat();
             (string label, Color color) = _battle.WinningSide switch
             {
                 0 => ("Victory!", new Color(0.30f, 0.78f, 0.33f)),
@@ -423,6 +426,7 @@ namespace MonsterBattler.Game
                         string subLine = leveled ? StatDiffLine(g.species, g.oldLevel, g.newLevel)
                                                  : $"+{g.xp} XP  ·  {toNext} XP to Lv {g.oldLevel + 1}";
                         int shownXp = Mathf.RoundToInt(g.fracTo * Meta.MetaGame.XpPerLevel);
+                        if (leveled) AudioManager.Play("levelup");
                         yield return card.Play(title, subLine, g.fracFrom, g.fracTo,
                                                leveled ? Meta.MetaGame.XpPerLevel : shownXp, Meta.MetaGame.XpPerLevel,
                                                leveled, unlockedText: "LEVEL UP!");
@@ -896,6 +900,9 @@ namespace MonsterBattler.Game
                             _fxScene.Shake(Mathf.Lerp(0.03f, 0.16f, sev), 0.25f + 0.15f * sev);
                             if (d <= -30) _fxScene.HitStop(0.07f);
                         }
+                        if (tag == "-damage" && d < 0)
+                            AudioManager.Play(d <= -30 ? "hit_super" : d >= -8 ? "hit_weak" : "hit");
+                        else if (tag == "-heal" && d > 0) AudioManager.Play("heal");
                         beat = true;
                     }
                 }
@@ -924,6 +931,7 @@ namespace MonsterBattler.Game
                     if (side >= 0)
                     {
                         View(side)?.PlayUse(); // charge-up: rise in place, no lunge
+                        AudioManager.Play("charge");
                         if (_fxScene != null)
                         {
                             string moveId = parts[3].ToLowerInvariant().Replace(" ", "").Replace("-", "").Replace("'", "");
@@ -953,6 +961,8 @@ namespace MonsterBattler.Game
                             _nameTexts[side].text = $"{MonName(mon)} L{mon.Level}";
                         ApplyHpFromLog(side, parts[3], snap: true); // new mon — no drain animation
                         SpawnPopup(side, $"Go! {MonName(mon) ?? parts[2]}", SwitchBg);
+                        AudioManager.Play("switch");
+                        UpdateBattleMood();
                         SyncMonView(side, mon); // swap sprite + enter anim
                         beat = true;
                     }
@@ -965,6 +975,8 @@ namespace MonsterBattler.Game
                         SpawnPopup(side, "Fainted", FaintBg);
                         View(side)?.PlayFaint();
                         _fxScene?.KoMoment(); // slow-mo + white flash + shake
+                        AudioManager.Play("faint");
+                        UpdateBattleMood();
                         beat = true;
                     }
                 }
@@ -972,12 +984,17 @@ namespace MonsterBattler.Game
                 {
                     int side = SideForName(parts[2], active);
                     bool up = tag == "-boost";
-                    if (side >= 0) { SpawnPopup(side, $"{StatAbbr(parts[3])} {(up ? "+" : "−")}{parts[4]}", up ? BoostBg : DropBg); beat = true; }
+                    if (side >= 0)
+                    {
+                        SpawnPopup(side, $"{StatAbbr(parts[3])} {(up ? "+" : "−")}{parts[4]}", up ? BoostBg : DropBg);
+                        AudioManager.Play(up ? "boost" : "unboost");
+                        beat = true;
+                    }
                 }
                 else if (tag == "-status" && parts.Length > 3)
                 {
                     int side = SideForName(parts[2], active);
-                    if (side >= 0) { SpawnPopup(side, parts[3].ToUpperInvariant(), StatusBg); beat = true; }
+                    if (side >= 0) { SpawnPopup(side, parts[3].ToUpperInvariant(), StatusBg); AudioManager.Play("status"); beat = true; }
                 }
                 else if (tag == "-crit" && parts.Length > 2)
                 {
@@ -1006,7 +1023,7 @@ namespace MonsterBattler.Game
                     int side = parts[2] == "p1" ? 0 : parts[2] == "p2" ? 1 : -1;
                     if (side >= 0)
                     {
-                        if (tag == "-sidestart") _hazards.Stack(side, parts[3]);
+                        if (tag == "-sidestart") { _hazards.Stack(side, parts[3]); AudioManager.Play("hazard"); }
                         else _hazards.Remove(side, parts[3]);
                     }
                 }
@@ -1019,6 +1036,7 @@ namespace MonsterBattler.Game
                         var v = View(side);
                         if (v != null && _fxScene != null)
                             UI.MoveAnims.ItemFlies(_fxScene, v.transform.position, side == 0);
+                        AudioManager.Play("item_off");
                         beat = true;
                     }
                 }
@@ -1026,6 +1044,23 @@ namespace MonsterBattler.Game
                 if (beat && _turnStepDelay > 0f) yield return new WaitForSeconds(_turnStepDelay);
             }
             if (_messageBar != null && groupActive) _messageBar.FadeOut(); // hide after the turn
+        }
+
+        // Dynamic music: player on their last mon → tension mix; opponent on theirs → triumph.
+        void UpdateBattleMood()
+        {
+            if (_battle == null || AudioManager.I == null) return;
+            int p = AliveCount(_battle.Sides[0]), o = AliveCount(_battle.Sides[1]);
+            AudioManager.I.SetBattleMood(
+                p <= 1 ? AudioManager.Mood.Tension :
+                o <= 1 ? AudioManager.Mood.Triumph : AudioManager.Mood.Base);
+        }
+
+        static int AliveCount(Side s)
+        {
+            int n = 0;
+            foreach (var m in s.Team) if (!m.IsFainted) n++;
+            return n;
         }
 
         // Parse "cur/max" and drive the side's HP bar + text. snap=true jumps instantly (switch-in).
