@@ -71,6 +71,7 @@ namespace MonsterBattler.Game.UI
             yield return Wait(0.12f);
 
             // 2. bar fills old → new
+            AudioManager.Play("boost");
             for (float t = 0f; t < FillDur; t += Time.unscaledDeltaTime)
             {
                 float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t / FillDur));

@@ -27,8 +27,14 @@ namespace MonsterBattler.Game.UI
             Vector3 def = defender.position + Vector3.up * 0.8f;
             var color = TypeStyle.BgColor(move.Type);
 
-            if (Registry.TryGetValue(move.Id, out var anim)) anim(fx, atk, def, color);
-            else if (PsAnims.TryPlay(fx, move.Id, atk, def)) { } // full extracted Showdown set
+            AudioManager.PlayMoveSound(move.Id, move.Type.ToString().ToLowerInvariant());
+
+            // Extracted Showdown data first (full fidelity incl. mon dances/hops); hand-ported
+            // registry and category defaults only as fallbacks.
+            var atkView = attacker.GetComponent<MonsterView>();
+            var defView = defender.GetComponent<MonsterView>();
+            if (PsAnims.TryPlay(fx, move.Id, atk, def, atkView, defView)) { }
+            else if (Registry.TryGetValue(move.Id, out var anim)) anim(fx, atk, def, color);
             else if (move.Category == MoveCategory.Status) DefaultStatus(fx, atk, def, move, color);
             else if (move.Contact) DefaultContact(fx, atk, def, color);
             else DefaultRanged(fx, atk, def, color);

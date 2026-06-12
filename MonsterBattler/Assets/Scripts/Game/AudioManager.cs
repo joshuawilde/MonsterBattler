@@ -88,6 +88,28 @@ namespace MonsterBattler.Game
             I._sfxSrc.PlayOneShot(clip, 0.85f);
         }
 
+        // ---- per-move / per-type attack sounds (Resources/Audio/, loaded by name, cached) ----
+
+        static readonly Dictionary<string, AudioClip> _resCache = new();
+
+        /// <summary>Attack sound for a move: Resources/Audio/move_{id} (Thunder = real thunder…)
+        /// if present, else the type-generic type_{type} sound.</summary>
+        public static void PlayMoveSound(string moveId, string typeName)
+        {
+            if (I == null || I._sfxSrc == null) return;
+            var clip = LoadRes("move_" + moveId);
+            if (clip == null) clip = LoadRes("type_" + typeName);
+            if (clip != null) I._sfxSrc.PlayOneShot(clip, 0.8f);
+        }
+
+        static AudioClip LoadRes(string name)
+        {
+            if (_resCache.TryGetValue(name, out var c)) return c;
+            c = Resources.Load<AudioClip>("Audio/" + name);
+            _resCache[name] = c; // misses cached too — avoids repeated disk probes
+            return c;
+        }
+
         public void PlayMenuMusic()
         {
             StopBattleStems();

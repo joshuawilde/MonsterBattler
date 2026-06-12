@@ -941,7 +941,8 @@ namespace MonsterBattler.Game
                             {
                                 Vector3 atk = atkT.position + Vector3.up * 0.8f;
                                 Vector3 def = defT.position + Vector3.up * 0.8f;
-                                if (!UI.PsAnims.TryPlayPrepare(_fxScene, moveId, atk, def))
+                                if (!UI.PsAnims.TryPlayPrepare(_fxScene, moveId, atk, def,
+                                        atkT.GetComponent<UI.MonsterView>(), defT.GetComponent<UI.MonsterView>()))
                                     _fxScene.ShowEffect("orb", // generic charge shimmer fallback
                                         UI.FxScene.State.At(atk).Scale(0.25f).Alpha(0.3f),
                                         UI.FxScene.State.At(atk).Scale(0.9f).Alpha(0.9f).Time(450f));

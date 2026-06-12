@@ -160,7 +160,7 @@ namespace MonsterBattler.Game.UI
         /// <summary>Decaying camera shake; strength in world units (~0.05 light, 0.15 heavy).</summary>
         public void Shake(float strength, float duration = 0.3f)
         {
-            var cam = Camera.main;
+            var cam = Camera.main != null ? Camera.main : FindAnyObjectByType<Camera>();
             if (cam == null) return;
             if (_shakeCo != null) StopCoroutine(_shakeCo);
             _shakeCo = StartCoroutine(RunShake(cam.transform, strength, duration));

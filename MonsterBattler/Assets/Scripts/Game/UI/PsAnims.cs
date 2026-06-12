@@ -21,15 +21,19 @@ namespace MonsterBattler.Game.UI
         static bool _loadFailed;
         static readonly Dictionary<string, JToken> _cache = new();
 
-        /// <summary>Play moveId's extracted animation. False if the table or move is missing.</summary>
-        public static bool TryPlay(FxScene fx, string moveId, Vector3 atk, Vector3 def)
-            => TryPlayList(fx, moveId, "steps", atk, def);
+        /// <summary>Play moveId's extracted animation. False if the table or move is missing.
+        /// When views are given, the data's mon-sprite queues (dances, hops, lunges) play too.</summary>
+        public static bool TryPlay(FxScene fx, string moveId, Vector3 atk, Vector3 def,
+                                   MonsterView atkView = null, MonsterView defView = null)
+            => TryPlayList(fx, moveId, "steps", atk, def, atkView, defView);
 
         /// <summary>Charge-turn animation for two-turn moves (PS prepareAnim: Solar Beam, Fly…).</summary>
-        public static bool TryPlayPrepare(FxScene fx, string moveId, Vector3 atk, Vector3 def)
-            => TryPlayList(fx, moveId, "prepare", atk, def);
+        public static bool TryPlayPrepare(FxScene fx, string moveId, Vector3 atk, Vector3 def,
+                                          MonsterView atkView = null, MonsterView defView = null)
+            => TryPlayList(fx, moveId, "prepare", atk, def, atkView, defView);
 
-        static bool TryPlayList(FxScene fx, string moveId, string list, Vector3 atk, Vector3 def)
+        static bool TryPlayList(FxScene fx, string moveId, string list, Vector3 atk, Vector3 def,
+                                MonsterView atkView, MonsterView defView)
         {
             var steps = Lookup(moveId)?[list] as JArray;
             if (steps == null || fx == null) return false;
@@ -43,6 +47,7 @@ namespace MonsterBattler.Game.UI
             float ay = atk.y / Px, dy = def.y / Px;
 
             bool played = false;
+            List<MonsterView.PsStep> qAtk = null, qDef = null;
             foreach (var step in steps)
             {
                 switch ((string)step["type"])
@@ -56,10 +61,49 @@ namespace MonsterBattler.Game.UI
                             (float?)step["delay"] ?? 0f);
                         played = true;
                         break;
-                    // monAnim/monDelay lunges are covered by MonsterView's own beat anims.
+                    case "monAnim":
+                    case "monDelay":
+                        bool isAtk = (string)step["who"] == "attacker";
+                        var view = isAtk ? atkView : defView;
+                        if (view == null) break;
+                        var q = isAtk ? (qAtk ??= new List<MonsterView.PsStep>())
+                                      : (qDef ??= new List<MonsterView.PsStep>());
+                        q.Add(ReadMonStep(step, view, atk, def, dirU, L, ay, dy));
+                        break;
                 }
             }
+            if (qAtk != null) { atkView.PlayPsAnim(qAtk); played = true; }
+            if (qDef != null) { defView.PlayPsAnim(qDef); played = true; }
             return played;
+        }
+
+        static MonsterView.PsStep ReadMonStep(JToken step, MonsterView view, Vector3 atk, Vector3 def,
+                                              Vector3 dirU, float L, float ay, float dy)
+        {
+            if ((string)step["type"] == "monDelay")
+                return new MonsterView.PsStep { isDelay = true, durMs = Eval(step["time"], 0f, 0f, 0f) };
+
+            var to = step["to"];
+            float u = Eval(to?["x"], 0f, L);
+            float y = Eval(to?["y"], ay, dy);
+            // Anchors are mon centers; shift the evaluated center back to the view's root pivot.
+            Vector3 rootOffset = view.transform.position - ((string)step["who"] == "attacker" ? atk : def);
+            Vector3 pos = atk + dirU * (u * Px);
+            pos.y = y * Px;
+            return new MonsterView.PsStep
+            {
+                pos = pos + rootOffset,
+                scale = Eval(to?["scale"], 0f, 0f, 1f),
+                opacity = Eval(to?["opacity"], 0f, 0f, 1f),
+                durMs = Eval(to?["time"], 0f, 0f, 500f),
+                ease = (string)step["ease"] switch
+                {
+                    "linear" => FxScene.Ease.Linear,
+                    "accel" => FxScene.Ease.Accel,
+                    "decel" => FxScene.Ease.Decel,
+                    _ => FxScene.Ease.Swing, // jQuery default
+                },
+            };
         }
 
         static bool PlayEffect(FxScene fx, JToken step, Vector3 atk, Vector3 dirU, float L, float ay, float dy)
