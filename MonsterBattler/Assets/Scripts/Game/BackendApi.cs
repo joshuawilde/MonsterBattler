@@ -17,6 +17,9 @@ namespace MonsterBattler.Game
         /// <summary>Backend base URL; override from a bootstrap or build config.</summary>
         public static string BaseUrl = "http://127.0.0.1:8080";
 
+        /// <summary>True once a bootstrap explicitly configured the backend (calls are pointless before).</summary>
+        public static bool Configured;
+
         /// <summary>Returns the bearer token for requests. Default: dev-bypass device identity.</summary>
         public static System.Func<string> TokenProvider = () => "dev:" + DevUid();
 

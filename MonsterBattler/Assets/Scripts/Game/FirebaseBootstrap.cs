@@ -29,6 +29,7 @@ namespace MonsterBattler.Game
                 if (t.Result != DependencyStatus.Available)
                 {
                     Debug.LogWarning($"[Firebase] unavailable ({t.Result}) — staying on dev identity");
+                    SyncProfile(); // dev-bypass backend still gets the dev identity
                     return;
                 }
                 _auth = FirebaseAuth.DefaultInstance;
@@ -56,11 +57,22 @@ namespace MonsterBattler.Game
             Debug.Log($"[Firebase] signed in as {user.UserId}");
             BackendApi.SetFirebaseUid(user.UserId);
             BackendApi.TokenProvider = () => FreshToken(user);
-            // refresh the cache up-front so the first API call has a token ready
+            // fetch the first token, THEN do the initial backend sync (ordering matters:
+            // a sync before this point would carry a stale/dev token).
             user.TokenAsync(false).ContinueWithOnMainThread(t =>
             {
-                if (!t.IsFaulted) { _cachedToken = t.Result; _tokenFetchedAt = Time.realtimeSinceStartup; }
+                if (t.IsFaulted) { Debug.LogWarning($"[Firebase] token fetch failed: {t.Exception?.GetBaseException().Message}"); return; }
+                _cachedToken = t.Result;
+                _tokenFetchedAt = Time.realtimeSinceStartup;
+                SyncProfile();
             });
+        }
+
+        void SyncProfile()
+        {
+            if (!BackendApi.Configured) return;
+            StartCoroutine(BackendApi.SyncProfile(Meta.MetaGame.Profile.username,
+                p => { if (p != null) Debug.Log($"[Backend] profile synced: {p.ToString(Newtonsoft.Json.Formatting.None)}"); }));
         }
 
         // TokenProvider is synchronous; serve the cached token and refresh it in the background

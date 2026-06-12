@@ -49,8 +49,9 @@ namespace MonsterBattler.Game.Net
             if (!string.IsNullOrEmpty(_backendUrl))
             {
                 BackendApi.BaseUrl = _backendUrl;
-                StartCoroutine(BackendApi.SyncProfile(Meta.MetaGame.Profile.username,
-                    p => { if (p != null) Debug.Log($"[Backend] profile synced: {p}"); }));
+                BackendApi.Configured = true;
+                // The initial profile sync happens in FirebaseBootstrap AFTER sign-in
+                // resolves — syncing here would race the identity and send a stale token.
             }
         }
 
