@@ -16,9 +16,64 @@ namespace MonsterBattler.Game
     /// </summary>
     public sealed class FirebaseBootstrap : MonoBehaviour
     {
+        public static FirebaseBootstrap Instance { get; private set; }
+
         FirebaseAuth _auth;
         string _cachedToken;
         float _tokenFetchedAt = -3600f;
+
+        void Awake() => Instance = this;
+
+        /// <summary>Human-readable account state for the Account panel.</summary>
+        public string AccountLabel()
+        {
+            var u = _auth?.CurrentUser;
+            if (u == null) return "Offline — local identity";
+            if (u.IsAnonymous) return "Guest account\n<size=70%>Progress is saved to this device's identity.\nSign in to keep it across devices.</size>";
+            string who = !string.IsNullOrEmpty(u.DisplayName) ? u.DisplayName
+                       : !string.IsNullOrEmpty(u.Email) ? u.Email : u.UserId.Substring(0, 8);
+            return $"Signed in as {who}";
+        }
+
+        public bool IsAnonymous => _auth?.CurrentUser?.IsAnonymous ?? true;
+
+        /// <summary>Link the current (anonymous) account to Apple/Google — keeps the uid, so Elo
+        /// and friends survive. If that provider identity already owns another account, signs
+        /// into it instead (uid switches; backend profile follows on next sync).
+        /// providerId: "apple.com" or "google.com". Device builds only (OS auth sheet).</summary>
+        public void LinkWith(string providerId, System.Action<string> status)
+        {
+            var u = _auth?.CurrentUser;
+            if (u == null) { status?.Invoke("Not connected to Firebase"); return; }
+            if (Application.isEditor)
+            {
+                status?.Invoke("Sign-in opens the system sheet on iOS/Android builds");
+                return;
+            }
+            var provider = new FederatedOAuthProvider();
+            provider.SetProviderData(new FederatedOAuthProviderData { ProviderId = providerId });
+            status?.Invoke("Opening sign-in…");
+            u.LinkWithProviderAsync(provider).ContinueWithOnMainThread(t =>
+            {
+                if (!t.IsFaulted && !t.IsCanceled)
+                {
+                    OnSignedIn(t.Result.User);
+                    status?.Invoke("Account linked!");
+                    return;
+                }
+                // Provider identity already has an account → sign into that one instead.
+                _auth.SignInWithProviderAsync(provider).ContinueWithOnMainThread(t2 =>
+                {
+                    if (t2.IsFaulted || t2.IsCanceled)
+                    {
+                        status?.Invoke("Sign-in didn't complete");
+                        return;
+                    }
+                    OnSignedIn(t2.Result.User);
+                    status?.Invoke("Signed in!");
+                });
+            });
+        }
 
         void Start()
         {

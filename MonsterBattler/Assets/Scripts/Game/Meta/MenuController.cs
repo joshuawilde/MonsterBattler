@@ -29,6 +29,22 @@ namespace MonsterBattler.Game.Meta
         [SerializeField] Button _boxButton;
         [SerializeField] Button _summonButton;
 
+        [Header("Account panel (scene-authored)")]
+        [SerializeField] Button _accountButton;
+        [SerializeField] GameObject _accountPanel;
+        [SerializeField] TextMeshProUGUI _accountStatus;
+        [SerializeField] Button _appleSignInButton;
+        [SerializeField] Button _googleSignInButton;
+        [SerializeField] Button _accountBackButton;
+
+        [Header("Leaderboard panel (scene-authored)")]
+        [SerializeField] Button _leaderboardButton;
+        [SerializeField] GameObject _leaderboardPanel;
+        [SerializeField] TextMeshProUGUI _leaderboardStatus;
+        [SerializeField] Transform _leaderboardContent;      // VerticalLayoutGroup parent
+        [SerializeField] GameObject _leaderboardRowTemplate; // inactive: Rank/Name/Elo TMP children
+        [SerializeField] Button _leaderboardBackButton;
+
         [Header("Matchmaking (scene-authored panel)")]
         [SerializeField] GameObject _matchmakingPanel;
         [SerializeField] TextMeshProUGUI _mmStatus;      // "Searching for opponent…" / "Match found!"
@@ -87,6 +103,107 @@ namespace MonsterBattler.Game.Meta
             Wire(_pullButton, OnPull);
             Wire(_detailBackButton, ShowBox);
             Wire(_detailTeamButton, OnDetailTeamToggle);
+            Wire(_accountButton, ShowAccount);
+            Wire(_accountBackButton, CloseOverlays);
+            Wire(_appleSignInButton, () => OnSignIn("apple.com"));
+            Wire(_googleSignInButton, () => OnSignIn("google.com"));
+            Wire(_leaderboardButton, ShowLeaderboard);
+            Wire(_leaderboardBackButton, CloseOverlays);
+        }
+
+        // ---- account + leaderboard overlays (sit above the home panel) -----------------------
+
+        void CloseOverlays()
+        {
+            if (_accountPanel != null) _accountPanel.SetActive(false);
+            if (_leaderboardPanel != null) _leaderboardPanel.SetActive(false);
+            ShowHome();
+        }
+
+        void ShowAccount()
+        {
+            if (_accountPanel == null) return;
+            _accountPanel.SetActive(true);
+            _accountPanel.transform.SetAsLastSibling();
+            RefreshAccountStatus(null);
+        }
+
+        void RefreshAccountStatus(string actionNote)
+        {
+            if (_accountStatus == null) return;
+            var fb = FirebaseBootstrap.Instance;
+            string label = fb != null ? fb.AccountLabel() : "Offline — local identity";
+            _accountStatus.text = string.IsNullOrEmpty(actionNote) ? label : $"{label}\n\n<color=#ffd24d>{actionNote}</color>";
+            bool anon = fb == null || fb.IsAnonymous;
+            if (_appleSignInButton != null) _appleSignInButton.gameObject.SetActive(anon);
+            if (_googleSignInButton != null) _googleSignInButton.gameObject.SetActive(anon);
+        }
+
+        void OnSignIn(string providerId)
+        {
+            var fb = FirebaseBootstrap.Instance;
+            if (fb == null) { RefreshAccountStatus("Firebase not available"); return; }
+            fb.LinkWith(providerId, note => RefreshAccountStatus(note));
+        }
+
+        void ShowLeaderboard()
+        {
+            if (_leaderboardPanel == null) return;
+            _leaderboardPanel.SetActive(true);
+            _leaderboardPanel.transform.SetAsLastSibling();
+            ClearLeaderboardRows();
+            if (!BackendApi.Configured)
+            {
+                if (_leaderboardStatus != null) _leaderboardStatus.text = "Leaderboard needs an online connection";
+                return;
+            }
+            if (_leaderboardStatus != null) _leaderboardStatus.text = "Loading…";
+            StartCoroutine(BackendApi.GetLeaderboard(15, PopulateLeaderboard));
+        }
+
+        void ClearLeaderboardRows()
+        {
+            if (_leaderboardContent == null) return;
+            foreach (Transform child in _leaderboardContent)
+                if (child.gameObject != _leaderboardRowTemplate) Destroy(child.gameObject);
+        }
+
+        void PopulateLeaderboard(Newtonsoft.Json.Linq.JObject data)
+        {
+            if (_leaderboardStatus == null || _leaderboardContent == null || _leaderboardRowTemplate == null) return;
+            if (data == null) { _leaderboardStatus.text = "Couldn't reach the leaderboard"; return; }
+            _leaderboardStatus.text = "";
+            var top = data["top"] as Newtonsoft.Json.Linq.JArray;
+            var me = data["me"];
+            string myUid = (string)me?["uid"] ?? "";
+            bool meShown = false;
+            if (top != null)
+                foreach (var row in top)
+                {
+                    bool isMe = (string)row["uid"] == myUid;
+                    meShown |= isMe;
+                    AddLeaderboardRow((int)row["rank"], (string)row["username"], (int)row["elo"], isMe);
+                }
+            // pin our own row at the bottom when we're outside the visible top
+            if (!meShown && me != null && !string.IsNullOrEmpty(myUid) && (int?)me["rank"] > 0)
+                AddLeaderboardRow((int)me["rank"], (string)me["username"], (int)me["elo"], true);
+            if (top == null || top.Count == 0) _leaderboardStatus.text = "No players yet — be the first!";
+        }
+
+        void AddLeaderboardRow(int rank, string name, int elo, bool isMe)
+        {
+            var row = Instantiate(_leaderboardRowTemplate, _leaderboardContent);
+            row.SetActive(true);
+            var texts = row.GetComponentsInChildren<TextMeshProUGUI>(includeInactive: true);
+            foreach (var t in texts)
+            {
+                if (t.name == "Rank") t.text = $"#{rank}";
+                else if (t.name == "Name") t.text = name;
+                else if (t.name == "Elo") t.text = elo.ToString();
+                if (isMe) t.color = new Color(1f, 0.84f, 0.35f); // gold = you
+            }
+            var bg = row.GetComponent<Image>();
+            if (bg != null && isMe) bg.color = new Color(0.35f, 0.30f, 0.12f, 0.9f);
         }
 
         static void Wire(Button b, UnityEngine.Events.UnityAction a) { if (b != null) b.onClick.AddListener(a); }
