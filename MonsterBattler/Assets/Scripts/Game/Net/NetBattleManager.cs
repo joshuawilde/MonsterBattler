@@ -190,7 +190,8 @@ namespace MonsterBattler.Game.Net
             if (_sim.IsFinished)
             {
                 Debug.Log($"[NetBattle] finished, winner side {_sim.WinningSide}");
-                Invoke(nameof(ResetMatch), 5f); // durable server: ready for the next pair
+                ReportResult(_sim.WinningSide ?? -1); // null = draw
+                Invoke(nameof(ResetMatch), 5f); // safety even on single-use actors
             }
             else SubmitBotInputsIfNeeded();
         }
@@ -275,6 +276,32 @@ namespace MonsterBattler.Game.Net
                 ObserversAbort();
             }
             ResetMatch();
+        }
+
+        /// <summary>Report the result to the backend (server-side Elo). PvP only — bot matches
+        /// don't touch the ladder. Needs BACKEND_URL + INTERNAL_API_KEY env on the actor.</summary>
+        void ReportResult(int winnerSide)
+        {
+            if (_botSide >= 0) return;
+            string url = System.Environment.GetEnvironmentVariable("BACKEND_URL");
+            string key = System.Environment.GetEnvironmentVariable("INTERNAL_API_KEY");
+            if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(key)) return;
+            StartCoroutine(PostResult(url, key, winnerSide));
+        }
+
+        System.Collections.IEnumerator PostResult(string url, string key, int winnerSide)
+        {
+            var body = $"{{\"uid0\":\"{_players[0].Spec.Uid}\",\"uid1\":\"{_players[1].Spec.Uid}\",\"winnerSide\":{winnerSide}}}";
+            using var req = new UnityEngine.Networking.UnityWebRequest(url.TrimEnd('/') + "/v1/internal/match-result", "POST");
+            req.uploadHandler = new UnityEngine.Networking.UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(body));
+            req.downloadHandler = new UnityEngine.Networking.DownloadHandlerBuffer();
+            req.SetRequestHeader("Content-Type", "application/json");
+            req.SetRequestHeader("X-Api-Key", key);
+            req.timeout = 10;
+            yield return req.SendWebRequest();
+            if (req.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
+                Debug.LogWarning($"[NetBattle] result report failed: {req.responseCode} {req.error}");
+            else Debug.Log($"[NetBattle] result reported: {req.downloadHandler.text}");
         }
 
         /// <summary>Clear all match state so a durable server can host the next pair.</summary>

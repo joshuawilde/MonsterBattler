@@ -75,3 +75,5 @@ pnpm-debug.log*
 *.pem
 *.key
 MonsterBattler/Builds/
+backend/*.db
+backend/*.db-*

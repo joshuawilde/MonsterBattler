@@ -3685,6 +3685,8 @@ MonoBehaviour:
   _host: 127.0.0.1
   _port: 7777
   _battleView: {fileID: 59681582}
+  _hostInEditor: 1
+  _backendUrl: 
 --- !u!114 &483799909
 MonoBehaviour:
   m_ObjectHideFlags: 0

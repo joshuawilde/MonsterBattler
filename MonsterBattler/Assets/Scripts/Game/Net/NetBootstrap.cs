@@ -18,6 +18,8 @@ namespace MonsterBattler.Game.Net
         [SerializeField] BattleView _battleView;
         [Tooltip("Editor/dev: also start a local server on join (host mode) so Battle Online works without a dedicated server — the manager's bot fills the other slot.")]
         [SerializeField] bool _hostInEditor = true;
+        [Tooltip("Backend base URL (profiles/leaderboard/friends/push). Empty = backend disabled.")]
+        [SerializeField] string _backendUrl = "";
 
         public static NetBootstrap Instance { get; private set; }
 
@@ -39,6 +41,16 @@ namespace MonsterBattler.Game.Net
                 Application.targetFrameRate = 30;
                 InstanceFinder.ServerManager.StartConnection(_port);
                 Debug.Log($"[Net] dedicated server listening on {_port}");
+                return;
+            }
+
+            string urlArg = Arg("-backend");
+            if (!string.IsNullOrEmpty(urlArg)) _backendUrl = urlArg;
+            if (!string.IsNullOrEmpty(_backendUrl))
+            {
+                BackendApi.BaseUrl = _backendUrl;
+                StartCoroutine(BackendApi.SyncProfile(Meta.MetaGame.Profile.username,
+                    p => { if (p != null) Debug.Log($"[Backend] profile synced: {p}"); }));
             }
         }
 

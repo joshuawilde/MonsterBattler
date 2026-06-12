@@ -1,0 +1,217 @@
+package main
+
+import (
+	"database/sql"
+	"errors"
+	"strings"
+	"time"
+
+	_ "modernc.org/sqlite" // pure-Go driver: static binary, scratch-container friendly
+)
+
+type Store struct{ db *sql.DB }
+
+func OpenStore(path string) (*Store, error) {
+	db, err := sql.Open("sqlite", path+"?_pragma=journal_mode(WAL)&_pragma=busy_timeout(5000)")
+	if err != nil {
+		return nil, err
+	}
+	db.SetMaxOpenConns(1) // sqlite: serialize writers, avoids SQLITE_BUSY entirely
+	_, err = db.Exec(`
+CREATE TABLE IF NOT EXISTS users (
+  uid        TEXT PRIMARY KEY,
+  username   TEXT NOT NULL UNIQUE,
+  elo        INTEGER NOT NULL DEFAULT 1000,
+  created_at INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS friendships (
+  a            TEXT NOT NULL,           -- uid min(a,b): one row per pair
+  b            TEXT NOT NULL,
+  status       TEXT NOT NULL,           -- 'pending' | 'accepted'
+  requested_by TEXT NOT NULL,
+  created_at   INTEGER NOT NULL,
+  PRIMARY KEY (a, b)
+);
+CREATE TABLE IF NOT EXISTS devices (
+  token      TEXT PRIMARY KEY,
+  uid        TEXT NOT NULL,
+  platform   TEXT NOT NULL DEFAULT '',
+  updated_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_users_elo ON users (elo DESC);
+CREATE INDEX IF NOT EXISTS idx_devices_uid ON devices (uid);`)
+	if err != nil {
+		return nil, err
+	}
+	return &Store{db: db}, nil
+}
+
+type User struct {
+	Uid      string `json:"uid"`
+	Username string `json:"username"`
+	Elo      int    `json:"elo"`
+	Rank     int    `json:"rank,omitempty"`
+}
+
+var ErrUsernameTaken = errors.New("username taken")
+
+// UpsertUser creates the user on first sync; later syncs may rename (if free).
+func (s *Store) UpsertUser(uid, username string) (User, error) {
+	now := time.Now().Unix()
+	_, err := s.db.Exec(`INSERT INTO users (uid, username, elo, created_at) VALUES (?, ?, 1000, ?)
+		ON CONFLICT(uid) DO UPDATE SET username = excluded.username`, uid, username, now)
+	if err != nil {
+		if isUniqueErr(err) {
+			return User{}, ErrUsernameTaken
+		}
+		return User{}, err
+	}
+	return s.GetUser(uid)
+}
+
+func isUniqueErr(err error) bool {
+	return err != nil && strings.Contains(err.Error(), "constraint failed")
+}
+
+func (s *Store) GetUser(uid string) (User, error) {
+	var u User
+	err := s.db.QueryRow(`SELECT uid, username, elo,
+		(SELECT COUNT(*) + 1 FROM users x WHERE x.elo > users.elo) AS rank
+		FROM users WHERE uid = ?`, uid).Scan(&u.Uid, &u.Username, &u.Elo, &u.Rank)
+	return u, err
+}
+
+func (s *Store) GetUserByName(username string) (User, error) {
+	var u User
+	err := s.db.QueryRow(`SELECT uid, username, elo FROM users WHERE username = ?`, username).
+		Scan(&u.Uid, &u.Username, &u.Elo)
+	return u, err
+}
+
+func (s *Store) TopUsers(limit int) ([]User, error) {
+	rows, err := s.db.Query(`SELECT uid, username, elo FROM users ORDER BY elo DESC, created_at ASC LIMIT ?`, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []User
+	rank := 0
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(&u.Uid, &u.Username, &u.Elo); err != nil {
+			return nil, err
+		}
+		rank++
+		u.Rank = rank
+		out = append(out, u)
+	}
+	return out, rows.Err()
+}
+
+func (s *Store) SetElo(uid string, elo int) error {
+	_, err := s.db.Exec(`UPDATE users SET elo = ? WHERE uid = ?`, elo, uid)
+	return err
+}
+
+// ---- friendships ------------------------------------------------------------------------------
+
+func pairKey(u1, u2 string) (string, string) {
+	if u1 < u2 {
+		return u1, u2
+	}
+	return u2, u1
+}
+
+func (s *Store) RequestFriend(from, to string) error {
+	a, b := pairKey(from, to)
+	_, err := s.db.Exec(`INSERT INTO friendships (a, b, status, requested_by, created_at)
+		VALUES (?, ?, 'pending', ?, ?)
+		ON CONFLICT(a, b) DO NOTHING`, a, b, from, time.Now().Unix())
+	return err
+}
+
+func (s *Store) RespondFriend(me, other string, accept bool) error {
+	a, b := pairKey(me, other)
+	if accept {
+		// Only the NON-requester may accept.
+		res, err := s.db.Exec(`UPDATE friendships SET status = 'accepted'
+			WHERE a = ? AND b = ? AND status = 'pending' AND requested_by != ?`, a, b, me)
+		if err != nil {
+			return err
+		}
+		if n, _ := res.RowsAffected(); n == 0 {
+			return errors.New("no pending request")
+		}
+		return nil
+	}
+	_, err := s.db.Exec(`DELETE FROM friendships WHERE a = ? AND b = ?`, a, b)
+	return err
+}
+
+func (s *Store) RemoveFriend(me, other string) error {
+	a, b := pairKey(me, other)
+	_, err := s.db.Exec(`DELETE FROM friendships WHERE a = ? AND b = ?`, a, b)
+	return err
+}
+
+type Friend struct {
+	User
+	Status    string `json:"status"`             // pending | accepted
+	Direction string `json:"direction,omitempty"` // incoming | outgoing (pending only)
+}
+
+func (s *Store) Friends(me string) ([]Friend, error) {
+	rows, err := s.db.Query(`
+		SELECT u.uid, u.username, u.elo, f.status, f.requested_by
+		FROM friendships f
+		JOIN users u ON u.uid = CASE WHEN f.a = ? THEN f.b ELSE f.a END
+		WHERE f.a = ? OR f.b = ?
+		ORDER BY f.status DESC, u.elo DESC`, me, me, me)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Friend
+	for rows.Next() {
+		var fr Friend
+		var requestedBy string
+		if err := rows.Scan(&fr.Uid, &fr.Username, &fr.Elo, &fr.Status, &requestedBy); err != nil {
+			return nil, err
+		}
+		if fr.Status == "pending" {
+			if requestedBy == me {
+				fr.Direction = "outgoing"
+			} else {
+				fr.Direction = "incoming"
+			}
+		}
+		out = append(out, fr)
+	}
+	return out, rows.Err()
+}
+
+// ---- devices ----------------------------------------------------------------------------------
+
+func (s *Store) RegisterDevice(uid, token, platform string) error {
+	_, err := s.db.Exec(`INSERT INTO devices (token, uid, platform, updated_at) VALUES (?, ?, ?, ?)
+		ON CONFLICT(token) DO UPDATE SET uid = excluded.uid, platform = excluded.platform, updated_at = excluded.updated_at`,
+		token, uid, platform, time.Now().Unix())
+	return err
+}
+
+func (s *Store) DeviceTokens(uid string) ([]string, error) {
+	rows, err := s.db.Query(`SELECT token FROM devices WHERE uid = ?`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []string
+	for rows.Next() {
+		var t string
+		if err := rows.Scan(&t); err != nil {
+			return nil, err
+		}
+		out = append(out, t)
+	}
+	return out, rows.Err()
+}

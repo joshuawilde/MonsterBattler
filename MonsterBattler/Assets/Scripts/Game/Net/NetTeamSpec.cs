@@ -11,6 +11,7 @@ namespace MonsterBattler.Game.Net
     /// </summary>
     public struct NetTeamSpec
     {
+        public string Uid;      // backend identity (Firebase uid; dev id until auth lands)
         public string Username;
         public int Elo;
         public string[] Species;
@@ -23,6 +24,7 @@ namespace MonsterBattler.Game.Net
             var team = Meta.MetaGame.BattleTeam() ?? new List<string>();
             var spec = new NetTeamSpec
             {
+                Uid = BackendApi.Uid,
                 Username = Meta.MetaGame.Profile.username,
                 Elo = Meta.MetaGame.Profile.elo,
                 Species = team.ToArray(),
