@@ -1,0 +1,329 @@
+{
+  "skeleton": {
+    "name": "dragon",
+    "width": 1024,
+    "height": 1024
+  },
+  "bones": [
+    {
+      "name": "root"
+    },
+    {
+      "name": "body",
+      "parent": "root",
+      "x": 0.5,
+      "y": 398.2
+    },
+    {
+      "name": "head",
+      "parent": "body",
+      "x": -130.0,
+      "y": 159.3
+    },
+    {
+      "name": "jaw",
+      "parent": "head",
+      "x": 137.5,
+      "y": -175.5
+    },
+    {
+      "name": "tail",
+      "parent": "body",
+      "x": 12.5,
+      "y": -11.2
+    },
+    {
+      "name": "arm-R",
+      "parent": "body",
+      "x": 16.5,
+      "y": 44.8
+    },
+    {
+      "name": "arm-L",
+      "parent": "body",
+      "x": 9.5,
+      "y": -16.2
+    },
+    {
+      "name": "leg-R",
+      "parent": "body",
+      "x": -149.5,
+      "y": -51.2
+    },
+    {
+      "name": "leg-L",
+      "parent": "body",
+      "x": 79.5,
+      "y": -56.2
+    }
+  ],
+  "slots": [
+    {
+      "name": "tail",
+      "bone": "tail",
+      "attachment": "tail"
+    },
+    {
+      "name": "arm-L",
+      "bone": "arm-L",
+      "attachment": "arm-L"
+    },
+    {
+      "name": "leg-L",
+      "bone": "leg-L",
+      "attachment": "leg-L"
+    },
+    {
+      "name": "body",
+      "bone": "body",
+      "attachment": "body"
+    },
+    {
+      "name": "leg-R",
+      "bone": "leg-R",
+      "attachment": "leg-R"
+    },
+    {
+      "name": "arm-R",
+      "bone": "arm-R",
+      "attachment": "arm-R"
+    },
+    {
+      "name": "jaw",
+      "bone": "jaw",
+      "attachment": "jaw"
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "attachment": "head"
+    }
+  ],
+  "attachments": {
+    "tail": {
+      "width": 736,
+      "height": 884,
+      "x": 69.0,
+      "y": 130.0
+    },
+    "arm-L": {
+      "width": 560,
+      "height": 401,
+      "x": -142.0,
+      "y": 66.5
+    },
+    "leg-L": {
+      "width": 554,
+      "height": 468,
+      "x": -40.0,
+      "y": -78.0
+    },
+    "body": {
+      "width": 643,
+      "height": 839,
+      "x": 60.0,
+      "y": 137.3
+    },
+    "leg-R": {
+      "width": 592,
+      "height": 685,
+      "x": 159.0,
+      "y": 70.5
+    },
+    "arm-R": {
+      "width": 547,
+      "height": 225,
+      "x": -161.5,
+      "y": -56.5
+    },
+    "jaw": {
+      "width": 557,
+      "height": 594,
+      "x": -137.5,
+      "y": 169.0
+    },
+    "head": {
+      "width": 557,
+      "height": 581,
+      "x": 0.0,
+      "y": 0.0
+    }
+  },
+  "animations": [],
+  "custom_animations": {
+    "idle": {
+      "bones": {
+        "body": {
+          "translate": [
+            {
+              "time": 0,
+              "x": 0,
+              "y": 0
+            },
+            {
+              "time": 1.2,
+              "x": 0,
+              "y": 7
+            },
+            {
+              "time": 2.4,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        },
+        "head": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 1.2,
+              "angle": -2.5
+            },
+            {
+              "time": 2.4,
+              "angle": 0
+            }
+          ]
+        },
+        "jaw": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 1.2,
+              "angle": 4
+            },
+            {
+              "time": 2.4,
+              "angle": 0
+            }
+          ]
+        },
+        "tail": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.8,
+              "angle": 7
+            },
+            {
+              "time": 1.6,
+              "angle": -7
+            },
+            {
+              "time": 2.4,
+              "angle": 0
+            }
+          ]
+        },
+        "arm-R": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 1.2,
+              "angle": 3
+            },
+            {
+              "time": 2.4,
+              "angle": 0
+            }
+          ]
+        }
+      }
+    },
+    "roar": {
+      "bones": {
+        "jaw": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.18,
+              "angle": 28
+            },
+            {
+              "time": 0.9,
+              "angle": 28
+            },
+            {
+              "time": 1.2,
+              "angle": 0
+            }
+          ]
+        },
+        "head": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.18,
+              "angle": -10
+            },
+            {
+              "time": 0.9,
+              "angle": -10
+            },
+            {
+              "time": 1.2,
+              "angle": 0
+            }
+          ]
+        },
+        "body": {
+          "translate": [
+            {
+              "time": 0,
+              "x": 0,
+              "y": 0
+            },
+            {
+              "time": 0.18,
+              "x": 0,
+              "y": 5
+            },
+            {
+              "time": 1.2,
+              "x": 0,
+              "y": 0
+            }
+          ]
+        },
+        "tail": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.3,
+              "angle": -12
+            },
+            {
+              "time": 0.7,
+              "angle": 10
+            },
+            {
+              "time": 1.2,
+              "angle": 0
+            }
+          ]
+        }
+      }
+    }
+  }
+}

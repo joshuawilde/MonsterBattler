@@ -1,0 +1,878 @@
+{
+  "skeleton": {
+    "hash": "ef99521a2726c2bba59a",
+    "spine": "4.2.0",
+    "x": -550,
+    "y": 0,
+    "width": 1100,
+    "height": 900,
+    "images": "./images/"
+  },
+  "bones": [
+    {
+      "name": "root"
+    },
+    {
+      "name": "hip",
+      "parent": "root",
+      "x": 130,
+      "y": 250
+    },
+    {
+      "name": "torso",
+      "parent": "hip",
+      "x": -150,
+      "y": 20
+    },
+    {
+      "name": "neck",
+      "parent": "torso",
+      "x": -160,
+      "y": 50
+    },
+    {
+      "name": "head",
+      "parent": "neck",
+      "x": -130,
+      "y": 25
+    },
+    {
+      "name": "jaw",
+      "parent": "head",
+      "x": 15,
+      "y": -30
+    },
+    {
+      "name": "back-spikes",
+      "parent": "torso",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "name": "foreleg-near",
+      "parent": "torso",
+      "x": -50,
+      "y": -5
+    },
+    {
+      "name": "foreleg-far",
+      "parent": "torso",
+      "x": -20,
+      "y": 0
+    },
+    {
+      "name": "hindleg-near",
+      "parent": "hip",
+      "x": 20,
+      "y": -5
+    },
+    {
+      "name": "hindleg-far",
+      "parent": "hip",
+      "x": 45,
+      "y": 0
+    },
+    {
+      "name": "tail-base",
+      "parent": "hip",
+      "x": 45,
+      "y": 15
+    },
+    {
+      "name": "tail-tip",
+      "parent": "tail-base",
+      "x": 160,
+      "y": 65
+    },
+    {
+      "name": "tail-fin",
+      "parent": "tail-tip",
+      "x": 135,
+      "y": 100
+    },
+    {
+      "name": "tail-spikes",
+      "parent": "tail-base",
+      "x": 75,
+      "y": 35
+    }
+  ],
+  "slots": [
+    {
+      "name": "hindleg-far",
+      "bone": "hindleg-far",
+      "attachment": "hindleg-far",
+      "color": "b8b8b8ff"
+    },
+    {
+      "name": "foreleg-far",
+      "bone": "foreleg-far",
+      "attachment": "foreleg-far",
+      "color": "c0c0c0ff"
+    },
+    {
+      "name": "tail-fin",
+      "bone": "tail-fin",
+      "attachment": "tail-fin"
+    },
+    {
+      "name": "tail-spikes",
+      "bone": "tail-spikes",
+      "attachment": "tail-spikes"
+    },
+    {
+      "name": "tail-tip",
+      "bone": "tail-tip",
+      "attachment": "tail-tip"
+    },
+    {
+      "name": "tail-base",
+      "bone": "tail-base",
+      "attachment": "tail-base"
+    },
+    {
+      "name": "back-spikes",
+      "bone": "back-spikes",
+      "attachment": "back-spikes"
+    },
+    {
+      "name": "neck",
+      "bone": "neck",
+      "attachment": "neck"
+    },
+    {
+      "name": "torso",
+      "bone": "torso",
+      "attachment": "torso"
+    },
+    {
+      "name": "hindleg-near",
+      "bone": "hindleg-near",
+      "attachment": "hindleg-near"
+    },
+    {
+      "name": "jaw",
+      "bone": "jaw",
+      "attachment": "jaw"
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "attachment": "head"
+    },
+    {
+      "name": "foreleg-near",
+      "bone": "foreleg-near",
+      "attachment": "foreleg-near"
+    }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "hindleg-far": {
+          "hindleg-far": {
+            "width": 246,
+            "height": 293,
+            "x": 10,
+            "y": -125,
+            "rotation": 0
+          }
+        },
+        "foreleg-far": {
+          "foreleg-far": {
+            "width": 285,
+            "height": 201,
+            "x": -10,
+            "y": -120,
+            "rotation": 0
+          }
+        },
+        "tail-fin": {
+          "tail-fin": {
+            "width": 321,
+            "height": 452,
+            "x": 70,
+            "y": 40,
+            "rotation": 20
+          }
+        },
+        "tail-spikes": {
+          "tail-spikes": {
+            "width": 108,
+            "height": 231,
+            "x": 50,
+            "y": 60,
+            "rotation": 30
+          }
+        },
+        "tail-tip": {
+          "tail-tip": {
+            "width": 163,
+            "height": 169,
+            "x": 65,
+            "y": 30,
+            "rotation": 35
+          }
+        },
+        "tail-base": {
+          "tail-base": {
+            "width": 183,
+            "height": 198,
+            "x": 65,
+            "y": 15,
+            "rotation": 25
+          }
+        },
+        "back-spikes": {
+          "back-spikes": {
+            "width": 135,
+            "height": 313,
+            "x": -10,
+            "y": 170,
+            "rotation": -88
+          }
+        },
+        "neck": {
+          "neck": {
+            "width": 217,
+            "height": 236,
+            "x": -20,
+            "y": -5,
+            "rotation": -15
+          }
+        },
+        "torso": {
+          "torso": {
+            "width": 414,
+            "height": 390,
+            "x": 20,
+            "y": -20,
+            "rotation": 0
+          }
+        },
+        "hindleg-near": {
+          "hindleg-near": {
+            "width": 245,
+            "height": 298,
+            "x": 10,
+            "y": -125,
+            "rotation": 0
+          }
+        },
+        "jaw": {
+          "jaw": {
+            "width": 224,
+            "height": 183,
+            "x": -35,
+            "y": -15,
+            "rotation": 0
+          }
+        },
+        "head": {
+          "head": {
+            "width": 255,
+            "height": 131,
+            "x": -20,
+            "y": 5,
+            "rotation": 0
+          }
+        },
+        "foreleg-near": {
+          "foreleg-near": {
+            "width": 253,
+            "height": 236,
+            "x": -15,
+            "y": -125,
+            "rotation": 0
+          }
+        }
+      }
+    }
+  ],
+  "animations": {
+    "idle": {
+      "bones": {
+        "torso": {
+          "translate": [
+            {
+              "time": 0,
+              "x": 0,
+              "y": 0
+            },
+            {
+              "time": 1.2,
+              "x": 0,
+              "y": 6,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "x": 0,
+              "y": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "neck": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 1.2,
+              "angle": 4,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "head": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 1.2,
+              "angle": -3,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "jaw": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 1.2,
+              "angle": -4,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "tail-base": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.792,
+              "angle": 6,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 1.584,
+              "angle": -6,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "tail-tip": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.792,
+              "angle": 9,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 1.584,
+              "angle": -9,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "tail-fin": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.792,
+              "angle": 7,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 1.584,
+              "angle": -7,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "foreleg-near": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 1.2,
+              "angle": 2,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "back-spikes": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 1.2,
+              "angle": 1,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 2.4,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "attack": {
+      "bones": {
+        "hip": {
+          "translate": [
+            {
+              "time": 0,
+              "x": 0,
+              "y": 0
+            },
+            {
+              "time": 0.12,
+              "x": 18,
+              "y": 4,
+              "curve": [
+                0.42,
+                0,
+                1,
+                1
+              ]
+            },
+            {
+              "time": 0.28,
+              "x": -40,
+              "y": 0,
+              "curve": [
+                0.4,
+                0,
+                0.2,
+                1
+              ]
+            },
+            {
+              "time": 0.7,
+              "x": 0,
+              "y": 0,
+              "curve": [
+                0,
+                0,
+                0.58,
+                1
+              ]
+            }
+          ]
+        },
+        "torso": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.12,
+              "angle": -8,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.28,
+              "angle": 10,
+              "curve": [
+                0.4,
+                0,
+                0.2,
+                1
+              ]
+            },
+            {
+              "time": 0.45,
+              "angle": 5,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.7,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "neck": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.12,
+              "angle": 10,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.28,
+              "angle": -14,
+              "curve": [
+                0.4,
+                0,
+                0.2,
+                1
+              ]
+            },
+            {
+              "time": 0.7,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "head": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.12,
+              "angle": 8,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.28,
+              "angle": -12,
+              "curve": [
+                0.4,
+                0,
+                0.2,
+                1
+              ]
+            },
+            {
+              "time": 0.7,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "jaw": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.1,
+              "angle": -35,
+              "curve": [
+                0.42,
+                0,
+                1,
+                1
+              ]
+            },
+            {
+              "time": 0.26,
+              "angle": 8,
+              "curve": [
+                0.4,
+                0,
+                0.2,
+                1
+              ]
+            },
+            {
+              "time": 0.4,
+              "angle": -2,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.7,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "tail-base": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.12,
+              "angle": -12,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.3,
+              "angle": 8,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.7,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        },
+        "tail-tip": {
+          "rotate": [
+            {
+              "time": 0,
+              "angle": 0
+            },
+            {
+              "time": 0.12,
+              "angle": -16,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.3,
+              "angle": 12,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            },
+            {
+              "time": 0.7,
+              "angle": 0,
+              "curve": [
+                0.25,
+                0,
+                0.75,
+                1
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

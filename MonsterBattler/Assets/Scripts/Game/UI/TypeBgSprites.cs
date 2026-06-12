@@ -86,6 +86,42 @@ namespace MonsterBattler.Game.UI
             return sprite;
         }
 
+        static readonly Dictionary<MonType, Sprite> _paleCache = new();
+
+        /// <summary>Battle move-card face: near-full-strength type art with a bottom-heavy dark
+        /// scrim baked in (text sits on the scrim; light text + outlines on top), plus a thin baked
+        /// frame (dark stroke, top highlight). Falls back to a flat tint when no art exists.</summary>
+        public static Sprite GetPale(MonType t)
+        {
+            if (_paleCache.TryGetValue(t, out var cached)) return cached;
+            var art = Art(t);
+            var flat = TypeStyle.BgColor(t);
+            var tex = new Texture2D(S, S, TextureFormat.RGBA32, false) { filterMode = FilterMode.Bilinear };
+            var px = new Color[S * S];
+            for (int y = 0; y < S; y++)
+            {
+                float v = (float)y / (S - 1);     // 0 = bottom, 1 = top
+                // Scrim: heavy at the bottom (type/PP row), easing off toward the top (name band).
+                float scrim = Mathf.Lerp(0.66f, 0.22f, Mathf.SmoothStep(0f, 1f, v));
+                for (int x = 0; x < S; x++)
+                {
+                    float u = (float)x / (S - 1);
+                    Color c = art != null ? Color.Lerp(art.GetPixelBilinear(u, v), Color.white, 0.18f) : flat;
+                    c = Color.Lerp(c, Color.black, scrim);
+                    // Baked frame: 2px dark stroke all round + 1px light top edge.
+                    if (x < 2 || x >= S - 2 || y < 2 || y >= S - 2) c = Color.Lerp(c, Color.black, 0.45f);
+                    else if (y == S - 3) c = Color.Lerp(c, Color.white, 0.13f);
+                    c.a = 1f;
+                    px[y * S + x] = c;
+                }
+            }
+            tex.SetPixels(px);
+            tex.Apply();
+            var sprite = Sprite.Create(tex, new Rect(0, 0, S, S), new Vector2(0.5f, 0.5f), 100f);
+            _paleCache[t] = sprite;
+            return sprite;
+        }
+
         static Texture2D Art(MonType t)
         {
             if (t == MonType.None) return null;

@@ -1,0 +1,96 @@
+dragon.png
+size: 2048,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+tail-fin
+  rotate: false
+  xy: 2, 2
+  size: 321, 452
+  orig: 321, 452
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 325, 2
+  size: 414, 390
+  orig: 414, 390
+  offset: 0, 0
+  index: -1
+back-spikes
+  rotate: false
+  xy: 741, 2
+  size: 135, 313
+  orig: 135, 313
+  offset: 0, 0
+  index: -1
+hindleg-near
+  rotate: false
+  xy: 878, 2
+  size: 245, 298
+  orig: 245, 298
+  offset: 0, 0
+  index: -1
+hindleg-far
+  rotate: false
+  xy: 1125, 2
+  size: 246, 293
+  orig: 246, 293
+  offset: 0, 0
+  index: -1
+foreleg-near
+  rotate: false
+  xy: 1373, 2
+  size: 253, 236
+  orig: 253, 236
+  offset: 0, 0
+  index: -1
+neck
+  rotate: false
+  xy: 1628, 2
+  size: 217, 236
+  orig: 217, 236
+  offset: 0, 0
+  index: -1
+tail-spikes
+  rotate: false
+  xy: 1847, 2
+  size: 108, 231
+  orig: 108, 231
+  offset: 0, 0
+  index: -1
+foreleg-far
+  rotate: false
+  xy: 2, 456
+  size: 285, 201
+  orig: 285, 201
+  offset: 0, 0
+  index: -1
+tail-base
+  rotate: false
+  xy: 289, 456
+  size: 183, 198
+  orig: 183, 198
+  offset: 0, 0
+  index: -1
+jaw
+  rotate: false
+  xy: 474, 456
+  size: 224, 183
+  orig: 224, 183
+  offset: 0, 0
+  index: -1
+tail-tip
+  rotate: false
+  xy: 700, 456
+  size: 163, 169
+  orig: 163, 169
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 865, 456
+  size: 255, 131
+  orig: 255, 131
+  offset: 0, 0
+  index: -1
