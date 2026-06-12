@@ -81,6 +81,9 @@ namespace MonsterBattler.Game
         [SerializeField] Transform _popupAnchor1;        // over the opponent's mon
         [SerializeField] UI.FloatingText _floatingTextPrefab;
 
+        [Header("Move VFX (scene-authored FxScene layer)")]
+        [SerializeField] UI.FxScene _fxScene;
+
         [Header("End screen (scene-authored)")]
         [SerializeField] GameObject _endScreen;          // full-screen overlay shown when the battle ends
         [SerializeField] GameObject _forcedSwitchBanner; // "Choose your next monster!" prompt over the roster
@@ -884,6 +887,13 @@ namespace MonsterBattler.Game
                         if (tag != "-sethp" && d != 0)
                             SpawnPopup(side, (d > 0 ? "+" : "") + d + "%", d > 0 ? HealBg : DmgBg);
                         if (tag == "-damage") View(side)?.PlayHit();
+                        // Impact layer: shake scales with the chunk; big hits get a freeze-frame.
+                        if (tag == "-damage" && d < 0 && _fxScene != null)
+                        {
+                            float sev = Mathf.Clamp01(-d / 50f);
+                            _fxScene.Shake(Mathf.Lerp(0.03f, 0.16f, sev), 0.25f + 0.15f * sev);
+                            if (d <= -30) _fxScene.HitStop(0.07f);
+                        }
                         beat = true;
                     }
                 }
@@ -892,6 +902,19 @@ namespace MonsterBattler.Game
                     int side = SideForName(parts[2], active);
                     bool selfTarget = parts.Length > 4 && parts[4] == parts[2]; // |move|user|Move|target
                     if (selfTarget) View(side)?.PlayUse(); else View(side)?.PlayAttack();
+
+                    // Showdown-style move VFX (fire-and-forget; the playback beat delay covers it).
+                    if (_fxScene != null && side >= 0 && _battle != null && parts.Length > 3)
+                    {
+                        string moveId = parts[3].ToLowerInvariant().Replace(" ", "").Replace("-", "").Replace("'", "");
+                        if (_battle.Dex.Moves.TryGetValue(moveId, out var md))
+                        {
+                            var atkT = View(side)?.transform;
+                            var defT = View(1 - side)?.transform;
+                            if (atkT != null && defT != null)
+                                StartCoroutine(UI.MoveAnims.Play(_fxScene, md, atkT, defT));
+                        }
+                    }
                 }
                 else if (tag == "switch" && parts.Length > 3)
                 {
@@ -911,7 +934,13 @@ namespace MonsterBattler.Game
                 else if (tag == "faint" && parts.Length > 2)
                 {
                     int side = SideForName(parts[2], active);
-                    if (side >= 0) { SpawnPopup(side, "Fainted", FaintBg); View(side)?.PlayFaint(); beat = true; }
+                    if (side >= 0)
+                    {
+                        SpawnPopup(side, "Fainted", FaintBg);
+                        View(side)?.PlayFaint();
+                        _fxScene?.KoMoment(); // slow-mo + white flash + shake
+                        beat = true;
+                    }
                 }
                 else if ((tag == "-boost" || tag == "-unboost") && parts.Length > 4)
                 {

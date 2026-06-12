@@ -24,6 +24,9 @@ namespace MonsterBattler.Game.UI
             _home = transform.localPosition;
         }
 
+        float _lastBob;       // last applied idle-bob offset (subtracted before re-applying)
+        float _bobPhase = -1f;
+
         void LateUpdate()
         {
             var cam = Camera.main;
@@ -31,6 +34,14 @@ namespace MonsterBattler.Game.UI
             Vector3 toCam = cam.transform.position - transform.position;
             toCam.y = 0f; // upright billboard (yaw only)
             if (toCam.sqrMagnitude > 0.0001f) transform.rotation = Quaternion.LookRotation(toCam);
+
+            // Idle bob: gentle breathing float, additive over whatever the action anims set.
+            if (_bobPhase < 0f) _bobPhase = (GetInstanceID() & 0xffff) * 0.37f; // desync the two mons
+            float bob = Mathf.Sin(Time.time * 2.1f + _bobPhase) * 0.045f;
+            var p = transform.position;
+            p.y += bob - _lastBob;
+            transform.position = p;
+            _lastBob = bob;
         }
 
         // Lunge toward the foe: player (front-left slot) pushes +x/+z, opponent the opposite.
