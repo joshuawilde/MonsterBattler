@@ -38,8 +38,23 @@ All `/v1/*` (except internal) require `Authorization: Bearer <firebase-id-token>
   (winnerSide 0/1/-1-draw; K=32 Elo computed server-side)
 - `GET /healthz`
 
+## Tests
+
+`go test ./...` — in-process integration tests over the real HTTP surface + real sqlite
+(profile/duplicate-name, auth rejection, full friend lifecycle, Elo math + leaderboard,
+API-key gate). CI runs them on every push.
+
 ## Deploy
 
-Anything that runs a container: Cloud Run (set min-instances=1 if you want zero cold start,
-though a Go scratch image cold-starts in ~100-300ms anyway) or a $5 VPS. SQLite + a volume is
-plenty at this scale; swap `store.go` to Postgres if/when it isn't.
+Two paths, same steps (test → image → push to GHCR → restart):
+
+- **CI (source of truth)**: `.github/workflows/backend.yml` runs on every push to `main`
+  touching `backend/`. Tests + builds + pushes `ghcr.io/joshuawilde/monsterbattler-backend`.
+  To enable the auto-deploy job: set repo variable `DEPLOY_ENABLED=true` and secrets
+  `DEPLOY_SSH_HOST` / `DEPLOY_SSH_USER` / `DEPLOY_SSH_KEY`.
+- **Instant, from your machine**: `DEPLOY_HOST=user@vps tools/deploy-backend.sh`
+  (needs a one-time `docker login ghcr.io`).
+
+Host setup is the `compose.yml` header — a $5 VPS with docker is enough; SQLite lives on a
+volume. Cloud Run works too (set min-instances=1 if you want literally-zero cold start,
+though the Go image cold-starts in ~100-300ms anyway); swap to Postgres if scale demands.

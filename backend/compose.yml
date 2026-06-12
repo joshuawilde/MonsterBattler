@@ -1,0 +1,25 @@
+# VPS deployment unit. One-time host setup:
+#   mkdir -p ~/monsterbattler && cd ~/monsterbattler
+#   curl -O https://raw.githubusercontent.com/joshuawilde/MonsterBattler/main/backend/compose.yml
+#   cp firebase-sa.json .   # service-account key (see FIREBASE_SETUP.md)
+#   echo "INTERNAL_API_KEY=$(openssl rand -hex 24)" > .env
+#   docker compose up -d
+# After that, deploys are just `docker compose pull && docker compose up -d`
+# (CI does this on every push to main; tools/deploy-backend.sh does it from your machine).
+services:
+  backend:
+    image: ghcr.io/joshuawilde/monsterbattler-backend:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - mbdata:/data
+      - ./firebase-sa.json:/data/firebase-sa.json:ro
+    environment:
+      DB_PATH: /data/monsterbattler.db
+      GOOGLE_APPLICATION_CREDENTIALS: /data/firebase-sa.json
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      # AUTH_DEV_BYPASS: "1"   # uncomment only while Firebase isn't set up yet
+
+volumes:
+  mbdata:

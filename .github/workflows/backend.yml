@@ -1,0 +1,66 @@
+name: backend
+
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", ".github/workflows/backend.yml"]
+  pull_request:
+    paths: ["backend/**"]
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/monsterbattler-backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+      - name: vet + test
+        working-directory: backend
+        run: |
+          go vet ./...
+          go test ./...
+
+  build-push:
+    if: github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: backend
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+
+  # Deploys to a VPS over SSH. Enable by setting the repo *variable* DEPLOY_ENABLED=true and
+  # secrets DEPLOY_SSH_HOST / DEPLOY_SSH_USER / DEPLOY_SSH_KEY. The host needs docker +
+  # backend/compose.yml at ~/monsterbattler/ with its .env filled in (see backend/README.md).
+  deploy:
+    if: github.ref == 'refs/heads/main' && vars.DEPLOY_ENABLED == 'true'
+    needs: build-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd ~/monsterbattler
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
