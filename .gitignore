@@ -77,3 +77,4 @@ pnpm-debug.log*
 MonsterBattler/Builds/
 backend/*.db
 backend/*.db-*
+secrets/
