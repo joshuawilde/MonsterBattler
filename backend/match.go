@@ -24,8 +24,14 @@ type waiter struct {
 	uid      string
 	username string
 	elo      int
-	since    time.Time
+	since    time.Time // queued at — after soloBotDelay with no human, gets a bot match
+	lastSeen time.Time // last status poll — pruned if the client stops polling (disconnected)
 }
+
+const (
+	soloBotDelay = 10 * time.Second // wait this long for a human before giving a bot
+	queueStale   = 30 * time.Second // drop a queued player who stops polling
+)
 
 type matchState int
 
@@ -65,13 +71,15 @@ func (m *Matchmaker) Enqueue(uid, username string, elo int) string {
 	if mid, ok := m.uid2mid[uid]; ok {
 		return mid // already queued or matched
 	}
-	// already waiting? refresh and bail.
+	// already waiting? refresh last-seen and bail.
 	for _, w := range m.queue {
 		if w.uid == uid {
+			w.lastSeen = time.Now()
 			return ""
 		}
 	}
-	m.queue = append(m.queue, &waiter{uid: uid, username: username, elo: elo, since: time.Now()})
+	now := time.Now()
+	m.queue = append(m.queue, &waiter{uid: uid, username: username, elo: elo, since: now, lastSeen: now})
 	m.tryPair()
 	return m.uid2mid[uid]
 }
@@ -132,6 +140,7 @@ func (m *Matchmaker) Status(uid string) *Match {
 	}
 	for _, w := range m.queue {
 		if w.uid == uid {
+			w.lastSeen = time.Now() // polling = still here
 			return waitingMatch
 		}
 	}
@@ -166,21 +175,63 @@ func (m *Matchmaker) Finish(uid0, uid1 string) {
 	}
 }
 
-// sweep forgets matches older than the TTL so a never-finished match (both players vanished
-// before a result) doesn't pin its players in "ready" forever.
+// sweep runs every 2s: forgets old matches, drops queue entries whose client stopped polling
+// (disconnected), and gives a lone waiter a bot match once they've waited soloBotDelay.
 func (m *Matchmaker) sweep() {
 	const ttl = 30 * time.Minute
-	for range time.Tick(2 * time.Minute) {
+	tick := 0
+	for range time.Tick(2 * time.Second) {
+		var botFor []*waiter
 		m.mu.Lock()
-		for _, match := range m.matches {
-			if time.Since(match.Created) > ttl {
-				delete(m.matches, match.ID)
-				delete(m.uid2mid, match.UID0)
-				delete(m.uid2mid, match.UID1)
-				log.Printf("match %s: swept (stale)", match.ID)
+		now := time.Now()
+		// drop disconnected queue entries (no recent poll)
+		kept := m.queue[:0]
+		for _, w := range m.queue {
+			if now.Sub(w.lastSeen) > queueStale {
+				log.Printf("queue: dropped stale %s", w.username)
+				continue
+			}
+			kept = append(kept, w)
+		}
+		m.queue = kept
+		// lone waiter past the solo delay → bot match (battle server fills the bot side)
+		for _, w := range m.queue {
+			if now.Sub(w.since) >= soloBotDelay {
+				botFor = append(botFor, w)
+			}
+		}
+		for _, w := range botFor {
+			m.removeWaiter(w.uid)
+			mid := newMatchID()
+			match := &Match{ID: mid, UID0: w.uid, UID1: "bot-" + mid, State: stateWaiting, Created: now}
+			m.matches[mid] = match
+			m.uid2mid[w.uid] = mid
+			log.Printf("match %s: %s gets a bot (no human after %s)", mid, w.username, soloBotDelay)
+			go m.register(match)
+		}
+		// old-match TTL sweep (every ~2 min)
+		if tick%60 == 0 {
+			for _, match := range m.matches {
+				if time.Since(match.Created) > ttl {
+					delete(m.matches, match.ID)
+					delete(m.uid2mid, match.UID0)
+					delete(m.uid2mid, match.UID1)
+					log.Printf("match %s: swept (stale)", match.ID)
+				}
 			}
 		}
 		m.mu.Unlock()
+		tick++
+	}
+}
+
+// removeWaiter drops a uid from the queue. Caller holds the lock.
+func (m *Matchmaker) removeWaiter(uid string) {
+	for i, w := range m.queue {
+		if w.uid == uid {
+			m.queue = removeAt(m.queue, i)
+			return
+		}
 	}
 }
 
