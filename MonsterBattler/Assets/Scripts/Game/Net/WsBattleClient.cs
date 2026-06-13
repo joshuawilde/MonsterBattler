@@ -13,9 +13,11 @@ namespace MonsterBattler.Game.Net
 {
     /// <summary>
     /// WebSocket transport to the pure-dotnet battle server, implementing <see cref="IBattleSession"/>.
-    /// The socket read loop runs off-thread and only enqueues messages; <see cref="Poll"/> drains
-    /// them on the main thread (call it every frame), so all session state the coroutines read is
-    /// touched on the main thread — no locks. BattleView is unchanged.
+    /// Uses the built-in <see cref="ClientWebSocket"/> over plain ws:// — Unity's Mono TLS can't
+    /// complete a wss handshake (hangs in the editor and on iOS), so the relay is unencrypted; only
+    /// move/switch choices and chat cross it. The receive loop runs off-thread and only enqueues;
+    /// <see cref="Poll"/> drains on the main thread (call every frame) so battle coroutines read
+    /// session state lock-free. BattleView is unchanged.
     /// </summary>
     public sealed class WsBattleClient : IBattleSession
     {
@@ -23,13 +25,13 @@ namespace MonsterBattler.Game.Net
         public bool Aborted { get; private set; }
         public bool ForfeitWin { get; private set; }
 
-        /// <summary>Fires (main thread) when the server starts the match — wire to BeginNetBattle.</summary>
         public event Action<int /*side*/, ulong /*seed*/, NetTeamSpec, NetTeamSpec> MatchStarted;
         public event Action<string /*from*/, string /*text*/> ChatReceived;
 
         readonly ClientWebSocket _ws = new();
         readonly ConcurrentQueue<string> _inbox = new();
-        readonly string _url, _matchId, _uid;
+        readonly CancellationTokenSource _cts = new();
+        readonly string _wsUrl, _matchId, _uid;
         readonly NetTeamSpec _team;
 
         int? _theirRepl;
@@ -38,47 +40,62 @@ namespace MonsterBattler.Game.Net
 
         public WsBattleClient(string wsUrl, string matchId, string uid, NetTeamSpec team)
         {
-            _url = wsUrl; _matchId = matchId; _uid = uid; _team = team;
+            _wsUrl = wsUrl; _matchId = matchId; _uid = uid; _team = team;
         }
 
         public async Task ConnectAsync()
         {
-            await _ws.ConnectAsync(new Uri(_url), CancellationToken.None);
-            Send(new JObject { ["t"] = "join", ["matchId"] = _matchId, ["uid"] = _uid, ["team"] = TeamJson(_team) });
-            _ = ReadLoop();
+            Debug.Log($"[Ws] ConnectAsync: dialing {_wsUrl}");
+            await _ws.ConnectAsync(new Uri(_wsUrl), _cts.Token);
+            Debug.Log($"[Ws] connected (state={_ws.State}); sending join");
+            // AWAIT the join so it's actually transmitted before we consider ourselves connected —
+            // a fire-and-forget here can race the socket-open and get dropped (the server then never
+            // starts the match). Start the receive loop only after the join is on the wire.
+            await SendNow(new JObject { ["t"] = "join", ["matchId"] = _matchId, ["uid"] = _uid, ["team"] = TeamJson(_team) });
+            _ = ReceiveLoop();
         }
 
-        async Task ReadLoop()
+        async Task ReceiveLoop()
         {
+            Debug.Log("[Ws] receive loop started");
             var buf = new byte[8192];
             var sb = new StringBuilder();
-            while (_ws.State == WebSocketState.Open)
+            try
             {
-                WebSocketReceiveResult r;
-                try { r = await _ws.ReceiveAsync(buf, CancellationToken.None); }
-                catch { break; }
-                if (r.MessageType == WebSocketMessageType.Close) break;
-                sb.Append(Encoding.UTF8.GetString(buf, 0, r.Count));
-                if (!r.EndOfMessage) continue;
-                _inbox.Enqueue(sb.ToString());
-                sb.Clear();
+                while (_ws.State == WebSocketState.Open && !_cts.IsCancellationRequested)
+                {
+                    var res = await _ws.ReceiveAsync(new ArraySegment<byte>(buf), _cts.Token);
+                    if (res.MessageType == WebSocketMessageType.Close) { Debug.Log($"[Ws] recv Close frame: {res.CloseStatus} {res.CloseStatusDescription}"); break; }
+                    sb.Append(Encoding.UTF8.GetString(buf, 0, res.Count));
+                    if (res.EndOfMessage) { var s = sb.ToString(); Debug.Log($"[Ws] recv {s.Substring(0, Math.Min(90, s.Length))}"); _inbox.Enqueue(s); sb.Clear(); }
+                }
+                Debug.Log($"[Ws] receive loop exiting normally (state={_ws.State}, cancelled={_cts.IsCancellationRequested})");
             }
-            _inbox.Enqueue("{\"t\":\"abort\"}"); // socket closed → treat as abort if mid-match
+            catch (Exception e) when (!(e is OperationCanceledException))
+            {
+                Debug.LogWarning($"[Ws] receive loop EXCEPTION: {e.GetBaseException().Message}");
+            }
+            _inbox.Enqueue("{\"t\":\"abort\"}");
         }
 
-        /// <summary>Drain inbound messages on the main thread. Call every frame while online.</summary>
         public void Poll()
         {
             while (_inbox.TryDequeue(out var json))
             {
                 JObject m;
-                try { m = JObject.Parse(json); } catch { continue; }
-                switch ((string)m["t"])
+                try { m = JObject.Parse(json); } catch (Exception e) { Debug.LogWarning($"[Ws] bad json: {e.Message}"); continue; }
+                string mt = (string)m["t"];
+                Debug.Log($"[Ws] dispatch '{mt}'");
+                switch (mt)
                 {
                     case "start":
-                        MySide = (int)m["side"];
-                        _started = true;
-                        MatchStarted?.Invoke(MySide, (ulong)m["seed"], ReadTeam(m["team0"]), ReadTeam(m["team1"]));
+                        try
+                        {
+                            MySide = (int)m["side"];
+                            _started = true;
+                            MatchStarted?.Invoke(MySide, (ulong)m["seed"], ReadTeam(m["team0"]), ReadTeam(m["team1"]));
+                        }
+                        catch (Exception e) { Debug.LogError($"[Ws] 'start' handling threw: {e}"); Aborted = true; }
                         break;
                     case "turn":
                         _theirChoice = ReadChoice(MySide == 0 ? m["s1"] : m["s0"]);
@@ -89,12 +106,12 @@ namespace MonsterBattler.Game.Net
                     case "chat":
                         ChatReceived?.Invoke((string)m["from"], (string)m["text"]);
                         break;
-                    case "abort":
-                        if (_started) Aborted = true;
-                        break;
                     case "forfeit":
                         ForfeitWin = true;
-                        Aborted = true; // breaks the battle loop; end screen shows the win
+                        Aborted = true;
+                        break;
+                    case "abort":
+                        if (_started) Aborted = true;
                         break;
                     case "error":
                         Debug.LogWarning($"[Ws] server error: {m["text"]}");
@@ -120,22 +137,35 @@ namespace MonsterBattler.Game.Net
             if (_theirChoice != null) onTheirs(_theirChoice.Value);
         }
 
-        public void SendChat(string text)
-            => Send(new JObject { ["t"] = "chat", ["text"] = text });
+        public void SendChat(string text) => Send(new JObject { ["t"] = "chat", ["text"] = text });
 
-        // ---- json helpers (explicit camelCase to match the server) -----------------------------
-
-        void Send(JObject o)
+        // fire-and-forget wrapper for in-battle sends (choices/replace/chat)
+        async void Send(JObject o)
         {
-            if (_ws.State != WebSocketState.Open) return;
+            try { await SendNow(o); }
+            catch (Exception e) { Debug.LogWarning($"[Ws] send '{(string)o["t"]}' FAILED: {e.GetBaseException().Message}"); }
+        }
+
+        async Task SendNow(JObject o)
+        {
+            string t = (string)o["t"];
+            if (_ws.State != WebSocketState.Open)
+            {
+                Debug.LogWarning($"[Ws] send '{t}' SKIPPED — socket state={_ws.State}");
+                return;
+            }
             var bytes = Encoding.UTF8.GetBytes(o.ToString(Newtonsoft.Json.Formatting.None));
-            _ = _ws.SendAsync(bytes, WebSocketMessageType.Text, true, CancellationToken.None);
+            await _ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, _cts.Token);
+            Debug.Log($"[Ws] sent '{t}' ({bytes.Length}b)");
         }
 
         public void Close()
         {
+            try { _cts.Cancel(); } catch { }
             try { _ = _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None); } catch { }
         }
+
+        // ---- json helpers (explicit camelCase to match the server) -----------------------------
 
         static JObject TeamJson(NetTeamSpec t) => new()
         {

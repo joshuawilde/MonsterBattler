@@ -54,52 +54,70 @@ namespace MonsterBattler.Game.Net
         IEnumerator MatchmakeAndConnect()
         {
             Status = "Finding opponent…";
+            Debug.Log($"[Net] JoinOnline: queueing (uid={BackendApi.Uid}, backend={BackendApi.BaseUrl})");
             bool queued = false;
             yield return BackendApi.MatchQueue(r => queued = r != null);
+            Debug.Log($"[Net] queue request returned: queued={queued}");
             if (!queued) { Fail("Matchmaking unavailable"); yield break; }
 
             float waited = 0f;
+            string lastState = null;
             while (waited < 90f)
             {
                 JObject st = null;
                 yield return BackendApi.MatchStatus(r => st = r);
-                switch ((string)st?["state"])
+                string state = (string)st?["state"];
+                if (state != lastState) { Debug.Log($"[Net] status → {state ?? "null"} (raw: {st?.ToString(Newtonsoft.Json.Formatting.None)})"); lastState = state; }
+                switch (state)
                 {
                     case "ready":
                         Status = st["opponent"] != null ? $"Match found vs {st["opponent"]}!" : "Match found!";
+                        Debug.Log($"[Net] READY: wsUrl={st["wsUrl"]} matchId={st["matchId"]} side={st["side"]} opp={st["opponent"]}");
                         yield return Connect((string)st["wsUrl"], (string)st["matchId"]);
                         yield break;
                     case "error":
+                        Debug.LogWarning($"[Net] matchmaking error: {st?["error"]}");
                         Fail((string)st?["error"] ?? "Matchmaking failed"); yield break;
                 }
                 waited += 1.5f;
                 yield return new WaitForSeconds(1.5f);
             }
+            Debug.LogWarning("[Net] matchmaking timed out after 90s — cancelling");
             StartCoroutine(BackendApi.MatchCancel());
             Fail("No match found");
         }
 
         IEnumerator Connect(string wsUrl, string matchId)
         {
+            if (Active != null) { Debug.Log("[Net] closing stale client before reconnect"); Active.Close(); Active = null; }
+            Debug.Log($"[Net] Connect: creating client for match {matchId} @ {wsUrl}");
             var client = new WsBattleClient(wsUrl, matchId, BackendApi.Uid, NetTeamSpec.FromMeta());
             client.MatchStarted += (side, seed, s0, s1) =>
             {
+                Debug.Log($"[Net] MatchStarted fired: side={side} seed={seed} → BeginNetBattle");
                 Status = "";
                 var view = _battleView != null ? _battleView : FindAnyObjectByType<BattleView>();
+                if (view == null) { Debug.LogError("[Net] no BattleView found — cannot start battle!"); return; }
                 view.BeginNetBattle(client, seed, s0, s1);
                 OnlineMatchBegan?.Invoke();
+                Debug.Log("[Net] BeginNetBattle returned OK");
             };
             Active = client;
 
+            Debug.Log("[Net] awaiting ConnectAsync…");
             var connectTask = client.ConnectAsync();
-            while (!connectTask.IsCompleted) yield return null;
+            float ct = 0f;
+            while (!connectTask.IsCompleted) { ct += Time.unscaledDeltaTime; yield return null; }
+            Debug.Log($"[Net] ConnectAsync completed in {ct:0.0}s (faulted={connectTask.IsFaulted})");
             if (connectTask.IsFaulted)
             {
-                Debug.LogWarning($"[Net] ws connect failed: {connectTask.Exception?.GetBaseException().Message}");
+                Debug.LogWarning($"[Net] ws connect failed: {connectTask.Exception?.GetBaseException()}");
                 Active = null;
                 Fail("Couldn't reach the battle server");
+                yield break;
             }
-            // else: wait for the server's "start" (Poll → MatchStarted). _joining stays true until then.
+            Debug.Log("[Net] connected — waiting for server 'start' (watch for [Ws] recv lines)");
+            // _joining stays true until MatchStarted fires (Poll → MatchStarted → BeginNetBattle).
         }
 
         void Fail(string reason)

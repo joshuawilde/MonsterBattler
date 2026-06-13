@@ -1,12 +1,7 @@
-# Auto-HTTPS (Let's Encrypt) for the OVH hostname. Routes the WebSocket to the battle
-# server and everything else to the Go backend. Caddy is the only public surface.
+# Auto-HTTPS (Let's Encrypt) for the OVH hostname, fronting the Go backend
+# (profiles/leaderboard/matchmaking/results). The battle server is reached directly over
+# plain ws:// on :8081 (Unity's Mono TLS can't do wss), so it's NOT proxied here.
 vps-7d32ac6f.vps.ovh.us {
 	encode gzip
-
-	# battle-server WebSocket
-	@ws path /ws
-	reverse_proxy @ws battle:8081
-
-	# everything else (profiles, leaderboard, matchmaking, health) → backend
 	reverse_proxy backend:8080
 }

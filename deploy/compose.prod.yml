@@ -28,17 +28,24 @@ services:
       DB_PATH: /data/monsterbattler.db
       GOOGLE_APPLICATION_CREDENTIALS: /data/firebase-sa.json
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
-      # register matches over the internal network; hand clients the public wss URL
+      # register matches over the internal network; hand clients the public plain-ws URL.
+      # Plain ws (not wss): Unity's Mono TLS can't complete a wss handshake (editor + iOS),
+      # so the battle relay runs unencrypted on a direct public port. Only move/switch choices
+      # and chat cross it — all sensitive traffic (auth, profile, Elo, results) stays on HTTPS.
       BATTLE_SERVERS: http://battle:8081
-      WS_PUBLIC_URLS: wss://vps-7d32ac6f.vps.ovh.us/ws
+      # IPv4 literal, NOT the hostname: the hostname has both A + AAAA records, and Unity/Mono's
+      # WebSocket connect has no Happy-Eyeballs fallback — it can pick the IPv6 address and hang
+      # when the client has no IPv6 route to the VPS. Plain ws has no TLS, so an IP literal is fine.
+      WS_PUBLIC_URLS: ws://15.204.93.121:8081/ws
 
   battle:
     build:
       context: ..
       dockerfile: battle-server/Dockerfile
     restart: unless-stopped
-    expose:
-      - "8081"
+    # public plain-ws port (clients connect directly, bypassing Caddy/TLS)
+    ports:
+      - "8081:8081"
     environment:
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
       BACKEND_URL: http://backend:8080

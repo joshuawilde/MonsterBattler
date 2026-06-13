@@ -29,8 +29,8 @@ type waiter struct {
 }
 
 const (
-	soloBotDelay = 10 * time.Second // wait this long for a human before giving a bot
-	queueStale   = 30 * time.Second // drop a queued player who stops polling
+	soloBotDelay = 30 * time.Second // wait this long for a human before giving a bot
+	queueStale   = 45 * time.Second // drop a queued player who stops polling
 )
 
 type matchState int
