@@ -26,20 +26,27 @@ type BattleServers struct {
 }
 
 func NewBattleServers() *BattleServers {
-	// BATTLE_SERVERS = comma-separated http base URLs (ws derived). Default local dev server.
+	// BATTLE_SERVERS = comma-separated http base URLs for INTERNAL registration (compose network).
+	// WS_PUBLIC_URLS = the public wss:// URL(s) handed to clients, index-aligned. When unset, the
+	// public ws URL is derived from BATTLE_SERVERS (dev: direct ws://host:port/ws).
 	raw := envOr("BATTLE_SERVERS", "http://127.0.0.1:8081")
+	pub := os.Getenv("WS_PUBLIC_URLS")
 	var httpBases, wsBases []string
-	for _, b := range strings.Split(raw, ",") {
+	pubList := strings.Split(pub, ",")
+	for i, b := range strings.Split(raw, ",") {
 		b = strings.TrimRight(strings.TrimSpace(b), "/")
 		if b == "" {
 			continue
 		}
 		httpBases = append(httpBases, b)
-		ws := strings.Replace(b, "http://", "ws://", 1)
-		ws = strings.Replace(ws, "https://", "wss://", 1)
-		wsBases = append(wsBases, ws+"/ws")
+		if pub != "" && i < len(pubList) && strings.TrimSpace(pubList[i]) != "" {
+			wsBases = append(wsBases, strings.TrimSpace(pubList[i]))
+		} else {
+			ws := strings.Replace(strings.Replace(b, "http://", "ws://", 1), "https://", "wss://", 1)
+			wsBases = append(wsBases, ws+"/ws")
+		}
 	}
-	log.Printf("battle servers: %v", httpBases)
+	log.Printf("battle servers: register=%v public=%v", httpBases, wsBases)
 	return &BattleServers{
 		httpBases: httpBases, wsBases: wsBases,
 		key:  os.Getenv("INTERNAL_API_KEY"),

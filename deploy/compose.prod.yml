@@ -1,13 +1,26 @@
-# MonsterBattler production stack (one OVH VPS). Both services build from source here.
-# The Go backend hands clients the PUBLIC battle-server ws URL, so BATTLE_SERVERS uses the
-# public IP (registration hairpins through it — fine at this scale).
+# MonsterBattler production stack (one OVH VPS). Caddy terminates TLS (auto Let's Encrypt for
+# the OVH hostname) and is the ONLY public surface; backend + battle server are internal-only.
 services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - battle
+
   backend:
     build:
       context: ../backend
     restart: unless-stopped
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"
     volumes:
       - mbdata:/data
       - ../secrets/firebase-sa.json:/data/firebase-sa.json:ro
@@ -15,18 +28,22 @@ services:
       DB_PATH: /data/monsterbattler.db
       GOOGLE_APPLICATION_CREDENTIALS: /data/firebase-sa.json
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
-      BATTLE_SERVERS: http://15.204.93.121:8081
+      # register matches over the internal network; hand clients the public wss URL
+      BATTLE_SERVERS: http://battle:8081
+      WS_PUBLIC_URLS: wss://vps-7d32ac6f.vps.ovh.us/ws
 
   battle:
     build:
       context: ..
       dockerfile: battle-server/Dockerfile
     restart: unless-stopped
-    ports:
-      - "8081:8081"
+    expose:
+      - "8081"
     environment:
       INTERNAL_API_KEY: ${INTERNAL_API_KEY}
       BACKEND_URL: http://backend:8080
 
 volumes:
   mbdata:
+  caddy_data:
+  caddy_config:
