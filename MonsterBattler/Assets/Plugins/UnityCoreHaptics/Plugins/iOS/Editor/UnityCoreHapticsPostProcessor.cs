@@ -101,7 +101,7 @@ public static class UnityCoreHapticsPostProcessor
       Directory.CreateDirectory(Path.GetDirectoryName(destPath));
     }
     Debug.Log("[UnityCoreHapticsPostProcessor] Copy module file to project : " + sourcePath + " -> " + destPath);
-    File.Copy(sourcePath, destPath);
+    File.Copy(sourcePath, destPath, overwrite: true); // overwrite: rebuilding into the same folder leaves the old copy
   }
 
   /// <summary>
