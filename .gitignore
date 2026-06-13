@@ -78,3 +78,5 @@ MonsterBattler/Builds/
 backend/*.db
 backend/*.db-*
 secrets/
+battle-server/bin/
+battle-server/obj/
