@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	fbauth "firebase.google.com/go/v4/auth"
 	"firebase.google.com/go/v4/messaging"
@@ -17,6 +18,7 @@ type Server struct {
 	Auth        *fbauth.Client
 	Push        *messaging.Client
 	Match       *Matchmaker
+	Presence    *Presence
 	InternalKey string // shared secret for the battle server's result reports
 }
 
@@ -166,6 +168,11 @@ func (s *Server) RegisterDevice(w http.ResponseWriter, r *http.Request, uid stri
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]any{"ok": true})
+}
+
+// GET /v1/online → {count} of players seen recently (includes the caller, who is marked online).
+func (s *Server) Online(w http.ResponseWriter, r *http.Request, uid string) {
+	writeJSON(w, http.StatusOK, map[string]any{"count": s.Presence.Touch(uid, time.Now())})
 }
 
 // POST /v1/match/queue → enqueue + return current status (same shape as /v1/match/status)

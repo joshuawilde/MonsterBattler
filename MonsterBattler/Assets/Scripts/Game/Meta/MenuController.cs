@@ -24,6 +24,7 @@ namespace MonsterBattler.Game.Meta
         [SerializeField] TextMeshProUGUI _homeCoins;
         [SerializeField] TextMeshProUGUI _homeTeam;
         [SerializeField] TextMeshProUGUI _homeElo;       // "You · Elo 1000"
+        [SerializeField] TextMeshProUGUI _onlineCount;   // "● N online" — hidden when < 2 (online indicator)
         [SerializeField] Button _battleButton;
         [SerializeField] Button _battleOnlineButton; // optional: PvP via NetBootstrap
         [SerializeField] Button _boxButton;
@@ -36,6 +37,11 @@ namespace MonsterBattler.Game.Meta
         [SerializeField] Button _appleSignInButton;
         [SerializeField] Button _googleSignInButton;
         [SerializeField] Button _accountBackButton;
+        [Header("Account — username editor (only usable once signed in)")]
+        [SerializeField] GameObject _usernameRow;        // container shown only when not a guest
+        [SerializeField] TMP_InputField _usernameInput;
+        [SerializeField] Button _usernameSaveButton;
+        [SerializeField] TextMeshProUGUI _usernameStatus;
 
         [Header("Leaderboard panel (scene-authored)")]
         [SerializeField] Button _leaderboardButton;
@@ -107,6 +113,7 @@ namespace MonsterBattler.Game.Meta
             Wire(_accountBackButton, CloseOverlays);
             Wire(_appleSignInButton, () => OnSignIn("apple.com"));
             Wire(_googleSignInButton, () => OnSignIn("google.com"));
+            Wire(_usernameSaveButton, OnSaveUsername);
             Wire(_leaderboardButton, ShowLeaderboard);
             Wire(_leaderboardBackButton, CloseOverlays);
         }
@@ -137,6 +144,10 @@ namespace MonsterBattler.Game.Meta
             bool anon = fb == null || fb.IsAnonymous;
             if (_appleSignInButton != null) _appleSignInButton.gameObject.SetActive(anon);
             if (_googleSignInButton != null) _googleSignInButton.gameObject.SetActive(anon);
+            // Username is editable only once verified with Apple/Google (not a guest).
+            if (_usernameRow != null) _usernameRow.SetActive(!anon);
+            if (!anon && _usernameInput != null && string.IsNullOrEmpty(_usernameInput.text))
+                _usernameInput.text = MetaGame.Profile.username;
         }
 
         void OnSignIn(string providerId)
@@ -144,6 +155,31 @@ namespace MonsterBattler.Game.Meta
             var fb = FirebaseBootstrap.Instance;
             if (fb == null) { RefreshAccountStatus("Firebase not available"); return; }
             fb.LinkWith(providerId, note => RefreshAccountStatus(note));
+        }
+
+        void OnSaveUsername()
+        {
+            if (_usernameInput == null) return;
+            string name = _usernameInput.text.Trim();
+            if (name.Length < 2 || name.Length > 24)
+            {
+                if (_usernameStatus != null) _usernameStatus.text = "<color=#ff7a7a>2–24 characters</color>";
+                return;
+            }
+            if (!BackendApi.Configured) { if (_usernameStatus != null) _usernameStatus.text = "Online unavailable"; return; }
+            if (_usernameStatus != null) _usernameStatus.text = "Saving…";
+            if (_usernameSaveButton != null) _usernameSaveButton.interactable = false;
+            StartCoroutine(BackendApi.SetUsername(name, (ok, taken, prof) =>
+            {
+                if (_usernameSaveButton != null) _usernameSaveButton.interactable = true;
+                if (_usernameStatus == null) return;
+                if (taken) { _usernameStatus.text = "<color=#ff7a7a>That name's taken</color>"; return; }
+                if (!ok) { _usernameStatus.text = "<color=#ff7a7a>Couldn't reach server</color>"; return; }
+                MetaGame.Profile.username = name;       // unique, accepted by the server
+                MetaGame.Save();
+                _usernameStatus.text = "<color=#7affa0>Saved!</color>";
+                RefreshHome();                          // home "You · Elo" line uses the username
+            }));
         }
 
         void ShowLeaderboard()
@@ -158,7 +194,7 @@ namespace MonsterBattler.Game.Meta
                 return;
             }
             if (_leaderboardStatus != null) _leaderboardStatus.text = "Loading…";
-            StartCoroutine(BackendApi.GetLeaderboard(15, PopulateLeaderboard));
+            StartCoroutine(BackendApi.GetLeaderboard(20, PopulateLeaderboard));
         }
 
         void ClearLeaderboardRows()
@@ -218,6 +254,7 @@ namespace MonsterBattler.Game.Meta
                 _menuRoot.SetActive(true);
             }
             ShowHome();
+            StartCoroutine(OnlineCountLoop());
         }
 
         string Name(string id) =>
@@ -241,10 +278,34 @@ namespace MonsterBattler.Game.Meta
         {
             SetPanels(home: true, box: false, summon: false);
             AudioManager.I?.PlayMenuMusic();
+            RefreshHome();
+        }
+
+        // Update the home labels in place (no panel switch) — used after a username change.
+        void RefreshHome()
+        {
             int teamN = MetaGame.BattleTeam().Count;
             if (_homeCoins != null) _homeCoins.text = $"{MetaGame.Profile.coins} coins";
             if (_homeTeam != null) _homeTeam.text = $"Team {teamN}/{MetaGame.TeamSize}  ·  {MetaGame.Profile.owned.Count} owned";
             if (_homeElo != null) _homeElo.text = $"{MetaGame.Profile.username}  ·  Elo {MetaGame.Profile.elo}";
+        }
+
+        // Poll the live online count (heartbeats us too). Shown only when 2+ are online.
+        System.Collections.IEnumerator OnlineCountLoop()
+        {
+            if (_onlineCount != null) _onlineCount.gameObject.SetActive(false);
+            var wait = new WaitForSeconds(15f);
+            while (true)
+            {
+                if (BackendApi.Configured && _onlineCount != null)
+                    yield return BackendApi.Online(r =>
+                    {
+                        int n = r != null && r["count"] != null ? (int)r["count"] : 0;
+                        _onlineCount.gameObject.SetActive(n >= 2);
+                        if (n >= 2) _onlineCount.text = $"<color=#7affa0>●</color> {n} online";
+                    });
+                yield return wait;
+            }
         }
 
         void ShowBox()

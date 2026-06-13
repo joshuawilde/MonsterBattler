@@ -22,7 +22,8 @@ func main() {
 	auth, push := InitFirebase() // nil-safe in dev-bypass mode
 	matchmaker := NewMatchmaker(store, NewBattleServers())
 
-	s := &Server{Store: store, Auth: auth, Push: push, Match: matchmaker, InternalKey: os.Getenv("INTERNAL_API_KEY")}
+	s := &Server{Store: store, Auth: auth, Push: push, Match: matchmaker,
+		Presence: NewPresence(), InternalKey: os.Getenv("INTERNAL_API_KEY")}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) { w.Write([]byte("ok")) })
@@ -33,6 +34,7 @@ func main() {
 	mux.Handle("POST /v1/friends/respond", s.WithAuth(s.FriendRespond))
 	mux.Handle("DELETE /v1/friends/{uid}", s.WithAuth(s.FriendRemove))
 	mux.Handle("POST /v1/devices", s.WithAuth(s.RegisterDevice))
+	mux.Handle("GET /v1/online", s.WithAuth(s.Online))
 	mux.Handle("POST /v1/match/queue", s.WithAuth(s.MatchQueue))
 	mux.Handle("GET /v1/match/status", s.WithAuth(s.MatchStatus))
 	mux.Handle("POST /v1/match/cancel", s.WithAuth(s.MatchCancel))
