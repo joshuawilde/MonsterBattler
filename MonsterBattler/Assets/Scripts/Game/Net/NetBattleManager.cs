@@ -302,6 +302,14 @@ namespace MonsterBattler.Game.Net
             if (req.result != UnityEngine.Networking.UnityWebRequest.Result.Success)
                 Debug.LogWarning($"[NetBattle] result report failed: {req.responseCode} {req.error}");
             else Debug.Log($"[NetBattle] result reported: {req.downloadHandler.text}");
+
+            // Per-match actor: the match is over, so the process should exit even if the backend's
+            // own actor-destroy missed. A dedicated batchmode server only ever hosts one match.
+            if (Application.isBatchMode)
+            {
+                yield return new WaitForSeconds(2f); // let the result land + clients disconnect
+                Application.Quit();
+            }
         }
 
         /// <summary>Clear all match state so a durable server can host the next pair.</summary>

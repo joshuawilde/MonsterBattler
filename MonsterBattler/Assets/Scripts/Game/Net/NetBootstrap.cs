@@ -1,5 +1,7 @@
+using System.Collections;
 using FishNet;
 using FishNet.Transporting;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace MonsterBattler.Game.Net
@@ -55,19 +57,66 @@ namespace MonsterBattler.Game.Net
             }
         }
 
-        /// <summary>Menu hook: connect to the server and queue for a match with the meta team.</summary>
+        /// <summary>Menu hook: find a match and join it. With a backend configured this queues
+        /// through the matchmaker (which spawns a per-match server and returns its address);
+        /// without one it connects directly to the inspector/arg host (dev fallback).</summary>
         public void JoinOnline()
         {
             if (_joining) return;
             _joining = true;
             Status = "Connecting…";
 
-            if (_hostInEditor && Application.isEditor && !InstanceFinder.ServerManager.Started)
-                InstanceFinder.ServerManager.StartConnection(_port);
+            if (BackendApi.Configured)
+                StartCoroutine(MatchmakeThenConnect());
+            else
+                Connect(_host, _port);
+        }
 
+        // Queue with the backend, poll until it hands back a server address, then connect there.
+        IEnumerator MatchmakeThenConnect()
+        {
+            Status = "Finding opponent…";
+            bool got = false;
+            yield return BackendApi.MatchQueue(r => got = r != null);
+            if (!got) { Fail("Matchmaking unavailable"); yield break; }
+
+            float waited = 0f;
+            while (waited < 90f)
+            {
+                JObject st = null;
+                yield return BackendApi.MatchStatus(r => st = r);
+                string state = (string)st?["state"];
+                if (state == "ready")
+                {
+                    string host = (string)st["host"];
+                    int port = (int)st["port"];
+                    // For the local stub the address is our own host-mode server.
+                    if (_hostInEditor && Application.isEditor && !InstanceFinder.ServerManager.Started
+                        && (host == "127.0.0.1" || host == "localhost"))
+                        InstanceFinder.ServerManager.StartConnection((ushort)port);
+                    Status = st["opponent"] != null ? $"Match found vs {st["opponent"]}!" : "Match found!";
+                    Connect(host, (ushort)port);
+                    yield break;
+                }
+                if (state == "error") { Fail((string)st?["error"] ?? "Matchmaking failed"); yield break; }
+                waited += 1.5f;
+                yield return new WaitForSeconds(1.5f);
+            }
+            StartCoroutine(BackendApi.MatchCancel());
+            Fail("No match found");
+        }
+
+        void Connect(string host, ushort port)
+        {
             var cm = InstanceFinder.ClientManager;
             cm.OnClientConnectionState += OnClientState;
-            cm.StartConnection(_host, _port);
+            cm.StartConnection(host, port);
+        }
+
+        void Fail(string reason)
+        {
+            Status = reason;
+            _joining = false;
         }
 
         void OnClientState(ClientConnectionStateArgs args)

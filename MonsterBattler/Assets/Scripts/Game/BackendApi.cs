@@ -50,6 +50,15 @@ namespace MonsterBattler.Game
         public static IEnumerator RegisterDevice(string fcmToken, System.Action<JObject> onDone = null)
             => Post("/v1/devices", new JObject { ["token"] = fcmToken, ["platform"] = Application.platform.ToString() }, onDone);
 
+        public static IEnumerator MatchQueue(System.Action<JObject> onDone)
+            => Post("/v1/match/queue", new JObject(), onDone);
+
+        public static IEnumerator MatchStatus(System.Action<JObject> onDone)
+            => Get("/v1/match/status", onDone);
+
+        public static IEnumerator MatchCancel(System.Action<JObject> onDone = null)
+            => Post("/v1/match/cancel", new JObject(), onDone);
+
         // ---- plumbing ---------------------------------------------------------------------------
 
         static IEnumerator Get(string path, System.Action<JObject> onDone)
