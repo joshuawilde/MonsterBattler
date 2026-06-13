@@ -6,8 +6,7 @@
         "Unity.InputSystem",
         "Unity.TextMeshPro",
         "UnityEngine.UI",
-        "Coffee.UIParticle",
-        "FishNet.Runtime"
+        "Coffee.UIParticle"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

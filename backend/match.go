@@ -45,6 +45,7 @@ type Match struct {
 	ID      string
 	UID0    string
 	UID1    string
+	Bot     bool // solo match — battle server fills the opponent with a bot immediately
 	WsURL   string
 	State   matchState
 	Err     string
@@ -118,7 +119,7 @@ func (m *Matchmaker) tryPair() {
 func (m *Matchmaker) register(match *Match) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
-	wsURL, err := m.servers.Register(ctx, match.ID, match.UID0, match.UID1)
+	wsURL, err := m.servers.Register(ctx, match.ID, match.UID0, match.UID1, match.Bot)
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	if err != nil {
@@ -203,7 +204,7 @@ func (m *Matchmaker) sweep() {
 		for _, w := range botFor {
 			m.removeWaiter(w.uid)
 			mid := newMatchID()
-			match := &Match{ID: mid, UID0: w.uid, UID1: "bot-" + mid, State: stateWaiting, Created: now}
+			match := &Match{ID: mid, UID0: w.uid, UID1: "bot-" + mid, Bot: true, State: stateWaiting, Created: now}
 			m.matches[mid] = match
 			m.uid2mid[w.uid] = mid
 			log.Printf("match %s: %s gets a bot (no human after %s)", mid, w.username, soloBotDelay)

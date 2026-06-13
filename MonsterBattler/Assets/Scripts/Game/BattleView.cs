@@ -416,31 +416,35 @@ namespace MonsterBattler.Game
 
         void ShowEndScreen()
         {
-            bool won = _battle.WinningSide == _mySide;
+            // A forfeit (opponent left a live PvP match) is a win for us even though the sim
+            // didn't reach a KO; the server already awarded both sides' Elo.
+            bool forfeitWin = _session != null && _session.ForfeitWin;
+            int winSide = forfeitWin ? _mySide : (_battle.WinningSide ?? -1);
+            bool won = winSide == _mySide;
             if (won) AudioManager.I?.PlayVictory();
             else AudioManager.I?.PlayDefeat();
-            (string label, Color color) = _battle.WinningSide < 0
+            (string label, Color color) = winSide < 0
                 ? ("Draw", new Color(0.80f, 0.80f, 0.85f))
-                : won ? ("Victory!", new Color(0.30f, 0.78f, 0.33f))
+                : won ? (forfeitWin ? "Opponent left — you win!" : "Victory!", new Color(0.30f, 0.78f, 0.33f))
                       : ("Defeat", new Color(0.86f, 0.25f, 0.22f));
 
-            if (_battle.WinningSide < 0) // draw — no rating change
+            if (winSide < 0) // draw — no rating change
             {
                 if (_endResultText != null) { _endResultText.text = label; _endResultText.color = color; }
             }
             else
             {
-                var res = Meta.MetaGame.ResolveMatch(_battle.WinningSide == _mySide);
+                var res = Meta.MetaGame.ResolveMatch(won);
                 // Progression: a few locked moves on your team inch toward unlocking.
                 var teamIds = new List<string>();
                 foreach (var m in Mine.Team) if (m.Species != null) teamIds.Add(m.Species.Id);
-                _endGains = Meta.MetaGame.AwardMoveProgress(_battle.WinningSide == _mySide, teamIds);
+                _endGains = Meta.MetaGame.AwardMoveProgress(won, teamIds);
 
                 // Leveling: per-mon XP by participation (battled / benched / survived).
                 var part = new List<(string, bool, bool)>();
                 foreach (var m in Mine.Team)
                     if (m.Species != null) part.Add((m.Species.Id, m.HasBeenActive, !m.IsFainted));
-                _endXp = Meta.MetaGame.AwardXp(_battle.WinningSide == _mySide, part);
+                _endXp = Meta.MetaGame.AwardXp(won, part);
                 if (_endResultText != null)
                 {
                     string s = res.eloDelta >= 0 ? "+" : "";

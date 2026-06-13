@@ -56,10 +56,12 @@ namespace MonsterBattler.BattleServer
             public string Text { get; init; }
         }
 
+        readonly bool _botMatch; // solo match — fill the bot the instant the player joins
+
         public Match(MatchRegistration reg, Dex dex, RandbatsDex randbats,
-                     Func<string, string, int, Task> report, Action<Match> onDone, int botFillMs = 12000)
+                     Func<string, string, int, Task> report, Action<Match> onDone, int botFillMs = 8000)
         {
-            Id = reg.MatchId; _uid0 = reg.Uid0; _uid1 = reg.Uid1;
+            Id = reg.MatchId; _uid0 = reg.Uid0; _uid1 = reg.Uid1; _botMatch = reg.Bot;
             _dex = dex; _randbats = randbats; _report = report; _onDone = onDone; _botFillMs = botFillMs;
             _ = Task.Run(Pump);
             _ = FillTimer();
@@ -108,6 +110,7 @@ namespace MonsterBattler.BattleServer
                     if (side < 0) { await ev.Conn.SendAsync(Err("not a player in this match")); return; }
                     _p[side] = new Player { Uid = ev.Uid, Conn = ev.Conn, Spec = ev.Team };
                     if (_p[0] != null && _p[1] != null) await Start();
+                    else if (_botMatch) { FillBotAndStart(); await StartContinue(); } // solo: start now, no wait
                     else await ev.Conn.SendAsync(new ServerMsg { T = "waiting" });
                     break;
                 }
@@ -137,10 +140,22 @@ namespace MonsterBattler.BattleServer
                 }
                 case EvKind.Disconnect:
                 {
-                    if (_started && !_finished)
+                    int side = ev.Conn?.Uid != null ? SideOf(ev.Conn.Uid) : -1;
+                    if (_started && !_finished && side >= 0)
                     {
-                        int side = ev.Conn?.Uid != null ? SideOf(ev.Conn.Uid) : -1;
-                        await SendOther(side, new ServerMsg { T = "abort" });
+                        if (_botSide < 0)
+                        {
+                            // Mid-match disconnect in a PvP game = forfeit: the other player wins,
+                            // both get their Elo change. (No bot swap-in.)
+                            int winner = 1 - side;
+                            Console.WriteLine($"[match {Id}] {_p[side]?.Spec?.Username} left — forfeit, side {winner} wins");
+                            if (_report != null) await _report(_uid0, _uid1, winner);
+                            await SendOther(side, new ServerMsg { T = "forfeit" });
+                        }
+                        else
+                        {
+                            await SendOther(side, new ServerMsg { T = "abort" }); // vs a bot — no ranked result
+                        }
                     }
                     Finish();
                     break;

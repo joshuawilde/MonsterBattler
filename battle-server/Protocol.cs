@@ -70,5 +70,6 @@ namespace MonsterBattler.BattleServer
         public string MatchId { get; set; }
         public string Uid0 { get; set; }
         public string Uid1 { get; set; }
+        public bool Bot { get; set; } // solo match: fill the opponent with a bot as soon as the player joins
     }
 }

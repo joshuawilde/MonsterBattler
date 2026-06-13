@@ -16,6 +16,9 @@ namespace MonsterBattler.Game.Net
         /// <summary>True once the opponent disconnected or the server ended the match early.</summary>
         bool Aborted { get; }
 
+        /// <summary>True when the opponent left a live PvP match — a forfeit win for us.</summary>
+        bool ForfeitWin { get; }
+
         /// <summary>Replacement phase after faints: submit our forced-switch team index
         /// (-1 when our side doesn't need one) and yield until the opponent's arrives.</summary>
         IEnumerator ExchangeReplacements(int mine, System.Action<int> onTheirs);

@@ -55,13 +55,14 @@ func NewBattleServers() *BattleServers {
 }
 
 // Register a paired match on a battle server; returns the ws URL clients should connect to.
-func (b *BattleServers) Register(ctx context.Context, matchID, uid0, uid1 string) (string, error) {
+// bot=true → the battle server fills the opponent with an AI as soon as the player joins.
+func (b *BattleServers) Register(ctx context.Context, matchID, uid0, uid1 string, bot bool) (string, error) {
 	if len(b.httpBases) == 0 {
 		return "", fmt.Errorf("no battle servers configured")
 	}
 	i := b.rr % len(b.httpBases)
 	b.rr++
-	body, _ := json.Marshal(map[string]string{"matchId": matchID, "uid0": uid0, "uid1": uid1})
+	body, _ := json.Marshal(map[string]any{"matchId": matchID, "uid0": uid0, "uid1": uid1, "bot": bot})
 	req, err := http.NewRequestWithContext(ctx, "POST", b.httpBases[i]+"/internal/match", bytes.NewReader(body))
 	if err != nil {
 		return "", err

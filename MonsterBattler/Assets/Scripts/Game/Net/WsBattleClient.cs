@@ -21,6 +21,7 @@ namespace MonsterBattler.Game.Net
     {
         public int MySide { get; private set; }
         public bool Aborted { get; private set; }
+        public bool ForfeitWin { get; private set; }
 
         /// <summary>Fires (main thread) when the server starts the match — wire to BeginNetBattle.</summary>
         public event Action<int /*side*/, ulong /*seed*/, NetTeamSpec, NetTeamSpec> MatchStarted;
@@ -90,6 +91,10 @@ namespace MonsterBattler.Game.Net
                         break;
                     case "abort":
                         if (_started) Aborted = true;
+                        break;
+                    case "forfeit":
+                        ForfeitWin = true;
+                        Aborted = true; // breaks the battle loop; end screen shows the win
                         break;
                     case "error":
                         Debug.LogWarning($"[Ws] server error: {m["text"]}");
