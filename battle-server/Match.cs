@@ -112,8 +112,7 @@ namespace MonsterBattler.BattleServer
                     break;
                 }
                 case EvKind.FillTick:
-                    if (!_started) FillBotAndStart();
-                    if (_started) await StartContinue();
+                    if (!_started) { FillBotAndStart(); await StartContinue(); }
                     break;
                 case EvKind.Choice:
                 {

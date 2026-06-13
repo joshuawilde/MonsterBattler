@@ -1,0 +1,32 @@
+# MonsterBattler production stack (one OVH VPS). Both services build from source here.
+# The Go backend hands clients the PUBLIC battle-server ws URL, so BATTLE_SERVERS uses the
+# public IP (registration hairpins through it — fine at this scale).
+services:
+  backend:
+    build:
+      context: ../backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - mbdata:/data
+      - ../secrets/firebase-sa.json:/data/firebase-sa.json:ro
+    environment:
+      DB_PATH: /data/monsterbattler.db
+      GOOGLE_APPLICATION_CREDENTIALS: /data/firebase-sa.json
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      BATTLE_SERVERS: http://15.204.93.121:8081
+
+  battle:
+    build:
+      context: ..
+      dockerfile: battle-server/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY}
+      BACKEND_URL: http://backend:8080
+
+volumes:
+  mbdata:

@@ -80,3 +80,4 @@ backend/*.db-*
 secrets/
 battle-server/bin/
 battle-server/obj/
+deploy/.env.prod
