@@ -526,7 +526,7 @@ namespace MonsterBattler.Game
                         string subLine = leveled ? StatDiffLine(g.species, g.oldLevel, g.newLevel)
                                                  : $"+{g.xp} XP  ·  {toNext} XP to Lv {g.oldLevel + 1}";
                         int shownXp = Mathf.RoundToInt(g.fracTo * Meta.MetaGame.XpPerLevel);
-                        if (leveled) { AudioManager.Play("levelup"); HapticManager.LevelUp(); }
+                        if (leveled) AudioManager.Play("levelup"); // haptic fires in MoveProgressCard at the level-up pop
                         yield return card.Play(title, subLine, g.fracFrom, g.fracTo,
                                                leveled ? Meta.MetaGame.XpPerLevel : shownXp, Meta.MetaGame.XpPerLevel,
                                                leveled, unlockedText: "LEVEL UP!");

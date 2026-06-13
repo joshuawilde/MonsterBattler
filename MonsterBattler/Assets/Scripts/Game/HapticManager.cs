@@ -93,8 +93,35 @@ namespace MonsterBattler.Game
         /// <summary>Defeat — low, sinking rumble.</summary>
         public static void Defeat() { if (!PlayFile("Haptics/defeat.ahap")) Continuous(0.7f, 0.15f, 0.5f); }
 
-        /// <summary>Level-up — rising ticks.</summary>
-        public static void LevelUp() { if (!PlayFile("Haptics/levelup.ahap")) Transient(0.6f, 0.8f); }
+        /// <summary>Celebration buzz for the unlock/level-up pop (rising ticks).</summary>
+        public static void Celebrate() { if (!PlayFile("Haptics/levelup.ahap")) Transient(0.6f, 0.8f); }
+
+        // ---- continuous "meter" player: a sustained rumble whose intensity we ramp live (used while
+        //      the end-screen XP / progress bars fill). Begin → Update each frame → End. ------------
+
+        static int _meterPlayer = -1;
+
+        public static void MeterBegin(float intensity = 0.15f, float sharpness = 0.3f)
+        {
+            MeterEnd(); // never leak a prior player
+            if (!Ready) return;
+            _meterPlayer = UnityCoreHapticsProxy.CreateContinuousPlayer(Mathf.Clamp01(intensity), Mathf.Clamp01(sharpness));
+            UnityCoreHapticsProxy.StartPlayer(_meterPlayer);
+        }
+
+        public static void MeterUpdate(float intensity, float sharpness)
+        {
+            if (_meterPlayer < 0) return;
+            UnityCoreHapticsProxy.UpdatePlayerParameters(_meterPlayer, Mathf.Clamp01(intensity), Mathf.Clamp01(sharpness));
+        }
+
+        public static void MeterEnd()
+        {
+            if (_meterPlayer < 0) return;
+            UnityCoreHapticsProxy.StopPlayer(_meterPlayer);
+            UnityCoreHapticsProxy.DestroyPlayer(_meterPlayer);
+            _meterPlayer = -1;
+        }
 
         // ---- primitives -----------------------------------------------------------------------
 

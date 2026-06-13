@@ -70,21 +70,25 @@ namespace MonsterBattler.Game.UI
             if (_group != null) _group.alpha = 1f;
             yield return Wait(0.12f);
 
-            // 2. bar fills old → new
+            // 2. bar fills old → new — continuous haptic rumble ramps up with the bar
             AudioManager.Play("boost");
+            HapticManager.MeterBegin();
             for (float t = 0f; t < FillDur; t += Time.unscaledDeltaTime)
             {
                 float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t / FillDur));
                 if (_barFill != null) _barFill.fillAmount = Mathf.Lerp(from, to, k);
+                HapticManager.MeterUpdate(Mathf.Lerp(0.15f, 0.55f, k), Mathf.Lerp(0.3f, 0.7f, k));
                 yield return null;
             }
             if (_barFill != null) _barFill.fillAmount = to;
+            HapticManager.MeterEnd();
 
             // 3. unlocked: gold bar + spark burst + bloom + label pop
             if (unlocked)
             {
                 if (_barFill != null) _barFill.color = BarGold;
                 if (_burst != null) _burst.Play();
+                HapticManager.Celebrate(); // celebration buzz at the actual unlock/level-up pop
                 if (_unlockedLabel != null) _unlockedLabel.SetActive(true);
                 var lrt = _unlockedLabel != null ? _unlockedLabel.transform : null;
                 for (float t = 0f; t < FlashDur; t += Time.unscaledDeltaTime)
