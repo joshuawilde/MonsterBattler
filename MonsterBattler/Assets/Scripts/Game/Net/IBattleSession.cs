@@ -25,5 +25,9 @@ namespace MonsterBattler.Game.Net
 
         /// <summary>Turn phase: submit our choice, yield until the opponent's arrives.</summary>
         IEnumerator ExchangeTurn(Choice mine, System.Action<Choice> onTheirs);
+
+        /// <summary>Tear down the connection (e.g. on forfeit/leave). The server sees the
+        /// disconnect as a forfeit and awards the opponent the win + Elo.</summary>
+        void Close();
     }
 }

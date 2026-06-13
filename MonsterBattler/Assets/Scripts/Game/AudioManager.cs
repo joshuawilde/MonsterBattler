@@ -64,9 +64,24 @@ namespace MonsterBattler.Game
             Add("boost", _boost); Add("unboost", _unboost); Add("hazard", _hazard);
             Add("item_off", _itemOff); Add("levelup", _levelUp); Add("charge", _charge);
 
-            // Click sound on every scene-authored button (dynamic cells call Play("click") directly).
+            // Click sound + light haptic on every scene-authored button (dynamic cells call
+            // Play("click") directly).
             foreach (var b in FindObjectsByType<UnityEngine.UI.Button>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-                b.onClick.AddListener(() => Play("click"));
+                b.onClick.AddListener(() => { Play("click"); HapticManager.UIClick(); });
+
+            ApplyAudioSettings(); // honor saved music/sfx on/off
+        }
+
+        /// <summary>Apply the saved music/sfx on-off prefs by muting the relevant sources. Mute
+        /// leaves volumes/crossfade state intact, so toggling back on resumes cleanly.</summary>
+        public void ApplyAudioSettings()
+        {
+            bool music = GameSettings.MusicEnabled, sfx = GameSettings.SfxEnabled;
+            if (_menuSrc != null) _menuSrc.mute = !music;
+            if (_stemBase != null) _stemBase.mute = !music;
+            if (_stemTension != null) _stemTension.mute = !music;
+            if (_stemTriumph != null) _stemTriumph.mute = !music;
+            if (_sfxSrc != null) _sfxSrc.mute = !sfx;
         }
 
         void Update()

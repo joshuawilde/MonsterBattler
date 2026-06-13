@@ -308,6 +308,7 @@ namespace MonsterBattler.Game
             if (_rematchButton != null) _rematchButton.onClick.AddListener(OnRematch);
             if (_endScreen != null) _endScreen.SetActive(false); // hidden until the battle ends
 
+            HapticManager.Init(); // spin up the Core Haptics engine now (avoids a first-hit frame spike)
             _logFeed.Add("Battle started!");
             FlushLog(); // surface any lead switch-in / weather / ability activations from Setup
             RefreshAll();
@@ -421,8 +422,8 @@ namespace MonsterBattler.Game
             bool forfeitWin = _session != null && _session.ForfeitWin;
             int winSide = forfeitWin ? _mySide : (_battle.WinningSide ?? -1);
             bool won = winSide == _mySide;
-            if (won) AudioManager.I?.PlayVictory();
-            else AudioManager.I?.PlayDefeat();
+            if (won) { AudioManager.I?.PlayVictory(); HapticManager.Victory(); }
+            else { AudioManager.I?.PlayDefeat(); HapticManager.Defeat(); }
             (string label, Color color) = winSide < 0
                 ? ("Draw", new Color(0.80f, 0.80f, 0.85f))
                 : won ? (forfeitWin ? "Opponent left — you win!" : "Victory!", new Color(0.30f, 0.78f, 0.33f))
@@ -525,7 +526,7 @@ namespace MonsterBattler.Game
                         string subLine = leveled ? StatDiffLine(g.species, g.oldLevel, g.newLevel)
                                                  : $"+{g.xp} XP  ·  {toNext} XP to Lv {g.oldLevel + 1}";
                         int shownXp = Mathf.RoundToInt(g.fracTo * Meta.MetaGame.XpPerLevel);
-                        if (leveled) AudioManager.Play("levelup");
+                        if (leveled) { AudioManager.Play("levelup"); HapticManager.LevelUp(); }
                         yield return card.Play(title, subLine, g.fracFrom, g.fracTo,
                                                leveled ? Meta.MetaGame.XpPerLevel : shownXp, Meta.MetaGame.XpPerLevel,
                                                leveled, unlockedText: "LEVEL UP!");
@@ -569,6 +570,22 @@ namespace MonsterBattler.Game
         {
             if (Application.CanStreamedLevelBeLoaded("MenuScene")) SceneManager.LoadScene("MenuScene");
             else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        /// <summary>True while a battle is live and pausable (not the end screen).</summary>
+        public bool InBattle => _battle != null && !_battle.IsFinished
+                                && (_endScreen == null || !_endScreen.activeSelf);
+
+        /// <summary>True for an online PvP match (vs a local bot battle).</summary>
+        public bool IsOnlineMatch => _session != null;
+
+        /// <summary>Forfeit/quit to the menu. Online: closes the session so the server awards the
+        /// opponent the win + Elo. Either way drops any KO time-warp first.</summary>
+        public void ForfeitMatch()
+        {
+            Time.timeScale = 1f;
+            if (_session != null) { try { _session.Close(); } catch { } _session = null; }
+            OnRematch();
         }
 
         IEnumerator PromptForcedSwitch() => PromptForcedSwitch(apply: true);
@@ -1001,11 +1018,15 @@ namespace MonsterBattler.Game
                             SpawnPopup(side, (d > 0 ? "+" : "") + d + "%", d > 0 ? HealBg : DmgBg);
                         if (tag == "-damage") View(side)?.PlayHit();
                         // Impact layer: shake scales with the chunk; big hits get a freeze-frame.
-                        if (tag == "-damage" && d < 0 && _fxScene != null)
+                        if (tag == "-damage" && d < 0)
                         {
                             float sev = Mathf.Clamp01(-d / 50f);
-                            _fxScene.Shake(Mathf.Lerp(0.03f, 0.16f, sev), 0.25f + 0.15f * sev);
-                            if (d <= -30) _fxScene.HitStop(0.07f);
+                            if (_fxScene != null)
+                            {
+                                _fxScene.Shake(Mathf.Lerp(0.03f, 0.16f, sev), 0.25f + 0.15f * sev);
+                                if (d <= -30) _fxScene.HitStop(0.07f);
+                            }
+                            HapticManager.Hit(sev); // rumble on every impact, matching the shake
                         }
                         if (tag == "-damage" && d < 0)
                             AudioManager.Play(d <= -30 ? "hit_super" : d >= -8 ? "hit_weak" : "hit");
@@ -1083,6 +1104,7 @@ namespace MonsterBattler.Game
                         SpawnPopup(side, "Fainted", FaintBg);
                         View(side)?.PlayFaint();
                         _fxScene?.KoMoment(); // slow-mo + white flash + shake
+                        HapticManager.Ko();   // big rumble
                         AudioManager.Play("faint");
                         UpdateBattleMood();
                         beat = true;
@@ -1107,7 +1129,7 @@ namespace MonsterBattler.Game
                 else if (tag == "-crit" && parts.Length > 2)
                 {
                     int side = SideForName(parts[2], active);
-                    if (side >= 0) { SpawnPopup(side, "Crit!", DmgBg); beat = true; }
+                    if (side >= 0) { SpawnPopup(side, "Crit!", DmgBg); HapticManager.Crit(); beat = true; }
                 }
                 else if (tag == "-miss" && parts.Length > 3)
                 {

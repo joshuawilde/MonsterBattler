@@ -1,0 +1,10 @@
+{
+  "Version": 1,
+  "Metadata": { "Project": "MonsterBattler", "Description": "Critical hit: sharp double snap" },
+  "Pattern": [
+    { "Event": { "Time": 0.0, "EventType": "HapticTransient",
+        "EventParameters": [ {"ParameterID":"HapticIntensity","ParameterValue":1.0}, {"ParameterID":"HapticSharpness","ParameterValue":1.0} ] } },
+    { "Event": { "Time": 0.08, "EventType": "HapticTransient",
+        "EventParameters": [ {"ParameterID":"HapticIntensity","ParameterValue":0.9}, {"ParameterID":"HapticSharpness","ParameterValue":1.0} ] } }
+  ]
+}
