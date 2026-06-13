@@ -254,8 +254,11 @@ namespace MonsterBattler.Game.Meta
                 _menuRoot.SetActive(true);
             }
             ShowHome();
-            StartCoroutine(OnlineCountLoop());
+            ShowOnlineCount(OnlinePresence.Count);          // current value
+            OnlinePresence.CountChanged += ShowOnlineCount; // live updates (survives battles)
         }
+
+        void OnDestroy() => OnlinePresence.CountChanged -= ShowOnlineCount;
 
         string Name(string id) =>
             _dex != null && _dex.Species.TryGetValue(id, out var sp) ? sp.Name : Pretty(id);
@@ -297,22 +300,13 @@ namespace MonsterBattler.Game.Meta
             if (_homeElo != null) _homeElo.text = $"{MetaGame.Profile.username}  ·  Elo {MetaGame.Profile.elo}";
         }
 
-        // Poll the live online count (heartbeats us too). Shown only when 2+ are online.
-        System.Collections.IEnumerator OnlineCountLoop()
+        // The "N online" label mirrors OnlinePresence (which heartbeats from a persistent object,
+        // so it keeps counting us as online even during a match). Shown only when 2+ are online.
+        void ShowOnlineCount(int n)
         {
-            if (_onlineCount != null) _onlineCount.gameObject.SetActive(false);
-            var wait = new WaitForSeconds(15f);
-            while (true)
-            {
-                if (BackendApi.Configured && _onlineCount != null)
-                    yield return BackendApi.Online(r =>
-                    {
-                        int n = r != null && r["count"] != null ? (int)r["count"] : 0;
-                        _onlineCount.gameObject.SetActive(n >= 2);
-                        if (n >= 2) _onlineCount.text = $"<color=#7affa0>●</color> {n} online";
-                    });
-                yield return wait;
-            }
+            if (_onlineCount == null) return;
+            _onlineCount.gameObject.SetActive(n >= 2);
+            if (n >= 2) _onlineCount.text = $"<color=#7affa0>●</color> {n} online";
         }
 
         void ShowBox()

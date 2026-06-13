@@ -134,7 +134,16 @@ namespace MonsterBattler.Game
             {
                 if (p == null) return;
                 Debug.Log($"[Backend] profile synced: {p.ToString(Newtonsoft.Json.Formatting.None)}");
-                ProfileSynced?.Invoke((string)p["username"], p["elo"] != null ? (int)p["elo"] : 0);
+                // Server owns the username (it auto-generates a unique one on account creation,
+                // e.g. Trainer4821). Adopt it locally so home matches the leaderboard.
+                string serverName = (string)p["username"];
+                int serverElo = p["elo"] != null ? (int)p["elo"] : 0;
+                if (!string.IsNullOrEmpty(serverName) && serverName != Meta.MetaGame.Profile.username)
+                {
+                    Meta.MetaGame.Profile.username = serverName;
+                    Meta.MetaGame.Save();
+                }
+                ProfileSynced?.Invoke(serverName, serverElo);
             }));
         }
 

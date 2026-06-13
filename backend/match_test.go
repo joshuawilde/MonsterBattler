@@ -28,6 +28,7 @@ func newMatchTestServer(t *testing.T) *httptest.Server {
 	s := &Server{Store: store, InternalKey: "k", Match: NewMatchmaker(store, NewBattleServers())}
 	mux := http.NewServeMux()
 	mux.Handle("POST /v1/profile/sync", s.WithAuth(s.ProfileSync))
+	mux.Handle("POST /v1/profile/username", s.WithAuth(s.SetUsername))
 	mux.Handle("POST /v1/match/queue", s.WithAuth(s.MatchQueue))
 	mux.Handle("GET /v1/match/status", s.WithAuth(s.MatchStatus))
 	mux.HandleFunc("POST /v1/internal/match-result", s.MatchResult)
@@ -38,8 +39,8 @@ func newMatchTestServer(t *testing.T) *httptest.Server {
 
 func TestMatchmakingStubFlow(t *testing.T) {
 	ts := newMatchTestServer(t)
-	call(t, ts, "POST", "/v1/profile/sync", "p1", `{"username":"One"}`, nil)
-	call(t, ts, "POST", "/v1/profile/sync", "p2", `{"username":"Two"}`, nil)
+	mkUser(t, ts, "p1", "One")
+	mkUser(t, ts, "p2", "Two")
 
 	// p1 queues alone → searching
 	_, b1 := call(t, ts, "POST", "/v1/match/queue", "p1", `{}`, nil)

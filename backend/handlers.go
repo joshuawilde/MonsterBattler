@@ -36,8 +36,19 @@ func readJSON(w http.ResponseWriter, r *http.Request, v any) bool {
 	return true
 }
 
-// POST /v1/profile/sync {username} → full profile (creates the user on first call)
+// POST /v1/profile/sync → full profile. Creates the account with an auto-generated unique
+// username on first call (the client adopts whatever name comes back). Never 409s.
 func (s *Server) ProfileSync(w http.ResponseWriter, r *http.Request, uid string) {
+	u, err := s.Store.EnsureUser(uid)
+	if err != nil {
+		http.Error(w, "server error", http.StatusInternalServerError)
+		return
+	}
+	writeJSON(w, http.StatusOK, u)
+}
+
+// POST /v1/profile/username {username} → explicit rename; 409 if taken.
+func (s *Server) SetUsername(w http.ResponseWriter, r *http.Request, uid string) {
 	var in struct{ Username string `json:"username"` }
 	if !readJSON(w, r, &in) {
 		return
@@ -47,13 +58,13 @@ func (s *Server) ProfileSync(w http.ResponseWriter, r *http.Request, uid string)
 		http.Error(w, "username must be 2-24 chars", http.StatusBadRequest)
 		return
 	}
-	u, err := s.Store.UpsertUser(uid, in.Username)
+	u, err := s.Store.SetUsername(uid, in.Username)
 	if err == ErrUsernameTaken {
 		http.Error(w, "username taken", http.StatusConflict)
 		return
 	}
 	if err != nil {
-		http.Error(w, "server error", http.StatusInternalServerError)
+		http.Error(w, "sync your profile first", http.StatusBadRequest)
 		return
 	}
 	writeJSON(w, http.StatusOK, u)

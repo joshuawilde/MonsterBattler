@@ -28,6 +28,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) { w.Write([]byte("ok")) })
 	mux.Handle("POST /v1/profile/sync", s.WithAuth(s.ProfileSync))
+	mux.Handle("POST /v1/profile/username", s.WithAuth(s.SetUsername))
 	mux.Handle("GET /v1/leaderboard", s.WithAuth(s.Leaderboard))
 	mux.Handle("GET /v1/friends", s.WithAuth(s.FriendsList))
 	mux.Handle("POST /v1/friends/request", s.WithAuth(s.FriendRequest))

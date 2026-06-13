@@ -21,6 +21,7 @@ func newTestServer(t *testing.T) *httptest.Server {
 	s := &Server{Store: store, InternalKey: "testkey"}
 	mux := http.NewServeMux()
 	mux.Handle("POST /v1/profile/sync", s.WithAuth(s.ProfileSync))
+	mux.Handle("POST /v1/profile/username", s.WithAuth(s.SetUsername))
 	mux.Handle("GET /v1/leaderboard", s.WithAuth(s.Leaderboard))
 	mux.Handle("GET /v1/friends", s.WithAuth(s.FriendsList))
 	mux.Handle("POST /v1/friends/request", s.WithAuth(s.FriendRequest))
@@ -31,6 +32,17 @@ func newTestServer(t *testing.T) *httptest.Server {
 	ts := httptest.NewServer(mux)
 	t.Cleanup(ts.Close)
 	return ts
+}
+
+// mkUser: create the account (auto-named) then set an explicit username, the real client flow.
+func mkUser(t *testing.T, ts *httptest.Server, uid, name string) {
+	t.Helper()
+	if code, _ := call(t, ts, "POST", "/v1/profile/sync", uid, `{}`, nil); code != 200 {
+		t.Fatalf("sync %s: %d", uid, code)
+	}
+	if code, _ := call(t, ts, "POST", "/v1/profile/username", uid, `{"username":"`+name+`"}`, nil); code != 200 {
+		t.Fatalf("setname %s=%s: %d", uid, name, code)
+	}
 }
 
 func call(t *testing.T, ts *httptest.Server, method, path, uid, body string, hdr map[string]string) (int, map[string]any) {
@@ -52,20 +64,23 @@ func call(t *testing.T, ts *httptest.Server, method, path, uid, body string, hdr
 	return res.StatusCode, out
 }
 
-func TestProfileSyncAndDuplicateName(t *testing.T) {
+func TestProfileSyncAutoNamesAndRename(t *testing.T) {
 	ts := newTestServer(t)
-	code, body := call(t, ts, "POST", "/v1/profile/sync", "u1", `{"username":"Josh"}`, nil)
-	if code != 200 || body["elo"].(float64) != 1000 {
-		t.Fatalf("sync: %d %v", code, body)
+	// sync auto-creates with a unique name, never 409, even for two fresh users
+	code, body := call(t, ts, "POST", "/v1/profile/sync", "u1", `{}`, nil)
+	if code != 200 || body["elo"].(float64) != 1000 || body["username"] == "" {
+		t.Fatalf("sync u1: %d %v", code, body)
 	}
-	code, _ = call(t, ts, "POST", "/v1/profile/sync", "u2", `{"username":"Josh"}`, nil)
-	if code != http.StatusConflict {
-		t.Fatalf("expected 409 for duplicate username, got %d", code)
+	if code, _ := call(t, ts, "POST", "/v1/profile/sync", "u2", `{}`, nil); code != 200 {
+		t.Fatalf("sync u2 must not 409: %d", code)
 	}
-	// renaming yourself to your own name is fine
-	code, _ = call(t, ts, "POST", "/v1/profile/sync", "u1", `{"username":"Josh"}`, nil)
-	if code != 200 {
-		t.Fatalf("re-sync own name: %d", code)
+	// explicit rename: u1 → Josh ok
+	if code, _ := call(t, ts, "POST", "/v1/profile/username", "u1", `{"username":"Josh"}`, nil); code != 200 {
+		t.Fatalf("rename u1: %d", code)
+	}
+	// u2 → Josh is taken → 409
+	if code, _ := call(t, ts, "POST", "/v1/profile/username", "u2", `{"username":"Josh"}`, nil); code != http.StatusConflict {
+		t.Fatalf("expected 409 renaming to taken name, got %d", code)
 	}
 }
 
@@ -79,8 +94,8 @@ func TestAuthRequired(t *testing.T) {
 
 func TestFriendFlow(t *testing.T) {
 	ts := newTestServer(t)
-	call(t, ts, "POST", "/v1/profile/sync", "u1", `{"username":"Ann"}`, nil)
-	call(t, ts, "POST", "/v1/profile/sync", "u2", `{"username":"Bob"}`, nil)
+	mkUser(t, ts, "u1", "Ann")
+	mkUser(t, ts, "u2", "Bob")
 
 	if code, _ := call(t, ts, "POST", "/v1/friends/request", "u1", `{"username":"Bob"}`, nil); code != 200 {
 		t.Fatalf("request: %d", code)
@@ -113,8 +128,8 @@ func TestFriendFlow(t *testing.T) {
 
 func TestMatchResultEloAndLeaderboard(t *testing.T) {
 	ts := newTestServer(t)
-	call(t, ts, "POST", "/v1/profile/sync", "u1", `{"username":"Ann"}`, nil)
-	call(t, ts, "POST", "/v1/profile/sync", "u2", `{"username":"Bob"}`, nil)
+	mkUser(t, ts, "u1", "Ann")
+	mkUser(t, ts, "u2", "Bob")
 
 	// wrong key rejected
 	code, _ := call(t, ts, "POST", "/v1/internal/match-result", "", `{}`, map[string]string{"X-Api-Key": "nope"})

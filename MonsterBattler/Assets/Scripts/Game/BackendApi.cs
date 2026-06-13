@@ -39,7 +39,7 @@ namespace MonsterBattler.Game
         /// "taken" (409) distinctly from network errors. ok=true → profile returned.</summary>
         public static IEnumerator SetUsername(string username, System.Action<bool /*ok*/, bool /*taken*/, JObject> onDone)
         {
-            using var req = new UnityWebRequest(BaseUrl + "/v1/profile/sync", "POST");
+            using var req = new UnityWebRequest(BaseUrl + "/v1/profile/username", "POST");
             req.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
                 new JObject { ["username"] = username }.ToString()));
             req.downloadHandler = new DownloadHandlerBuffer();

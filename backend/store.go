@@ -1,8 +1,10 @@
 package main
 
 import (
+	"crypto/rand"
 	"database/sql"
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 
@@ -61,18 +63,54 @@ type User struct {
 
 var ErrUsernameTaken = errors.New("username taken")
 
-// UpsertUser creates the user on first sync; later syncs may rename (if free).
-func (s *Store) UpsertUser(uid, username string) (User, error) {
+// EnsureUser returns the existing user, or creates one with an auto-generated unique username
+// (e.g. "Trainer4821"). Never fails on a name collision — used by the launch-time profile sync,
+// which must always succeed so the player can play. Existing users keep their chosen name.
+func (s *Store) EnsureUser(uid string) (User, error) {
+	if u, err := s.GetUser(uid); err == nil {
+		return u, nil // already exists — don't touch the username
+	} else if err != sql.ErrNoRows {
+		return User{}, err
+	}
 	now := time.Now().Unix()
-	_, err := s.db.Exec(`INSERT INTO users (uid, username, elo, created_at) VALUES (?, ?, 1000, ?)
-		ON CONFLICT(uid) DO UPDATE SET username = excluded.username`, uid, username, now)
+	for attempt := 0; attempt < 20; attempt++ {
+		name := randomUsername()
+		_, err := s.db.Exec(`INSERT INTO users (uid, username, elo, created_at) VALUES (?, ?, 1000, ?)`,
+			uid, name, now)
+		if err == nil {
+			return s.GetUser(uid)
+		}
+		if !isUniqueErr(err) {
+			return User{}, err
+		}
+		if u, e := s.GetUser(uid); e == nil {
+			return u, nil // uid created concurrently
+		}
+		// else: name collided — loop and try another
+	}
+	return User{}, errors.New("could not allocate a username")
+}
+
+// SetUsername is the EXPLICIT rename (username editor): strictly unique, errors if taken.
+func (s *Store) SetUsername(uid, username string) (User, error) {
+	res, err := s.db.Exec(`UPDATE users SET username = ? WHERE uid = ?`, username, uid)
 	if err != nil {
 		if isUniqueErr(err) {
 			return User{}, ErrUsernameTaken
 		}
 		return User{}, err
 	}
+	if n, _ := res.RowsAffected(); n == 0 {
+		return User{}, sql.ErrNoRows // no such user yet
+	}
 	return s.GetUser(uid)
+}
+
+func randomUsername() string {
+	var b [3]byte
+	_, _ = rand.Read(b[:])
+	n := (int(b[0])<<16 | int(b[1])<<8 | int(b[2])) % 10000
+	return fmt.Sprintf("Trainer%04d", n)
 }
 
 func isUniqueErr(err error) bool {
