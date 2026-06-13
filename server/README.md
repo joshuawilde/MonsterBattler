@@ -22,6 +22,22 @@ Pieces, individually:
 - Docker running.
 - `rivet login` once (interactive browser auth).
 
+## Rivet deploy status (2026-06-12)
+
+- Project: **`monsterbattl-nwo`** (display "MonsterBattler", game_id `7ab7fe31-…`), envs `prod` + `staging`.
+- Auth: CLI reads the cloud token from `RIVET_CLOUD_TOKEN` env (in `secrets/rivet.env`, gitignored).
+- **Build IS deployed to prod**: `RIVET_CLOUD_TOKEN=… rivet deploy -e prod` builds the amd64 image
+  and uploads it. Two gotchas hit + fixed/worked-around:
+  1. Rivet rejects root containers → Dockerfile now adds a non-root `USER 10001`.
+  2. The deploy's final tag step 500s (Rivet-side), leaving the build untagged. Workaround:
+     `rivet build patch-tags <BUILD_ID> -e prod -t name=game,current=true`. Done — the current
+     prod build is tagged `name=game, current=true` (what actors reference).
+- **BLOCKED — actor runtime errors**: `rivet actor create/list` and the `/actors` REST API all
+  return 500 "internal error" for this project. Build management works; the actor *runtime* does
+  not. Likely the project predates Rivet's current actors platform (it has old namespaces/versions)
+  or needs migration on rivet.dev. Resolve via Rivet support (quote a ray_id) or recreate the
+  project on the current platform, then the matchmaking backend's actors.create will work unchanged.
+
 ## Known notes
 
 - **Local `docker run` crashes on Apple Silicon** with a Mono JIT assertion
