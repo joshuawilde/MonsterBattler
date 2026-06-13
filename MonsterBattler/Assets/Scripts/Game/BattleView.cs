@@ -1046,7 +1046,7 @@ namespace MonsterBattler.Game
                         string moveId = parts[3].ToLowerInvariant().Replace(" ", "").Replace("-", "").Replace("'", "");
                         if (_battle.Dex.Moves.TryGetValue(moveId, out var md))
                         {
-                            HapticManager.Move(md.Type.ToString()); // type-flavored cast buzz, synced with the VFX
+                            // (haptics now fire from FxScene at each effect's keyframe — see HapticManager.Effect)
                             var atkT = View(side)?.transform;
                             var defT = View(1 - side)?.transform;
                             if (atkT != null && defT != null)

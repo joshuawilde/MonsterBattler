@@ -77,13 +77,14 @@ namespace MonsterBattler.Game.UI
         public void ShowEffect(string sprite, State from, State to, Ease ease, Fade fade, float arcY = 0f)
         {
             if (_fxPrefab == null || !_byName.TryGetValue(sprite, out var spr)) return;
-            StartCoroutine(RunEffect(spr, from, to, ease, fade, arcY));
+            StartCoroutine(RunEffect(sprite, spr, from, to, ease, fade, arcY));
         }
 
-        IEnumerator RunEffect(Sprite spr, State from, State to, Ease ease, Fade fade, float arcY)
+        IEnumerator RunEffect(string name, Sprite spr, State from, State to, Ease ease, Fade fade, float arcY)
         {
             _running++;
             if (from.timeMs > 0f) yield return new WaitForSeconds(from.timeMs / 1000f);
+            HapticManager.Effect(name, fade == Fade.Explode); // keyframed buzz the instant the sprite lands
 
             var sr = Instantiate(_fxPrefab, transform);
             sr.gameObject.SetActive(true);
@@ -134,6 +135,7 @@ namespace MonsterBattler.Game.UI
         {
             _running++;
             if (delay > 0f) yield return new WaitForSeconds(delay);
+            HapticManager.Flash(opacity); // keyframed thud on the flash beat (explosions, lightning bg)
             float half = dur / 2f;
             for (float t = 0f; t < dur; t += UnityEngine.Time.deltaTime)
             {

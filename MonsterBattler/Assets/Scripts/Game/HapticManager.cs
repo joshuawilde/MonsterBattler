@@ -39,26 +39,34 @@ namespace MonsterBattler.Game
         /// <summary>Light tap for UI taps / minor beats.</summary>
         public static void UIClick() => Transient(0.35f, 0.6f);
 
-        /// <summary>A move firing — flavored by its type so it reads like the move (Ground rumbles,
-        /// Electric snaps, Fire whooshes…). Played at cast time, alongside the move's VFX; the
-        /// landing damage adds its own <see cref="Hit"/> on top.</summary>
-        public static void Move(string typeName)
+        /// <summary>Keyframed VFX haptic: fired by <see cref="UI.FxScene"/> at the exact frame each
+        /// effect sprite appears, so the buzz lands on the visual beat (the lightning bolt snaps, the
+        /// fist connects, the rock thuds). Flavored by which library sprite it is; projectiles/
+        /// cosmetics (orb/leaf/item) stay silent so we don't buzz on every in-flight frame.
+        /// explode = a Fade.Explode burst → a short boom regardless of sprite.</summary>
+        public static void Effect(string librarySprite, bool explode)
         {
-            switch ((typeName ?? "").ToLowerInvariant())
+            if (explode) { Continuous(0.9f, 0.3f, 0.16f); return; } // explosion boom
+            switch (librarySprite)
             {
-                case "ground": case "rock":      Continuous(0.95f, 0.18f, 0.38f); break; // heavy rumble (earthquake)
-                case "electric":                 Transient(0.95f, 1.0f); break;          // sharp zap (lightning)
-                case "fire":                     Continuous(0.75f, 0.6f, 0.22f); break;   // burst/whoosh
-                case "water":                    Continuous(0.55f, 0.35f, 0.25f); break;  // surge
-                case "ice":                      Transient(0.7f, 0.85f); break;           // sharp crack
-                case "fighting": case "steel":   Transient(1.0f, 0.8f); break;            // hard strike
-                case "dragon": case "dark":      Continuous(0.85f, 0.4f, 0.28f); break;   // ominous growl
-                case "grass": case "bug":        Transient(0.45f, 0.45f); break;          // soft
-                case "psychic": case "fairy":    Transient(0.5f, 0.75f); break;           // shimmer
-                case "ghost": case "poison":     Continuous(0.5f, 0.3f, 0.3f); break;     // eerie
-                case "flying":                   Transient(0.45f, 0.6f); break;           // gust
-                default:                          Transient(0.55f, 0.55f); break;
+                case "impact":    Transient(0.85f, 0.9f); break;  // burst hit
+                case "fist":      Transient(1.0f, 0.7f); break;   // heavy punch
+                case "slash":     Transient(0.8f, 1.0f); break;   // sharp slash
+                case "lightning": Transient(0.95f, 1.0f); break;  // zap (Thunderbolt's bolt)
+                case "icicle":    Transient(0.7f, 0.9f); break;   // crack
+                case "rock":      Transient(0.9f, 0.4f); break;   // earthy thud (Earthquake)
+                case "spike":     Transient(0.5f, 0.6f); break;
+                case "web":       Transient(0.35f, 0.5f); break;
+                case "ring":      Transient(0.5f, 0.55f); break;  // generic burst/shimmer (light)
+                // orb, leaf, item → silent (projectiles / cosmetics)
             }
+        }
+
+        /// <summary>Keyframed full-screen flash (explosions, lightning bg) → a low thud. Skips faint
+        /// tints so subtle background washes don't buzz.</summary>
+        public static void Flash(float opacity)
+        {
+            if (opacity >= 0.25f) Continuous(Mathf.Clamp01(0.45f + opacity), 0.22f, 0.16f);
         }
 
         /// <summary>An incoming hit; severity 0 (chip) → 1 (huge chunk) scales the thump.
