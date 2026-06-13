@@ -16,6 +16,7 @@ type Server struct {
 	Store       *Store
 	Auth        *fbauth.Client
 	Push        *messaging.Client
+	Match       *Matchmaker
 	InternalKey string // shared secret for the battle server's result reports
 }
 
@@ -167,6 +168,59 @@ func (s *Server) RegisterDevice(w http.ResponseWriter, r *http.Request, uid stri
 	writeJSON(w, http.StatusOK, map[string]any{"ok": true})
 }
 
+// POST /v1/match/queue → enqueue + return current status (same shape as /v1/match/status)
+func (s *Server) MatchQueue(w http.ResponseWriter, r *http.Request, uid string) {
+	u, err := s.Store.GetUser(uid)
+	if err != nil {
+		http.Error(w, "sync your profile first", http.StatusBadRequest)
+		return
+	}
+	s.Match.Enqueue(uid, u.Username, u.Elo)
+	s.writeMatchStatus(w, uid)
+}
+
+// GET /v1/match/status → {state, host, port, opponent?} — clients poll this after queuing.
+func (s *Server) MatchStatus(w http.ResponseWriter, r *http.Request, uid string) {
+	s.writeMatchStatus(w, uid)
+}
+
+// POST /v1/match/cancel → leave the queue (only effective while still waiting)
+func (s *Server) MatchCancel(w http.ResponseWriter, r *http.Request, uid string) {
+	s.Match.Cancel(uid)
+	writeJSON(w, http.StatusOK, map[string]any{"state": "idle"})
+}
+
+func (s *Server) writeMatchStatus(w http.ResponseWriter, uid string) {
+	m := s.Match.Status(uid)
+	if m == nil {
+		writeJSON(w, http.StatusOK, map[string]any{"state": "idle"})
+		return
+	}
+	resp := map[string]any{}
+	switch m.State {
+	case stateWaiting:
+		resp["state"] = "searching"
+	case stateError:
+		resp["state"] = "error"
+		resp["error"] = m.Err
+	case stateReady:
+		resp["state"] = "ready"
+		resp["host"] = m.Host
+		resp["port"] = m.Port
+		// who's the opponent + which sim side is this caller (matches NetBattleManager join order)
+		oppUid := m.UID1
+		resp["side"] = 0
+		if uid == m.UID1 {
+			oppUid, resp["side"] = m.UID0, 1
+		}
+		if opp, err := s.Store.GetUser(oppUid); err == nil {
+			resp["opponent"] = opp.Username
+			resp["opponentElo"] = opp.Elo
+		}
+	}
+	writeJSON(w, http.StatusOK, resp)
+}
+
 // POST /v1/internal/match-result {uid0, uid1, winnerSide} — battle server only (X-Api-Key).
 // winnerSide: 0, 1, or -1 for a draw. Elo is computed HERE so clients can't forge ratings.
 func (s *Server) MatchResult(w http.ResponseWriter, r *http.Request) {
@@ -209,6 +263,9 @@ func (s *Server) MatchResult(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("match: %s(%d→%d) vs %s(%d→%d) winner=%d",
 		u0.Username, u0.Elo, newElo0, u1.Username, u1.Elo, newElo1, in.WinnerSide)
+	if s.Match != nil {
+		s.Match.Finish(in.Uid0, in.Uid1) // destroy the per-match actor
+	}
 	writeJSON(w, http.StatusOK, map[string]any{"elo0": newElo0, "elo1": newElo1})
 }
 
