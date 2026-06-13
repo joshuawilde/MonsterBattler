@@ -72,6 +72,12 @@ namespace MonsterBattler.Game
         public static IEnumerator Online(System.Action<JObject> onDone)
             => Get("/v1/online", onDone);
 
+        public static IEnumerator GetSave(System.Action<JObject> onDone)
+            => Get("/v1/save", onDone);
+
+        public static IEnumerator PutSave(int rev, string data, System.Action<JObject> onDone = null)
+            => Put("/v1/save", new JObject { ["rev"] = rev, ["data"] = data }, onDone);
+
         public static IEnumerator MatchQueue(System.Action<JObject> onDone)
             => Post("/v1/match/queue", new JObject(), onDone);
 
@@ -90,8 +96,14 @@ namespace MonsterBattler.Game
         }
 
         static IEnumerator Post(string path, JObject body, System.Action<JObject> onDone)
+            => Body(path, "POST", body, onDone);
+
+        static IEnumerator Put(string path, JObject body, System.Action<JObject> onDone)
+            => Body(path, "PUT", body, onDone);
+
+        static IEnumerator Body(string path, string method, JObject body, System.Action<JObject> onDone)
         {
-            using var req = new UnityWebRequest(BaseUrl + path, "POST");
+            using var req = new UnityWebRequest(BaseUrl + path, method);
             req.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(body.ToString()));
             req.downloadHandler = new DownloadHandlerBuffer();
             req.SetRequestHeader("Content-Type", "application/json");

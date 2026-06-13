@@ -38,6 +38,12 @@ CREATE TABLE IF NOT EXISTS devices (
   platform   TEXT NOT NULL DEFAULT '',
   updated_at INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS saves (
+  uid        TEXT PRIMARY KEY,        -- one cloud save blob per user (collection/coins/team/…)
+  rev        INTEGER NOT NULL,        -- client's monotonic revision; last-write-wins
+  data       TEXT NOT NULL,           -- opaque PlayerProfile JSON
+  updated_at INTEGER NOT NULL
+);
 CREATE INDEX IF NOT EXISTS idx_users_elo ON users (elo DESC);
 CREATE INDEX IF NOT EXISTS idx_devices_uid ON devices (uid);`)
 	if err != nil {
@@ -197,6 +203,34 @@ func (s *Store) RegisterDevice(uid, token, platform string) error {
 		ON CONFLICT(token) DO UPDATE SET uid = excluded.uid, platform = excluded.platform, updated_at = excluded.updated_at`,
 		token, uid, platform, time.Now().Unix())
 	return err
+}
+
+// ---- cloud save (collection blob) -------------------------------------------------------------
+
+// GetSave returns the stored rev + blob (rev 0, "" when none).
+func (s *Store) GetSave(uid string) (int, string, error) {
+	var rev int
+	var data string
+	err := s.db.QueryRow(`SELECT rev, data FROM saves WHERE uid = ?`, uid).Scan(&rev, &data)
+	if err == sql.ErrNoRows {
+		return 0, "", nil
+	}
+	return rev, data, err
+}
+
+// PutSave stores the blob only if rev is newer (last-write-wins). Returns the resulting rev.
+func (s *Store) PutSave(uid string, rev int, data string) (int, error) {
+	cur, _, err := s.GetSave(uid)
+	if err != nil {
+		return 0, err
+	}
+	if rev < cur {
+		return cur, nil // stale write — keep the newer cloud copy
+	}
+	_, err = s.db.Exec(`INSERT INTO saves (uid, rev, data, updated_at) VALUES (?, ?, ?, ?)
+		ON CONFLICT(uid) DO UPDATE SET rev = excluded.rev, data = excluded.data, updated_at = excluded.updated_at`,
+		uid, rev, data, time.Now().Unix())
+	return rev, err
 }
 
 func (s *Store) DeviceTokens(uid string) ([]string, error) {

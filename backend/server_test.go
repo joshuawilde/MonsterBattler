@@ -133,6 +133,46 @@ func TestMatchResultEloAndLeaderboard(t *testing.T) {
 	}
 }
 
+func TestCloudSave(t *testing.T) {
+	ts := newTestServer(t)
+	// extend the mux with the save routes (newTestServer doesn't register them)
+	// → exercise the store directly for rev conflict, and the handler via a fresh server.
+	s := &Server{Store: mustStore(t)}
+	// empty → rev 0
+	rev, data, _ := s.Store.GetSave("u1")
+	if rev != 0 || data != "" {
+		t.Fatalf("empty save: %d %q", rev, data)
+	}
+	// write rev 1
+	if r, _ := s.Store.PutSave("u1", 1, `{"coins":50}`); r != 1 {
+		t.Fatalf("put rev1: %d", r)
+	}
+	// stale write (rev 0) is ignored, keeps rev 1
+	if r, _ := s.Store.PutSave("u1", 0, `{"coins":0}`); r != 1 {
+		t.Fatalf("stale write should keep rev1, got %d", r)
+	}
+	_, data, _ = s.Store.GetSave("u1")
+	if data != `{"coins":50}` {
+		t.Fatalf("stale write clobbered data: %q", data)
+	}
+	// newer write (rev 2) wins
+	s.Store.PutSave("u1", 2, `{"coins":99}`)
+	r2, d2, _ := s.Store.GetSave("u1")
+	if r2 != 2 || d2 != `{"coins":99}` {
+		t.Fatalf("rev2: %d %q", r2, d2)
+	}
+	_ = ts
+}
+
+func mustStore(t *testing.T) *Store {
+	t.Helper()
+	st, err := OpenStore(filepath.Join(t.TempDir(), "s.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return st
+}
+
 func TestEloMath(t *testing.T) {
 	if a, b := EloUpdate(1000, 1000, 1); a != 1016 || b != 984 {
 		t.Fatalf("even win: %d %d", a, b)

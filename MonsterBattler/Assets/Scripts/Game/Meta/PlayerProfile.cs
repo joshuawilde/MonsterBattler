@@ -14,6 +14,7 @@ namespace MonsterBattler.Game.Meta
         public string username = "You";      // shown on the matchmaking / result screens
         public int elo = 1000;               // ranked rating (standard Elo vs calibrated bots)
         public int gamesPlayed = 0;          // for the provisional (high-K) rating period
+        public int rev = 0;                  // monotonic save revision (cloud last-write-wins)
 
         public List<MonMoves> monMoves = new();  // per-species move unlocks / equips
     }

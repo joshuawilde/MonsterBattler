@@ -35,6 +35,8 @@ func main() {
 	mux.Handle("DELETE /v1/friends/{uid}", s.WithAuth(s.FriendRemove))
 	mux.Handle("POST /v1/devices", s.WithAuth(s.RegisterDevice))
 	mux.Handle("GET /v1/online", s.WithAuth(s.Online))
+	mux.Handle("GET /v1/save", s.WithAuth(s.GetSave))
+	mux.Handle("PUT /v1/save", s.WithAuth(s.PutSave))
 	mux.Handle("POST /v1/match/queue", s.WithAuth(s.MatchQueue))
 	mux.Handle("GET /v1/match/status", s.WithAuth(s.MatchStatus))
 	mux.Handle("POST /v1/match/cancel", s.WithAuth(s.MatchCancel))

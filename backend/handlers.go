@@ -170,6 +170,37 @@ func (s *Server) RegisterDevice(w http.ResponseWriter, r *http.Request, uid stri
 	writeJSON(w, http.StatusOK, map[string]any{"ok": true})
 }
 
+// GET /v1/save → {rev, data} (the player's cloud collection blob; rev 0 / "" when none).
+func (s *Server) GetSave(w http.ResponseWriter, r *http.Request, uid string) {
+	rev, data, err := s.Store.GetSave(uid)
+	if err != nil {
+		http.Error(w, "server error", http.StatusInternalServerError)
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"rev": rev, "data": data})
+}
+
+// PUT /v1/save {rev, data} → {rev} (stored only if newer; returns the winning rev).
+func (s *Server) PutSave(w http.ResponseWriter, r *http.Request, uid string) {
+	var in struct {
+		Rev  int    `json:"rev"`
+		Data string `json:"data"`
+	}
+	if !readJSON(w, r, &in) {
+		return
+	}
+	if len(in.Data) > 1<<20 { // 1MB cap — a save blob is a few KB
+		http.Error(w, "save too large", http.StatusBadRequest)
+		return
+	}
+	rev, err := s.Store.PutSave(uid, in.Rev, in.Data)
+	if err != nil {
+		http.Error(w, "server error", http.StatusInternalServerError)
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]any{"rev": rev})
+}
+
 // GET /v1/online → {count} of players seen recently (includes the caller, who is marked online).
 func (s *Server) Online(w http.ResponseWriter, r *http.Request, uid string) {
 	writeJSON(w, http.StatusOK, map[string]any{"count": s.Presence.Touch(uid, time.Now())})

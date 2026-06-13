@@ -85,10 +85,35 @@ namespace MonsterBattler.Game.Meta
             return p;
         }
 
+        /// <summary>Raised after every local save — CloudSync listens to push the blob up.</summary>
+        public static event System.Action Saved;
+
         public static void Save()
         {
+            _profile.rev++; // monotonic; the cloud uses it for last-write-wins
             try { System.IO.File.WriteAllText(SavePath, JsonUtility.ToJson(_profile)); }
             catch (System.Exception e) { Debug.LogWarning($"[MetaGame] save failed: {e.Message}"); }
+            Saved?.Invoke();
+        }
+
+        /// <summary>Current save serialized for the cloud, plus its revision.</summary>
+        public static (int rev, string json) Snapshot() => (_profile.rev, JsonUtility.ToJson(_profile));
+
+        /// <summary>Replace the local profile with a cloud blob (used when the cloud is newer, e.g.
+        /// signing in on a new device). Keeps the server-authoritative username/elo passed in.</summary>
+        public static void ApplyCloud(string json, string authUsername, int authElo)
+        {
+            try
+            {
+                var loaded = JsonUtility.FromJson<PlayerProfile>(json);
+                if (loaded == null) return;
+                if (!string.IsNullOrEmpty(authUsername)) loaded.username = authUsername;
+                if (authElo > 0) loaded.elo = authElo;
+                _profile = loaded;
+                System.IO.File.WriteAllText(SavePath, JsonUtility.ToJson(_profile));
+                Debug.Log($"[MetaGame] applied cloud save rev {_profile.rev}");
+            }
+            catch (System.Exception e) { Debug.LogWarning($"[MetaGame] applyCloud failed: {e.Message}"); }
         }
 
         static void GrantStarter(PlayerProfile p)

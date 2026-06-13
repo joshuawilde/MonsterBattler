@@ -29,7 +29,7 @@ namespace MonsterBattler.Game
         {
             var u = _auth?.CurrentUser;
             if (u == null) return "Offline — local identity";
-            if (u.IsAnonymous) return "Guest account\n<size=70%>Progress is saved to this device's identity.\nSign in to keep it across devices.</size>";
+            if (u.IsAnonymous) return "Guest account\n<size=70%>Your collection is backed up, but tied to this device.\nSign in with Apple or Google to keep it if you\nreinstall or switch devices.</size>";
             string who = !string.IsNullOrEmpty(u.DisplayName) ? u.DisplayName
                        : !string.IsNullOrEmpty(u.Email) ? u.Email : u.UserId.Substring(0, 8);
             return $"Signed in as {who}";
@@ -123,11 +123,19 @@ namespace MonsterBattler.Game
             });
         }
 
+        /// <summary>Raised after the initial profile sync with the server-authoritative
+        /// username + Elo. CloudSync uses it to pull/merge the collection blob.</summary>
+        public static event System.Action<string /*username*/, int /*elo*/> ProfileSynced;
+
         void SyncProfile()
         {
             if (!BackendApi.Configured) return;
-            StartCoroutine(BackendApi.SyncProfile(Meta.MetaGame.Profile.username,
-                p => { if (p != null) Debug.Log($"[Backend] profile synced: {p.ToString(Newtonsoft.Json.Formatting.None)}"); }));
+            StartCoroutine(BackendApi.SyncProfile(Meta.MetaGame.Profile.username, p =>
+            {
+                if (p == null) return;
+                Debug.Log($"[Backend] profile synced: {p.ToString(Newtonsoft.Json.Formatting.None)}");
+                ProfileSynced?.Invoke((string)p["username"], p["elo"] != null ? (int)p["elo"] : 0);
+            }));
         }
 
         // TokenProvider is synchronous; serve the cached token and refresh it in the background

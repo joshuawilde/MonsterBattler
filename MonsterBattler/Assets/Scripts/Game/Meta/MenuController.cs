@@ -281,6 +281,13 @@ namespace MonsterBattler.Game.Meta
             RefreshHome();
         }
 
+        /// <summary>Called by CloudSync after restoring a newer cloud save — refresh visible UI.</summary>
+        public void OnCloudRestored()
+        {
+            RefreshHome();
+            if (_boxPanel != null && _boxPanel.activeSelf) PopulateBox();
+        }
+
         // Update the home labels in place (no panel switch) — used after a username change.
         void RefreshHome()
         {
