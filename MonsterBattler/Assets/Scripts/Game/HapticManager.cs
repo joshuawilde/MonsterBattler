@@ -1,16 +1,15 @@
-using UnityEngine;
-#if UNITY_IOS && !UNITY_EDITOR
 using UnityCoreHaptics;
-#endif
+using UnityEngine;
 
 namespace MonsterBattler.Game
 {
     /// <summary>
     /// Battle haptics via iOS Core Haptics (UnityCoreHaptics plugin). Rich signature moments
     /// (KO, crit, victory…) play authored AHAP files from StreamingAssets/Haptics; variable hits
-    /// use scaled transient taps. No-ops on non-iOS / unsupported devices / when disabled.
-    /// Call <see cref="Init"/> once at battle start to spin up the engine (avoids a first-play
-    /// frame spike). All public methods are safe to call from anywhere on the main thread.
+    /// and move "casts" use parameterized transient/continuous patterns. Every entry point no-ops
+    /// off-iOS / on unsupported devices / when disabled — <see cref="UnityCoreHapticsProxy"/>'s own
+    /// methods are platform-guarded, and <see cref="Ready"/> gates on support + the user pref.
+    /// Call <see cref="Init"/> once at battle start to spin up the engine (avoids a first-play spike).
     /// </summary>
     public static class HapticManager
     {
@@ -22,10 +21,8 @@ namespace MonsterBattler.Game
             if (_initialized) return;
             _initialized = true;
             Enabled = GameSettings.HapticsEnabled;
-#if UNITY_IOS && !UNITY_EDITOR
-            _supported = UnityCoreHapticsProxy.SupportsCoreHaptics();
+            _supported = UnityCoreHapticsProxy.SupportsCoreHaptics(); // false off-iOS
             if (_supported) UnityCoreHapticsProxy.CreateEngine();
-#endif
         }
 
         static bool Ready
@@ -42,6 +39,28 @@ namespace MonsterBattler.Game
         /// <summary>Light tap for UI taps / minor beats.</summary>
         public static void UIClick() => Transient(0.35f, 0.6f);
 
+        /// <summary>A move firing — flavored by its type so it reads like the move (Ground rumbles,
+        /// Electric snaps, Fire whooshes…). Played at cast time, alongside the move's VFX; the
+        /// landing damage adds its own <see cref="Hit"/> on top.</summary>
+        public static void Move(string typeName)
+        {
+            switch ((typeName ?? "").ToLowerInvariant())
+            {
+                case "ground": case "rock":      Continuous(0.95f, 0.18f, 0.38f); break; // heavy rumble (earthquake)
+                case "electric":                 Transient(0.95f, 1.0f); break;          // sharp zap (lightning)
+                case "fire":                     Continuous(0.75f, 0.6f, 0.22f); break;   // burst/whoosh
+                case "water":                    Continuous(0.55f, 0.35f, 0.25f); break;  // surge
+                case "ice":                      Transient(0.7f, 0.85f); break;           // sharp crack
+                case "fighting": case "steel":   Transient(1.0f, 0.8f); break;            // hard strike
+                case "dragon": case "dark":      Continuous(0.85f, 0.4f, 0.28f); break;   // ominous growl
+                case "grass": case "bug":        Transient(0.45f, 0.45f); break;          // soft
+                case "psychic": case "fairy":    Transient(0.5f, 0.75f); break;           // shimmer
+                case "ghost": case "poison":     Continuous(0.5f, 0.3f, 0.3f); break;     // eerie
+                case "flying":                   Transient(0.45f, 0.6f); break;           // gust
+                default:                          Transient(0.55f, 0.55f); break;
+            }
+        }
+
         /// <summary>An incoming hit; severity 0 (chip) → 1 (huge chunk) scales the thump.
         /// Big hits play the richer thud pattern.</summary>
         public static void Hit(float severity)
@@ -52,7 +71,7 @@ namespace MonsterBattler.Game
         }
 
         /// <summary>Critical hit — sharp double snap.</summary>
-        public static void Crit() { if (!PlayFile("Haptics/crit.ahap")) { Transient(0.9f, 1f); } }
+        public static void Crit() { if (!PlayFile("Haptics/crit.ahap")) Transient(0.9f, 1f); }
 
         /// <summary>Super-effective / very heavy blow.</summary>
         public static void SuperEffective() { if (!PlayFile("Haptics/supereffective.ahap")) Transient(1f, 0.9f); }
@@ -74,31 +93,23 @@ namespace MonsterBattler.Game
         public static void Transient(float intensity, float sharpness)
         {
             if (!Ready) return;
-#if UNITY_IOS && !UNITY_EDITOR
             UnityCoreHapticsProxy.PlayTransientHaptics(Mathf.Clamp01(intensity), Mathf.Clamp01(sharpness));
-#endif
         }
 
         public static void Continuous(float intensity, float sharpness, float duration)
         {
             if (!Ready) return;
-#if UNITY_IOS && !UNITY_EDITOR
             UnityCoreHapticsProxy.PlayContinuousHaptics(Mathf.Clamp01(intensity), Mathf.Clamp01(sharpness), duration);
-#endif
         }
 
-        /// <summary>Play an AHAP file under StreamingAssets; returns false if missing/unavailable so
-        /// callers can fall back to a transient.</summary>
+        /// <summary>Play an AHAP file under StreamingAssets; returns false if missing so callers can
+        /// fall back to a transient. Returns true (handled) when haptics are off/unsupported.</summary>
         static bool PlayFile(string relativePath)
         {
-            if (!Ready) return true; // treat as "handled" (no-op) so we don't also fire a fallback
-#if UNITY_IOS && !UNITY_EDITOR
-            if (!UnityCoreHaptics.Utility.FileExists(relativePath)) return false;
+            if (!Ready) return true;
+            if (!Utility.FileExists(relativePath)) return false;
             UnityCoreHapticsProxy.PlayHapticsFromFile(relativePath);
             return true;
-#else
-            return true;
-#endif
         }
     }
 }

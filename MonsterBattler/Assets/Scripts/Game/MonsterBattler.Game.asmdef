@@ -6,7 +6,8 @@
         "Unity.InputSystem",
         "Unity.TextMeshPro",
         "UnityEngine.UI",
-        "Coffee.UIParticle"
+        "Coffee.UIParticle",
+        "UnityCoreHaptics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
