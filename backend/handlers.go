@@ -205,9 +205,9 @@ func (s *Server) writeMatchStatus(w http.ResponseWriter, uid string) {
 		resp["error"] = m.Err
 	case stateReady:
 		resp["state"] = "ready"
-		resp["host"] = m.Host
-		resp["port"] = m.Port
-		// who's the opponent + which sim side is this caller (matches NetBattleManager join order)
+		resp["wsUrl"] = m.WsURL
+		resp["matchId"] = m.ID
+		// who's the opponent + which sim side is this caller (server's canonical join order)
 		oppUid := m.UID1
 		resp["side"] = 0
 		if uid == m.UID1 {

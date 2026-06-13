@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"path/filepath"
+	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -11,12 +13,19 @@ import (
 func newMatchTestServer(t *testing.T) *httptest.Server {
 	t.Helper()
 	t.Setenv("AUTH_DEV_BYPASS", "1")
-	t.Setenv("RIVET_STUB_HOST", "10.0.0.5:7777")
+	// mock battle server: accepts /internal/match registrations
+	var registered int32
+	bs := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&registered, 1)
+		w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(bs.Close)
+	t.Setenv("BATTLE_SERVERS", bs.URL)
 	store, err := OpenStore(filepath.Join(t.TempDir(), "m.db"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	s := &Server{Store: store, InternalKey: "k", Match: NewMatchmaker(store, NewRivet())}
+	s := &Server{Store: store, InternalKey: "k", Match: NewMatchmaker(store, NewBattleServers())}
 	mux := http.NewServeMux()
 	mux.Handle("POST /v1/profile/sync", s.WithAuth(s.ProfileSync))
 	mux.Handle("POST /v1/match/queue", s.WithAuth(s.MatchQueue))
@@ -41,15 +50,15 @@ func TestMatchmakingStubFlow(t *testing.T) {
 	call(t, ts, "POST", "/v1/match/queue", "p2", `{}`, nil)
 
 	ready := pollReady(t, ts, "p1")
-	if ready["host"] != "10.0.0.5" || int(ready["port"].(float64)) != 7777 {
-		t.Fatalf("p1 endpoint: %v", ready)
+	if !strings.HasPrefix(ready["wsUrl"].(string), "ws://") || !strings.HasSuffix(ready["wsUrl"].(string), "/ws") {
+		t.Fatalf("p1 wsUrl: %v", ready)
 	}
 	if ready["opponent"] != "Two" || int(ready["side"].(float64)) != 0 {
 		t.Fatalf("p1 opponent/side: %v", ready)
 	}
-	// p2 sees the same actor, side 1, opponent One
+	// p2 sees the same match, side 1, opponent One
 	r2 := pollReady(t, ts, "p2")
-	if r2["host"] != "10.0.0.5" || r2["opponent"] != "One" || int(r2["side"].(float64)) != 1 {
+	if r2["matchId"] != ready["matchId"] || r2["opponent"] != "One" || int(r2["side"].(float64)) != 1 {
 		t.Fatalf("p2 view: %v", r2)
 	}
 

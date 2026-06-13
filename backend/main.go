@@ -20,7 +20,7 @@ func main() {
 	}
 
 	auth, push := InitFirebase() // nil-safe in dev-bypass mode
-	matchmaker := NewMatchmaker(store, NewRivet())
+	matchmaker := NewMatchmaker(store, NewBattleServers())
 
 	s := &Server{Store: store, Auth: auth, Push: push, Match: matchmaker, InternalKey: os.Getenv("INTERNAL_API_KEY")}
 
