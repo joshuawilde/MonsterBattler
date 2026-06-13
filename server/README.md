@@ -32,11 +32,15 @@ Pieces, individually:
   2. The deploy's final tag step 500s (Rivet-side), leaving the build untagged. Workaround:
      `rivet build patch-tags <BUILD_ID> -e prod -t name=game,current=true`. Done — the current
      prod build is tagged `name=game, current=true` (what actors reference).
-- **BLOCKED — actor runtime errors**: `rivet actor create/list` and the `/actors` REST API all
-  return 500 "internal error" for this project. Build management works; the actor *runtime* does
-  not. Likely the project predates Rivet's current actors platform (it has old namespaces/versions)
-  or needs migration on rivet.dev. Resolve via Rivet support (quote a ray_id) or recreate the
-  project on the current platform, then the matchmaking backend's actors.create will work unchanged.
+- **BLOCKED — no compute regions provisioned**. Root cause confirmed: the regions API
+  (`GET /regions?project=monsterbattl-nwo&environment=prod`) returns `{"regions":[]}`. With no
+  regions, `rivet actor create` reports "no regions" (and 500s if a region is forced). The build
+  is deployed + current; there's just nowhere to run it. This is a Rivet account/project setup
+  item — enable/request compute regions for this project (likely tied to the rivet.gg→rivet.dev
+  platform migration and/or billing/plan). Once `regions` is non-empty, `rivet actor create -e prod
+  -b name=game -p game=udp:7777 -r <region>` and the backend's actors.create work unchanged.
+  (Minor: confirm the CLI port arg format — `game=udp:7777` gave a "missing value for field name"
+  validation error; verify against current docs when regions are live.)
 
 ## Known notes
 
